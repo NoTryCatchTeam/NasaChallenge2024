@@ -1,22 +1,22 @@
 import * as Three from "three";
-import { SolarSystem } from "./solarSystem";
+import { BaseSystem, SolarSystem } from "./solarSystem";
 import * as Helpers from "./helpers";
 
-export class ExoplanetSystem extends Three.Group {
+export class ExoplanetSystem extends BaseSystem {
 
     constructor() {
         super();
     }
 
-    public Star: Three.Mesh<Three.SphereGeometry, Three.MeshPhongMaterial>;
-
-    public StarRadius: number;
-
-    public Planet: Three.Mesh<Three.SphereGeometry, Three.MeshPhongMaterial>;
-
-    public PlanetRadius: number;
-
     private light: Three.PointLight;
+
+    getStarRadius(): number {
+        return this.Star.scale.x;
+    }
+
+    getPlanetRadius(): number {
+        return this.Planet.scale.x;
+    }
 
     async initAsync() {
 
@@ -85,8 +85,6 @@ export class ExoplanetSystem extends Three.Group {
             const newScale = data.star.sunRadius * SolarSystem.getSunRadius();
             this.Star.scale.set(newScale, newScale, newScale);
 
-            this.StarRadius = this.Star.scale.x;
-
             const texture = await new Three.TextureLoader().loadAsync(data.star.texture);
             texture.colorSpace = Three.SRGBColorSpace;
 
@@ -98,8 +96,6 @@ export class ExoplanetSystem extends Three.Group {
             const newScale = data.planet.earthRadius * SolarSystem.getEarthRadius();
             this.Planet.scale.set(newScale, newScale, newScale);
 
-            this.PlanetRadius = this.Planet.scale.x;
-
             const texture = await new Three.TextureLoader().loadAsync(data.planet.texture);
             texture.colorSpace = Three.SRGBColorSpace;
 
@@ -107,8 +103,8 @@ export class ExoplanetSystem extends Three.Group {
 
             const starSizeToPlanetOrbitRadius = data.star.sunRadius / data.planet.orbitalRadius;
             const planetOrbit = starSizeToPlanetOrbitRadius > 1 && starSizeToPlanetOrbitRadius <= 4 ?
-                data.planet.orbitalRadius * SolarSystem.getEarthOrbitalRadius() + this.StarRadius + this.PlanetRadius :
-                (this.StarRadius + this.PlanetRadius) * 2;
+                data.planet.orbitalRadius * SolarSystem.getEarthOrbitalRadius() + this.getStarRadius() + this.getPlanetRadius() :
+                (this.getStarRadius() + this.getPlanetRadius()) * 2;
 
             this.Planet.position.set(
                 planetOrbit,
