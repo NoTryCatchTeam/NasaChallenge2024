@@ -1,0 +1,59 @@
+@import '../base/var';
+@import '../base/mixins';
+
+.btn {
+    display: inline-block;
+    padding: 4px 12px;
+    background-color: $color-background-globe;
+    border: 1px solid $color-background-globe;
+    border-radius: 8px;
+    transition: $transition;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    &.btn-icon {
+        display: inline-flex;
+        align-items: center;
+        column-gap: 10px;
+    }
+
+    &:hover {
+        background-color: darken($color-background-globe, 3);
+        border: 1px solid darken($color-background-globe, 3);
+        transition: $transition;
+    }
+
+    &:active {
+        background-color: darken($color-background-globe, 9);
+        border: 1px solid darken($color-background-globe, 9);
+        transition: $transition;
+    }
+    
+    &.btn-secondary {
+        background-color: $color-background-light;
+        border: 1px solid $color-indicator;
+        color: $color-indicator;
+        transition: $transition;
+    }
+    
+    &.btn-primary {
+        background-color: $color-background-accent;
+        border: 1px solid $color-background-accent;
+        color: $color-text-primary-inverse;
+        transition: $transition;
+
+        &:hover {
+            background-color: lighten($color-background-accent, 3);
+            border: 1px solid lighten($color-background-accent, 3);
+            transition: $transition;
+        }
+
+        &:active {
+            background-color: darken($color-background-accent, 3);
+            border: 1px solid darken($color-background-accent, 3);
+            transition: $transition;
+        }
+    }
+}

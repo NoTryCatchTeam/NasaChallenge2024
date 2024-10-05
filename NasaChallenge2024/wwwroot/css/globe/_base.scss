@@ -1,0 +1,65 @@
+@import '../base/var';
+@import '../base/mixins';
+@import '../base/fonts';
+
+body {
+    font-family: $font-body;
+    @include body-m;
+    font-style: normal;
+    color: $color-text-primary;
+}
+
+a {
+    color: $color-text-primary;
+    cursor: pointer;
+}
+
+h1 {
+    @include header-1;
+}
+
+h2 {
+    @include header-2;
+}
+
+h3 {
+    @include header-3;
+}
+
+h4 {
+    @include header-4;
+}
+
+h5 {
+    @include header-5;
+}
+
+h6 {
+    @include header-6;
+}
+
+.h8 {
+    @include header-8;
+}
+
+.info-label {
+    @include body-s;
+    font-family: "Onest", serif;
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: 400;
+}
+
+.indicator-label {
+    @include body-s;
+    font-family: "Onest", serif;
+    color: $color-indicator;
+    font-weight: 400;
+}
+input {
+    border: 1px solid $color-background-border;
+    border-radius: 8px;
+    padding: 7px 12px;
+    width: 100%;
+    color: $color-text-primary;
+    @include body-m;
+}
