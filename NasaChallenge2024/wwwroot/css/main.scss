@@ -44,9 +44,6 @@
 }
 
 .score {
-    // position: absolute;
-    // top: 56px;
-    // right: 24px;
     font-family: "Jaro";
     font-size: 16px;
     font-weight: 400;
@@ -73,10 +70,28 @@
     border-top-right-radius: 40px;
     border-bottom-right-radius: 40px;
     opacity: 70%;
+    display: flex;
+    gap: 10px;
 }
 
 
 .menu-item:focus {
     background: linear-gradient(90deg, #EF48EF 0%, #010101 100%);
     opacity: 100%;
+}
+
+
+.vr {
+    position: absolute;
+    bottom: 24px;
+    left: 240px;
+    gap: 12px;
+    display: flex;
+    font-family: "Inter";
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.vr-button {
+    pointer-events: all;
 }
