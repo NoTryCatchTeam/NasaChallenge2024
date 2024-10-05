@@ -34,10 +34,53 @@
     left: 24px;
 }
 
-.avatar {
+.user-panel {
     position: absolute;
     top: 16px;
     right: 24px;
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
+.user {
+    font-family: "Jaro";
+    font-size: 32px;
+    line-height: 32px;
+    font-weight: 400;
+    display: flex;
+    flex-direction: column;
+    font-optical-sizing: 72px;
+    gap: 10px;
+}
+
+
+.progress-bar-container {
+    height: 8px;
+    min-width: 160px;
+    border-radius: 8px;
+    background: #242424;
+}
+
+.progress-bar-indicator {
+    height: 100%;
+    border-radius: 8px;
+    /* this will do the magic */
+    -webkit-mask: linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0);
+}
+
+.progress-bar-indicator::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: linear-gradient(90deg, #E8FDC4 0%, #0FBF26 100%);
+}
+
+.avatar {
     display: flex;
     flex-direction: column;
     align-items: center;
