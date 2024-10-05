@@ -9,11 +9,20 @@ let sceneCamera: SceneCamera;
 let solarSystem: SolarSystem;
 let exoplanetSystem: ExoplanetSystem;
 
-export async function initScene(canvasId: string, isDebug: boolean = false) {
+declare global {
+    var isDebug: boolean;
+}
+
+export async function initScene(
+    canvasId: string,
+    initialExoplanet: ExoplanetSystemData = null,
+    isDebug: boolean = false) {
 
     if (isInitialized) {
         return;
     }
+
+    globalThis.isDebug = isDebug;
 
     isInitialized = true;
 
@@ -73,11 +82,8 @@ export async function initScene(canvasId: string, isDebug: boolean = false) {
     sceneGroupsPositioner.positionGroup(exoplanetSystem);
     scene.add(exoplanetSystem);
 
-    if (isDebug) {
-        const targetWorldPos = solarSystem.Earth.getWorldPosition(new Three.Vector3());
-        const cameraTargetOffset = solarSystem.Earth.geometry.parameters.radius;
-        sceneCamera.Camera.position.set(targetWorldPos.x - cameraTargetOffset * 2, targetWorldPos.y, targetWorldPos.z);
-        sceneCamera.Controls.target.copy(targetWorldPos);
+    if (initialExoplanet != null) {
+        await showExoplanetSystemAsync(initialExoplanet, false);
     }
     else {
         const targetWorldPos = solarSystem.Earth.getWorldPosition(new Three.Vector3());
@@ -92,20 +98,32 @@ export async function initScene(canvasId: string, isDebug: boolean = false) {
 
 export async function showExoplanetSystemAsync(data: ExoplanetSystemData, isTargetStar: boolean) {
 
+    solarSystem.hide();
+    exoplanetSystem.show();
+
     await exoplanetSystem.prepareAsync(data);
 
     const targetWorldPos = (isTargetStar ? exoplanetSystem.Star : exoplanetSystem.Planet).getWorldPosition(new Three.Vector3());
     const cameraTargetOffset = isTargetStar ? exoplanetSystem.StarRadius : exoplanetSystem.PlanetRadius;
 
-    sceneCamera.Camera.position.set(targetWorldPos.x - cameraTargetOffset * 2, targetWorldPos.y, targetWorldPos.z);
+    // Angle from positive Z in XZ plane
+    const angle = -160;
+    const xOffset = 2 * cameraTargetOffset * Math.sin(angle * Math.PI / 180);
+    const zOffset = 2 * cameraTargetOffset * Math.cos(angle * Math.PI / 180);
+
+    sceneCamera.Camera.position.set(targetWorldPos.x + xOffset, targetWorldPos.y, targetWorldPos.z + zOffset);
     sceneCamera.Controls.target.copy(targetWorldPos);
 }
 
 export function showSolarSystemAsync(isTargetStar: boolean) {
+
+    exoplanetSystem.hide();
+    solarSystem.show();
+
     const targetWorldPos = (isTargetStar ? solarSystem.Sun : solarSystem.Earth).getWorldPosition(new Three.Vector3());
     const cameraTargetOffset = (isTargetStar ? solarSystem.Sun : solarSystem.Earth).geometry.parameters.radius;
 
-    sceneCamera.Camera.position.set(targetWorldPos.x - cameraTargetOffset * 2, targetWorldPos.y, targetWorldPos.z);
+    sceneCamera.Camera.position.set(targetWorldPos.x - cameraTargetOffset * 2, targetWorldPos.y, targetWorldPos.z - cameraTargetOffset * 2);
     sceneCamera.Controls.target.copy(targetWorldPos);
 }
 

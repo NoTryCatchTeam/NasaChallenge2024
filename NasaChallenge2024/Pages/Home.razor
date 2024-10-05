@@ -1,7 +1,8 @@
 ﻿@page "/"
 @using NasaChallenge2024.Definitions.Models
+@using static NasaChallenge2024.Pages.SceneDebug
 @inject IJSRuntime JsRuntime
-@inject HttpClient Http
+@inject HttpClient HttpClient
 
 <PageTitle>Main</PageTitle>
 
@@ -159,8 +160,33 @@
             return;
         }
 
-        _mainJsModule = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/main.js");
-        await _mainJsModule.InvokeVoidAsync("hello");
+        var planets = await HttpClient.GetFromJsonAsync<Exoplanet[]>("jsons/exoplanets.json");
+        var stars = await HttpClient.GetFromJsonAsync<Star[]>("jsons/stars.json");
+
+        var planetData = planets.ElementAt(9);
+        var star = stars.First(x => x.Id == planetData.HostStarIds.First());
+
+        var systemData = new ExoplanetSystemData
+        {
+            Planet = new ExoplanetSystemData.PlanetData
+            {
+                Id = planetData.Id,
+                Name = planetData.Name,
+                OrbitalRadius = planetData.OrbitalRadius,
+                EarthRadius = planetData.EarthRadius ?? 1,
+                Texture = planetData.TexturePath,
+            },
+            Star = new ExoplanetSystemData.StarData
+            {
+                Id = star.Id,
+                Name = star.Name,
+                SunRadius = star.SunRadius ?? 1,
+                Texture = star.TexturePath,
+            }
+        };
+
+        _mainJsModule = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scene.js");
+        await _mainJsModule.InvokeVoidAsync("initScene", "#scene-canvas", systemData);
     }
 
     private void UICheckboxChanged(ChangeEventArgs e)

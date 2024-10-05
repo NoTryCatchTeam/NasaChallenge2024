@@ -1,5 +1,6 @@
 import * as Three from "three";
 import { SolarSystem } from "./solarSystem";
+import * as Helpers from "./helpers";
 
 export class ExoplanetSystem extends Three.Group {
 
@@ -40,14 +41,12 @@ export class ExoplanetSystem extends Three.Group {
             this.add(mesh);
             this.Star = mesh;
 
-            const axes = new Three.AxesHelper(starRadius);
-            (axes.material as Three.Material).depthTest = false;
-            axes.renderOrder = 1;
-
-            mesh.add(axes);
-
             this.light = new Three.PointLight("#ffffff", 1, 0, 0.8);
             this.add(this.light);
+
+            if (globalThis.isDebug) {
+                Helpers.addAxesHelper(mesh, starRadius);
+            }
         }
 
         // Planet
@@ -65,11 +64,9 @@ export class ExoplanetSystem extends Three.Group {
             this.add(mesh);
             this.Planet = mesh;
 
-            const axes = new Three.AxesHelper(planetRadius);
-            (axes.material as Three.Material).depthTest = false;
-            axes.renderOrder = 1;
-
-            mesh.add(axes);
+            if (globalThis.isDebug) {
+                Helpers.addAxesHelper(mesh, planetRadius);
+            }
         }
     }
 
@@ -120,6 +117,14 @@ export class ExoplanetSystem extends Three.Group {
 
             this.light.intensity = planetOrbit;
         }
+    }
+
+    show() {
+        this.light.decay = 0.8;
+    }
+
+    hide() {
+        this.light.decay = 100;
     }
 }
 

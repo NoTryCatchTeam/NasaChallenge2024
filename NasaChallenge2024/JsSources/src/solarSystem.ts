@@ -1,10 +1,13 @@
 import * as Three from "three";
+import * as Helpers from "./helpers";
 
 export class SolarSystem extends Three.Group {
 
     constructor() {
         super();
     }
+
+    private light: Three.PointLight;
 
     // Earth radius
     public static getEarthRadius(): number {
@@ -47,14 +50,12 @@ export class SolarSystem extends Three.Group {
             this.add(mesh);
             this.Sun = mesh;
 
-            const axes = new Three.AxesHelper(sunRadius);
-            (axes.material as Three.Material).depthTest = false;
-            axes.renderOrder = 1;
+            if (globalThis.isDebug) {
+                Helpers.addAxesHelper(mesh, sunRadius);
+            }
 
-            mesh.add(axes);
-
-            const light = new Three.PointLight("#ffffff", earthOrbitRadius, 0, 0.8);
-            this.add(light);
+            this.light = new Three.PointLight("#ffffff", earthOrbitRadius, 0, 0.8);
+            this.add(this.light);
         }
 
         // Earth
@@ -73,11 +74,9 @@ export class SolarSystem extends Three.Group {
             this.add(mesh);
             this.Earth = mesh;
 
-            const axes = new Three.AxesHelper(earthRadius);
-            (axes.material as Three.Material).depthTest = false;
-            axes.renderOrder = 1;
-
-            mesh.add(axes);
+            if (globalThis.isDebug) {
+                Helpers.addAxesHelper(mesh, earthRadius);
+            }
         }
     }
 
@@ -86,5 +85,13 @@ export class SolarSystem extends Three.Group {
 
         this.Earth.setRotationFromAxisAngle(new Three.Vector3(0, 1, 0), time * 0.1);
         this.Sun.setRotationFromAxisAngle(new Three.Vector3(0, 1, 0), time * 0.01);
+    }
+
+    show() {
+        this.light.decay = 0.8;
+    }
+
+    hide() {
+        this.light.decay = 100;
     }
 }
