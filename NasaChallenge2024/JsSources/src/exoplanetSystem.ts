@@ -1,4 +1,5 @@
 import * as Three from "three";
+import { SolarSystem } from "./solarSystem";
 
 export class ExoplanetSystem extends Three.Group {
 
@@ -8,7 +9,11 @@ export class ExoplanetSystem extends Three.Group {
 
     public Star: Three.Mesh<Three.SphereGeometry, Three.MeshPhongMaterial>;
 
+    public StarRadius: number;
+
     public Planet: Three.Mesh<Three.SphereGeometry, Three.MeshPhongMaterial>;
+
+    public PlanetRadius: number;
 
     private light: Three.PointLight;
 
@@ -41,8 +46,7 @@ export class ExoplanetSystem extends Three.Group {
 
             mesh.add(axes);
 
-            this.light = new Three.PointLight("#ffffff", 1000);
-            // this.light.position.set(planetOrbitDistance - planetRadius * 20, 0, 0);
+            this.light = new Three.PointLight("#ffffff", 1, 0, 0.8);
             this.add(this.light);
         }
 
@@ -76,17 +80,17 @@ export class ExoplanetSystem extends Three.Group {
         this.Star.setRotationFromAxisAngle(new Three.Vector3(0, 1, 0), time * 0.01);
     }
 
-    async prepare(data: ExoplanetData) {
+    async prepareAsync(data: ExoplanetSystemData) {
 
         // Prepare star
         {
-            const currentScale = this.Star.scale;
-
             // Scale factor is 'new star scale' * 1 / 'current star scale'
-            const scaleFactor = data.Star.SunRadius / currentScale.x;
-            this.Star.scale.set(scaleFactor, scaleFactor, scaleFactor);
+            const newScale = data.star.sunRadius * SolarSystem.getSunRadius();
+            this.Star.scale.set(newScale, newScale, newScale);
 
-            const texture = await new Three.TextureLoader().loadAsync(data.Star.Texture);
+            this.StarRadius = this.Star.scale.x;
+
+            const texture = await new Three.TextureLoader().loadAsync(data.star.texture);
             texture.colorSpace = Three.SRGBColorSpace;
 
             this.Star.material.emissiveMap = texture;
@@ -94,49 +98,58 @@ export class ExoplanetSystem extends Three.Group {
 
         // Prepare planet
         {
-            const currentScale = this.Planet.scale;
+            const newScale = data.planet.earthRadius * SolarSystem.getEarthRadius();
+            this.Planet.scale.set(newScale, newScale, newScale);
 
-            const scaleFactor = data.Planet.EarthRadius / currentScale.x;
-            this.Planet.scale.set(scaleFactor, scaleFactor, scaleFactor);
+            this.PlanetRadius = this.Planet.scale.x;
 
-            const texture = await new Three.TextureLoader().loadAsync(data.Planet.Texture);
+            const texture = await new Three.TextureLoader().loadAsync(data.planet.texture);
             texture.colorSpace = Three.SRGBColorSpace;
 
             this.Planet.material.map = texture;
 
-            // 1 is 1 AU, so no need to multiply
-            this.Planet.position.set(data.Planet.OrbitalRadius, 0, 0);
+            const starSizeToPlanetOrbitRadius = data.star.sunRadius / data.planet.orbitalRadius;
+            const planetOrbit = starSizeToPlanetOrbitRadius > 1 && starSizeToPlanetOrbitRadius <= 4 ?
+                data.planet.orbitalRadius * SolarSystem.getEarthOrbitalRadius() + this.StarRadius + this.PlanetRadius :
+                (this.StarRadius + this.PlanetRadius) * 2;
+
+            this.Planet.position.set(
+                planetOrbit,
+                0,
+                0);
+
+            this.light.intensity = planetOrbit;
         }
     }
 }
 
-export class ExoplanetData {
+export class ExoplanetSystemData {
 
-    public Star: Star;
+    public star: Star;
 
-    public Planet: Planet;
+    public planet: Planet;
 }
 
 class Star {
 
-    public Id: number;
+    public id: number;
 
-    public Name: string;
+    public name: string;
 
-    public SunRadius: number;
+    public sunRadius: number;
 
-    public Texture: string;
+    public texture: string;
 }
 
 class Planet {
 
-    public Id: number;
+    public id: number;
 
-    public Name: string;
+    public name: string;
 
-    public EarthRadius: number;
+    public earthRadius: number;
 
-    public Texture: string;
+    public texture: string;
 
-    public OrbitalRadius: number;
+    public orbitalRadius: number;
 }
