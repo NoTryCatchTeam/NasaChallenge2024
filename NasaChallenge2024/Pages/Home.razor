@@ -38,7 +38,50 @@
 </div>
 
 <div class="object-panel @UIVisibility">
-
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Planet Name</label>
+        <label class="object-panel-item-value">@SpaceObject.Name</label>
+    </div>
+    <hr>
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Host Name</label>
+        <label class="object-panel-item-value">@SpaceObject.Host.Name</label>
+    </div>
+    <hr>
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Number of planet</label>
+        <label class="object-panel-item-value">@SpaceObject.Number</label>
+    </div>
+    <hr>
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Status</label>
+        <label class="object-panel-item-value">@SpaceObject.Status</label>
+    </div>
+    <hr>
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Stellar Effective Temperature [K]</label>
+        <label class="object-panel-item-value">@SpaceObject.Host.SolarTemp</label>
+    </div>
+    <hr>
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Stellar Radius [Solar Radius]</label>
+        <label class="object-panel-item-value">@SpaceObject.Host.SolarRadius</label>
+    </div>
+    <hr>
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Stellar Mass [Solar Mass]</label>
+        <label class="object-panel-item-value">@SpaceObject.Host.SolarMass</label>
+    </div>
+    <hr>
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Detected by</label>
+        <label class="object-panel-item-value">@SpaceObject.DetectedBy</label>
+    </div>
+    <hr>
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Observed by</label>
+        <label class="object-panel-item-value">@SpaceObject.ObservedBy</label>
+    </div>
 </div>
 
 <div class="bottom-panels @UIVisibility">
@@ -70,15 +113,27 @@
     public SpaceObject SpaceObject { get; set; } = new SpaceObject
         {
             Name = "Kepler-186f",
+
+            Number = 5,
+
             DiscoveryYear = 2014,
 
             OrbitalRadius = 0.7048f,
 
             OrbitalPeriod = 228.8f,
 
+            Status = "Published Confirmed",
+
+            DetectedBy = "Transit",
+
+            ObservedBy = "Kepler",
+
             Host = new SpaceObjectHost
             {
-                Name = "Kepler 186"
+                Name = "Kepler 186",
+                SolarTemp = "3748±75",
+                SolarRadius = "0.539±0.015"
+
             }
         };
 
