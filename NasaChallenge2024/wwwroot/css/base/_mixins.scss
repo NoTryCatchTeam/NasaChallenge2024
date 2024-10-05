@@ -1,0 +1,81 @@
+//breakpoints
+@mixin _tablet {
+    @media screen and (max-width: 1024px) {
+        @content;
+    }
+}
+
+@mixin _mobile {
+    @media screen and (max-width: 767px) {
+        @content;
+    }
+}
+
+//typography
+@mixin header-1 {
+    font-size: 48px;
+    line-height: 48px*1.2;
+    letter-spacing: -1.05107px;
+    font-weight: 700;
+}
+
+@mixin header-2 {
+    font-size: 40px;
+    line-height: 40px*1.2;
+    letter-spacing: -0.875776px;
+    font-weight: 700;
+}
+
+@mixin header-3 {
+    font-size: 32px;
+    line-height: 32px*1.2;
+    letter-spacing: -0.730048px;
+    font-weight: 700;
+}
+
+@mixin header-4 {
+    font-size: 28px;
+    line-height: 28px*1.2;
+    letter-spacing: -0.608256px;
+    font-weight: 700;
+}
+
+@mixin header-5 {
+    font-size: 24px;
+    line-height: 24px*1.2;
+    letter-spacing: -0.50688px;
+    font-weight: 700;
+}
+
+@mixin header-6 {
+    font-size: 20px;
+    line-height: 20px*1.2;
+    letter-spacing: -0.4224px;
+    font-weight: 700;
+}
+
+@mixin header-8 {
+    font-size: 12px;
+    line-height: 15px;
+    letter-spacing: -0.608256px;
+    font-weight: 700;
+}
+
+@mixin body-m {
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.17px;
+    font-weight: 400;
+}
+
+@mixin body-s {
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: -0.2px;
+    font-weight: 400;
+}
+
+.header-5 {
+    @include header-5;
+}
+

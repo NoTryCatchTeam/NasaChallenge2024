@@ -1,7 +1,44 @@
 ﻿@page "/"
+@inject IJSRuntime JsRuntime
 
-<PageTitle>Home</PageTitle>
+<PageTitle>INDEX</PageTitle>
 
-<h1>Hello, world!</h1>
+<img class="logo" src="images/exoplan.svg" alt="logo"/>
 
-Welcome to your new app.
+<div class="avatar">
+    <img src="images/avatar.svg" alt="avatar"/>
+    <div class="score">654</div>
+</div>
+
+
+<div class="menu">
+    <button class="menu-item" autofocus><img class="starFour" src="images/starFour.svg" alt="starFour"/>Main</button>    
+    <button class="menu-item"><img class="planet" src="images/planet.svg" alt="planet"/>Planets</button>
+    <button class="menu-item"><img class="flyingSaucer" src="images/flyingSaucer.svg" alt="flyingSaucer"/>Observatories</button>
+</div>
+
+
+<button class="vr-button"><div class="vr"><img class="visor" src="images/visor.svg" alt="visor"/>VR Mode</div></button>
+
+<div class="bottom-panels">
+    <div class="bottom-panels-item"></div>
+    <div class="bottom-panels-item"></div>
+    <div class="bottom-panels-item"></div>
+</div>
+
+
+@code
+{
+    private IJSObjectReference _mainJsModule;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return;
+        }
+
+        _mainJsModule = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/main.js");
+        await _mainJsModule.InvokeVoidAsync("hello");
+    }
+}
