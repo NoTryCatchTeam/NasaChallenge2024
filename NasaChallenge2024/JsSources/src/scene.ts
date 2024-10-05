@@ -12,6 +12,7 @@ let activeSystem: BaseSystem;
 let solarSystem: SolarSystem;
 let exoplanetSystem: ExoplanetSystem;
 let isFocusOnScene: boolean;
+let focusedCameraTarget: Three.Vector3;
 let mouseCoordinates = { x: .5, y: .5 };
 
 declare global {
@@ -147,7 +148,28 @@ function startRenderLoop(renderer: Three.WebGLRenderer) {
         exoplanetSystem.animate(time);
 
         if (!isFocusOnScene) {
-            // sceneCamera.Camera.
+            const currentTarget = sceneCamera.Controls.target;
+
+            // Y dolly
+            const newTarget = new Three.Vector3(
+                currentTarget.x + (.5 - mouseCoordinates.x) / 100,
+                currentTarget.y + (.5 - mouseCoordinates.y) / 100,
+                currentTarget.z + (.5 - mouseCoordinates.x) / 100
+            );
+
+            if (Math.abs(focusedCameraTarget.x - newTarget.x) <= activeSystem.getPlanetRadius() / 10) {
+                currentTarget.x = newTarget.x;
+            }
+
+            if (Math.abs(focusedCameraTarget.y - newTarget.y) <= activeSystem.getPlanetRadius() / 10) {
+                currentTarget.y = newTarget.y;
+            }
+
+            if (Math.abs(focusedCameraTarget.z - newTarget.z) <= activeSystem.getPlanetRadius() / 10) {
+                currentTarget.z = newTarget.z;
+            }
+
+            sceneCamera.Controls.target.copy(currentTarget);
         }
 
         sceneCamera.Controls.update();
@@ -190,6 +212,7 @@ function calculateCameraPosition(isTargetStar: boolean) {
 
     sceneCamera.Camera.position.set(targetWorldPos.x + xOffset - focusDelta.x, targetWorldPos.y, targetWorldPos.z + zOffset + focusDelta.z);
     sceneCamera.Controls.target.set(targetWorldPos.x - focusDelta.x, targetWorldPos.y, targetWorldPos.z + focusDelta.z);
+    focusedCameraTarget = sceneCamera.Controls.target.clone();
 }
 
 function onMouseMove(ev: MouseEvent) {
