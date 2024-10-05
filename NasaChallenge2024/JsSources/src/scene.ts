@@ -88,9 +88,15 @@ export function changeSystem() {
     const targetWorldPos = !isTargetingSolarSystem ?
         solarSystem.Earth.getWorldPosition(new Three.Vector3()) :
         exoplanetSystem.Planet.getWorldPosition(new Three.Vector3());
-    const cameraTargetOffset = solarSystem.Earth.geometry.parameters.radius;
+
+    const cameraTargetOffset = !isTargetingSolarSystem ?
+        solarSystem.Earth.geometry.parameters.radius :
+        exoplanetSystem.Planet.geometry.parameters.radius;
+
     sceneCamera.Camera.position.set(targetWorldPos.x - cameraTargetOffset * 2, targetWorldPos.y, targetWorldPos.z);
     sceneCamera.Controls.target.copy(targetWorldPos);
+
+    isTargetingSolarSystem = !isTargetingSolarSystem;
 }
 
 function startRenderLoop(renderer: Three.WebGLRenderer) {
