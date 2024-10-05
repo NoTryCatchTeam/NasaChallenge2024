@@ -9,11 +9,14 @@
 #app {
     width: 100%;
     height: 100%;
-    pointer-events: none;
     position: absolute;
+    pointer-events: none;
     top: 0;
     left: 0;
     z-index: 1;
+    background-color: #010101;
+    color: #FFFFFF;
+
 }
 
 #scene-canvas {
@@ -23,4 +26,46 @@
     position: fixed;
     left: 0;
     top: 0;
+}
+
+.logo {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+}
+
+.avatar {
+    position: absolute;
+    top: 16px;
+    right: 24px;
+}
+
+.score {
+    position: absolute;
+    top: 56px;
+    right: 24px;
+}
+
+.menu {
+    position: absolute;
+    top: 100px;
+    display: flex;
+    flex-direction: column;
+    width: 208px;
+}
+
+.menu-item {
+   text-align: start;
+   height: 48px;
+   padding-left: 24px;
+   padding-top: 16px;
+   padding-bottom: 16px;
+   pointer-events:all;
+   border-top-right-radius: 40px;
+   border-bottom-right-radius: 40px;
+}
+
+
+.menu-item:focus{
+    background: linear-gradient(90deg, #EF48EF 0%, #010101 100%);
 }
