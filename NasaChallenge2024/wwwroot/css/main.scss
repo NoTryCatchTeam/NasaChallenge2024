@@ -20,7 +20,6 @@
     z-index: 1;
     background-color: #010101;
     color: #FFFFFF;
-
 }
 
 #scene-canvas {
@@ -101,3 +100,6 @@
     opacity: 100%;
 }
 
+.invisible {
+    display: none !important;
+}
