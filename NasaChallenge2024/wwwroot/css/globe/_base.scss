@@ -63,3 +63,8 @@ input {
     color: $color-text-primary;
     @include body-m;
 }
+
+
+.invisible {
+    display: none !important;
+}

@@ -5,6 +5,9 @@
 
 <PageTitle>Main</PageTitle>
 
+<label class="object-name @UIVisibility">@SpaceObject.Name.ToUpper()</label>
+<label class="object-host-name @UIVisibility">@SpaceObject.Host.Name.ToUpper()</label>
+
 <div class="user-panel">
     <button class="vr-button">
         <div class="vr"><img class="visor" src="images/visor.svg" alt="visor" />VR Mode</div>
@@ -17,14 +20,14 @@
         </label>
     </div>
     <div class="user">
-        MISTER TURBO
+        @User.Name
         <div class="progress-bar-container">
-            <div class="progress-bar-indicator" style="width:60%"></div>
+            <div class="progress-bar-indicator" style="width:@User.Completion%"></div>
         </div>
     </div>
     <div class="avatar">
         <img src="images/avatar.svg" alt="avatar" />
-        <div class="score">654</div>
+        <div class="score">@User.UserScore</div>
     </div>
 </div>
 
@@ -35,18 +38,61 @@
 </div>
 
 <div class="object-panel @UIVisibility">
-
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Planet Name</label>
+        <label class="object-panel-item-value">@SpaceObject.Name</label>
+    </div>
+    <hr>
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Host Name</label>
+        <label class="object-panel-item-value">@SpaceObject.Host.Name</label>
+    </div>
+    <hr>
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Number of planet</label>
+        <label class="object-panel-item-value">@SpaceObject.Number</label>
+    </div>
+    <hr>
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Status</label>
+        <label class="object-panel-item-value">@SpaceObject.Status</label>
+    </div>
+    <hr>
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Stellar Effective Temperature [K]</label>
+        <label class="object-panel-item-value">@SpaceObject.Host.SolarTemp</label>
+    </div>
+    <hr>
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Stellar Radius [Solar Radius]</label>
+        <label class="object-panel-item-value">@SpaceObject.Host.SolarRadius</label>
+    </div>
+    <hr>
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Stellar Mass [Solar Mass]</label>
+        <label class="object-panel-item-value">@SpaceObject.Host.SolarMass</label>
+    </div>
+    <hr>
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Detected by</label>
+        <label class="object-panel-item-value">@SpaceObject.DetectedBy</label>
+    </div>
+    <hr>
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Observed by</label>
+        <label class="object-panel-item-value">@SpaceObject.ObservedBy</label>
+    </div>
 </div>
 
 <div class="bottom-panels @UIVisibility">
     <div class="bottom-panels-item-1">
-        <label class="bottom-panels-item-number">@DiscoveryYear</label>
+        <label class="bottom-panels-item-number">@SpaceObject.DiscoveryYear</label>
         <label class="bottom-panels-item-description">discovery year</label>
     </div>
-    <div class="bottom-panels-item-2"><label class="bottom-panels-item-number">@OrbitalRadius</label>
+    <div class="bottom-panels-item-2"><label class="bottom-panels-item-number">@SpaceObject.OrbitalRadius</label>
         <label class="bottom-panels-item-description">orbital radius (AU)</label>
     </div>
-    <div class="bottom-panels-item-3"><label class="bottom-panels-item-number">@OrbitalPeriod</label>
+    <div class="bottom-panels-item-3"><label class="bottom-panels-item-number">@SpaceObject.OrbitalPeriod</label>
         <label class="bottom-panels-item-description">orbital period (days)</label>
     </div>
 </div>
@@ -62,21 +108,46 @@
     //var telescopes = await Http.GetFromJsonAsync<Telescope[]>("jsons/telescopes.json");
     //var travelTypes = await Http.GetFromJsonAsync<TravelType[]>("jsons/travel-types.json");
 
-    public uint DiscoveryYear { get; set; } = 2014;
-
-    public float OrbitalRadius { get; set; } = 0.7048f;
-
-    public float OrbitalPeriod {get;set;} = 228.8f;
 
 
+    public SpaceObject SpaceObject { get; set; } = new SpaceObject
+        {
+            Name = "Kepler-186f",
+
+            Number = 5,
+
+            DiscoveryYear = 2014,
+
+            OrbitalRadius = 0.7048f,
+
+            OrbitalPeriod = 228.8f,
+
+            Status = "Published Confirmed",
+
+            DetectedBy = "Transit",
+
+            ObservedBy = "Kepler",
+
+            Host = new SpaceObjectHost
+            {
+                Name = "Kepler 186",
+                SolarTemp = "3748±75",
+                SolarRadius = "0.539±0.015"
+
+            }
+        };
+
+    public User User { get; set; } = new User
+        {
+            Name = "MISTER NITRO",
+            Completion = 30,
+            UserScore = 658
+        };
 
     [Parameter]
     public bool IsUIChecked { get; set; } = true;
     private bool isUIChecked;
     private string UIVisibility;
-
-
-
     protected override void OnParametersSet()
     {
         isUIChecked = this.IsUIChecked;
