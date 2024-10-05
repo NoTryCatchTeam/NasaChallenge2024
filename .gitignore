@@ -8,6 +8,6 @@ riderModule.iml
 
 node_modules/
 
-wwwroot/js/
-wwwroot/css/**.css
-wwwroot/css/**.css.map
+NasaChallenge2024/wwwroot/js/
+**.css
+**.css.map
