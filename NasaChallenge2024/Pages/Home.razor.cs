@@ -52,6 +52,10 @@ namespace NasaChallenge2024.Pages
 
         [Parameter]
         public bool IsUIChecked { get; set; } = true;
+
+        public string TravelTime {get;set;}
+
+        public string TravelSpeed {get;set;}
         private bool isUIChecked;
         private string UIVisibility;
         protected override void OnParametersSet()

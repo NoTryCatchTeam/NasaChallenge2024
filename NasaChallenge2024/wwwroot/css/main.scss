@@ -13,6 +13,7 @@
 @import 'controls/object_panel';
 @import 'controls/user_panel';
 @import 'controls/menu';
+@import 'controls/distance_panel';
 
 body {
     background-color: #010101;
@@ -64,4 +65,8 @@ body {
     font-weight: 600;
     line-height: 24px;
     opacity: 70%;
+}
+
+input {
+    pointer-events: all;
 }
