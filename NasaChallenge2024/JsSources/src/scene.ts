@@ -1,11 +1,15 @@
 import * as Three from "three";
 import * as Addons from "three/addons";
+import { SolarSystem } from "./solarSystem";
+import { ExoplanetData, ExoplanetSystem } from "./exoplanetSystem";
 
 let isInitialized = false;
 let scene: Three.Scene;
 let sceneCamera: SceneCamera;
+let solarSystem: SolarSystem;
+let exoplanetSystem: ExoplanetSystem;
 
-export async function initScene(canvasId: string) {
+export async function initScene(canvasId: string, isDebug: boolean = false) {
 
     if (isInitialized) {
         return;
@@ -32,24 +36,74 @@ export async function initScene(canvasId: string) {
         texture.mapping = Three.EquirectangularReflectionMapping;
         texture.colorSpace = Three.SRGBColorSpace;
         scene.background = texture;
+        // scene.background = new Three.Color("#787878");
     }
 
     // Setup camera
     {
-        const camera = new Three.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const camera = new Three.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
         scene.add(camera);
 
         const controls = new Addons.OrbitControls(camera, canvas);
         controls.target.set(0, 0, 0);
-        controls.enablePan = false;
+        // controls.enablePan = false;
         controls.dampingFactor = 0.2
         controls.enableDamping = true;
 
         sceneCamera = new SceneCamera(camera, controls);
     }
 
+    // Add ambient light
+    {
+        const light = new Three.AmbientLight("#ffffff", 0.1);
+        scene.add(light);
+    }
+
+    const sceneGroupsPositioner = new SceneGroupPositioner();
+
+    // Add sun-earth system
+    solarSystem = new SolarSystem();
+    await solarSystem.initAsync();
+    sceneGroupsPositioner.positionGroup(solarSystem);
+    scene.add(solarSystem);
+
+    // Add exoplanet system
+    exoplanetSystem = new ExoplanetSystem();
+    await exoplanetSystem.initAsync();
+    sceneGroupsPositioner.positionGroup(exoplanetSystem);
+    scene.add(exoplanetSystem);
+
+    if (isDebug) {
+        sceneCamera.Camera.position.set(10, 10, 10);
+    }
+    else {
+        const targetWorldPos = solarSystem.Earth.getWorldPosition(new Three.Vector3());
+        const cameraTargetOffset = solarSystem.Earth.geometry.parameters.radius;
+        sceneCamera.Camera.position.set(targetWorldPos.x - cameraTargetOffset * 2, targetWorldPos.y, targetWorldPos.z);
+        sceneCamera.Controls.target.copy(targetWorldPos);
+    }
+
     // Start render loop
     startRenderLoop(renderer);
+}
+
+export function showPlanet(data: ExoplanetData, isTargetStar: boolean) {
+
+    exoplanetSystem.prepare(data);
+
+    const targetWorldPos = (isTargetStar ? exoplanetSystem.Star : exoplanetSystem.Planet).getWorldPosition(new Three.Vector3());
+    const cameraTargetOffset = (isTargetStar ? exoplanetSystem.Star : exoplanetSystem.Planet).geometry.parameters.radius;
+
+    sceneCamera.Camera.position.set(targetWorldPos.x - cameraTargetOffset * 2, targetWorldPos.y, targetWorldPos.z);
+    sceneCamera.Controls.target.copy(targetWorldPos);
+}
+
+export function showSolarSystem(isTargetStar: boolean) {
+    const targetWorldPos = (isTargetStar ? solarSystem.Sun : solarSystem.Earth).getWorldPosition(new Three.Vector3());
+    const cameraTargetOffset = (isTargetStar ? solarSystem.Sun : solarSystem.Earth).geometry.parameters.radius;
+
+    sceneCamera.Camera.position.set(targetWorldPos.x - cameraTargetOffset * 2, targetWorldPos.y, targetWorldPos.z);
+    sceneCamera.Controls.target.copy(targetWorldPos);
 }
 
 function startRenderLoop(renderer: Three.WebGLRenderer) {
@@ -60,13 +114,17 @@ function startRenderLoop(renderer: Three.WebGLRenderer) {
 
         if (resizeRendererToDisplaySize()) {
             const canvas = renderer.domElement;
-            sceneCamera.Camera.aspect = sceneCamera.Camera.aspect = canvas.clientWidth / canvas.clientHeight;
+            sceneCamera.Camera.aspect = canvas.clientWidth / canvas.clientHeight;
             sceneCamera.Camera.updateProjectionMatrix();
         }
-        
+
+        solarSystem.animate(time);
+
         sceneCamera.Controls.update();
-        
+
         renderer.render(scene, sceneCamera.Camera);
+
+        requestAnimationFrame(render);
     }
 
     function resizeRendererToDisplaySize() {
@@ -83,7 +141,6 @@ function startRenderLoop(renderer: Three.WebGLRenderer) {
     }
 }
 
-
 class SceneCamera {
     constructor(camera: Three.PerspectiveCamera, controls: Addons.OrbitControls) {
         this.Camera = camera;
@@ -93,4 +150,14 @@ class SceneCamera {
     public Camera: Three.PerspectiveCamera;
 
     public Controls: Addons.OrbitControls;
+}
+
+class SceneGroupPositioner {
+
+    private sceneGroupXPosition = 0;
+    private sceneGroupXPositionIncrementor = 1000;
+
+    positionGroup(group: Three.Object3D) {
+        group.position.set(this.sceneGroupXPosition++ * this.sceneGroupXPositionIncrementor, 0, 0);
+    }
 }

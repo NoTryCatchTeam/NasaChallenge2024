@@ -1,11 +1,15 @@
 @page "/scene-debug"
 @inject IJSRuntime JsRuntime
+@inject HttpClient HttpClient
 
 <h3 style="color: #fff">SceneDebug</h3>
+
+<button @onclick="ChangeSystemAsync" style="color: #fff; pointer-events: all;">Change system</button>
 
 @code
 {
     private IJSObjectReference _mainJsModule;
+    private int _exoplanetIterator = 2;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -16,5 +20,80 @@
 
         _mainJsModule = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scene.js");
         await _mainJsModule.InvokeVoidAsync("initScene", "#scene-canvas");
+    }
+
+    private async Task ChangeSystemAsync()
+    {
+        var planets = await HttpClient.GetFromJsonAsync<IEnumerable<Planet>>("jsons/exoplanets.json");
+        var stars = await HttpClient.GetFromJsonAsync<IEnumerable<Star>>("jsons/stars.json");
+
+        var planetData = planets.ElementAt(_exoplanetIterator++);
+
+        await _mainJsModule.InvokeVoidAsync("changeSystem", System.Text.Json.JsonSerializer.Serialize(planetData));
+
+        if (_exoplanetIterator == planets.Count() - 1)
+        {
+            _exoplanetIterator = 2;
+        }
+    }
+
+    private class Planet
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        [JsonPropertyName("orbital_radius")]
+        public float OrbitalRadius { get; set; }
+
+        [JsonPropertyName("host_stars_ids")]
+        public IEnumerable<int> HostStars { get; set; }
+
+        [JsonPropertyName("texture_path")]
+        public string Texture { get; set; }
+    }
+
+    private class Star
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        [JsonPropertyName("sun_radius")]
+        public float SunRadius { get; set; }
+
+        [JsonPropertyName("texture_path")]
+        public string Texture { get; set; }
+    }
+
+    private class ExoplanetData
+    {
+        public StarData Star;
+
+        public PlanetData Planet;
+
+        public class StarData
+        {
+            public int Id { get; set; }
+
+            public string Name { get; set; }
+
+            public float SunRadius { get; set; }
+
+            public string Texture { get; set; }
+        }
+
+        public class PlanetData
+        {
+            public int Id { get; set; }
+
+            public string Name { get; set; }
+
+            public float EarthRadius { get; set; }
+
+            public string Texture { get; set; }
+
+            public float OrbitalRadius { get; set; }
+        }
     }
 }
