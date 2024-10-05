@@ -1,0 +1,31 @@
+.user-panel {
+    position: absolute;
+    top: 16px;
+    right: 24px;
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
+.user {
+    font-family: "Jaro";
+    font-size: 32px;
+    line-height: 32px;
+    font-weight: 400;
+    display: flex;
+    flex-direction: column;
+    font-optical-sizing: 72px;
+    gap: 10px;
+}
+
+.avatar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.score {
+    font-family: "Jaro";
+    font-size: 16px;
+    font-weight: 400;
+}

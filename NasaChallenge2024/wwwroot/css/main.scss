@@ -11,6 +11,8 @@
 @import 'controls/vr';
 @import 'controls/bottom_panel';
 @import 'controls/object_panel';
+@import 'controls/user_panel';
+@import 'controls/menu';
 
 #app {
     width: 100%;
@@ -20,7 +22,7 @@
     top: 0;
     left: 0;
     z-index: 1;
-    background-color: #010101;
+    background-image: url(../images/image_background_stars.jpg);
     color: #FFFFFF;
 }
 
@@ -39,70 +41,24 @@
     left: 24px;
 }
 
-.user-panel {
+.object-name {
     position: absolute;
-    top: 16px;
-    right: 24px;
-    display: flex;
-    flex-direction: row;
-    gap: 16px;
-}
-
-.user {
+    top: 60px;
+    left: 250px;
     font-family: "Jaro";
-    font-size: 32px;
-    line-height: 32px;
+    font-size: 120px;
     font-weight: 400;
-    display: flex;
-    flex-direction: column;
+    line-height: 150px;
     font-optical-sizing: 72px;
-    gap: 10px;
 }
 
-.avatar {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.score {
-    font-family: "Jaro";
-    font-size: 16px;
-    font-weight: 400;
-}
-
-.menu {
+.object-host-name {
     position: absolute;
-    top: 100px;
-    display: flex;
-    flex-direction: column;
-    width: 208px;
-}
-
-.menu-item {
+    top: 194px;
+    left: 250px;
     font-family: "Inter";
     font-size: 18px;
-    font-weight: 500;
-    text-align: start;
-    height: 48px;
-    padding-left: 24px;
-    padding-top: 16px;
-    padding-bottom: 16px;
-    pointer-events: all;
-    border-top-right-radius: 40px;
-    border-bottom-right-radius: 40px;
+    font-weight: 600;
+    line-height: 24px;
     opacity: 70%;
-    display: flex;
-    gap: 10px;
-}
-
-
-.menu-item:focus {
-    background: linear-gradient(90deg, #EF48EF 0%, #010101 100%);
-    opacity: 100%;
-}
-
-
-.invisible {
-    display: none !important;
 }
