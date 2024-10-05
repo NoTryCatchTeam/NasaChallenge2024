@@ -30,31 +30,33 @@
         var planets = await HttpClient.GetFromJsonAsync<Exoplanet[]>("jsons/exoplanets.json");
         var stars = await HttpClient.GetFromJsonAsync<Star[]>("jsons/stars.json");
 
-        var planetData = planets.ElementAt(_exoplanetIterator++);
+        var planetData = planets.ElementAt(_exoplanetIterator);
         var star = stars.First(x => x.Id == planetData.HostStarIds.First());
 
         var systemData = new ExoplanetSystemData
+        {
+            Planet = new ExoplanetSystemData.PlanetData
             {
-                Planet = new ExoplanetSystemData.PlanetData
-                {
-                    Id = planetData.Id,
-                    Name = planetData.Name,
-                    OrbitalRadius = planetData.OrbitalRadius,
-                    EarthRadius = planetData.EarthRadius ?? 1,
-                    Texture = planetData.TexturePath,
-                },
-                Star = new ExoplanetSystemData.StarData
-                {
-                    Id = star.Id,
-                    Name = star.Name,
-                    SunRadius = star.SunRadius ?? 1,
-                    Texture = star.TexturePath,
-                }
-            };
+                Id = planetData.Id,
+                Name = planetData.Name,
+                OrbitalRadius = planetData.OrbitalRadius,
+                EarthRadius = planetData.EarthRadius ?? 1,
+                Texture = planetData.TexturePath,
+            },
+            Star = new ExoplanetSystemData.StarData
+            {
+                Id = star.Id,
+                Name = star.Name,
+                SunRadius = star.SunRadius ?? 1,
+                Texture = star.TexturePath,
+            }
+        };
 
         await _mainJsModule.InvokeVoidAsync("showExoplanetSystemAsync", systemData, false);
 
-        if (_exoplanetIterator == planets.Count() - 1)
+        _exoplanetIterator++;
+
+        if (_exoplanetIterator == planets.Count())
         {
             _exoplanetIterator = 2;
         }
@@ -65,7 +67,7 @@
         await _mainJsModule.InvokeVoidAsync("showSolarSystemAsync", false);
     }
 
-    private class ExoplanetSystemData
+    public class ExoplanetSystemData
     {
         public StarData Star { get; set; }
 

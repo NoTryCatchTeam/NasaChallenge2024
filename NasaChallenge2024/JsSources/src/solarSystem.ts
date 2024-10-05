@@ -1,10 +1,28 @@
 import * as Three from "three";
+import * as Helpers from "./helpers";
 
-export class SolarSystem extends Three.Group {
+export abstract class BaseSystem extends Three.Group {
 
     constructor() {
         super();
     }
+
+    public Star: Three.Mesh<Three.SphereGeometry, Three.MeshPhongMaterial>;
+
+    public Planet: Three.Mesh<Three.SphereGeometry, Three.MeshPhongMaterial>;
+
+    abstract getStarRadius(): number;
+
+    abstract getPlanetRadius(): number;
+}
+
+export class SolarSystem extends BaseSystem {
+
+    constructor() {
+        super();
+    }
+
+    private light: Three.PointLight;
 
     // Earth radius
     public static getEarthRadius(): number {
@@ -21,9 +39,13 @@ export class SolarSystem extends Three.Group {
         return 1000 + this.getSunRadius() + this.getEarthRadius();
     }
 
-    public Sun: Three.Mesh<Three.SphereGeometry>;
+    getStarRadius(): number {
+        return this.Star.geometry.parameters.radius;
+    }
 
-    public Earth: Three.Mesh<Three.SphereGeometry>;
+    getPlanetRadius(): number {
+        return this.Planet.geometry.parameters.radius;
+    }
 
     async initAsync() {
 
@@ -45,16 +67,14 @@ export class SolarSystem extends Three.Group {
 
             let mesh = new Three.Mesh(geometry, material);
             this.add(mesh);
-            this.Sun = mesh;
+            this.Star = mesh;
 
-            const axes = new Three.AxesHelper(sunRadius);
-            (axes.material as Three.Material).depthTest = false;
-            axes.renderOrder = 1;
+            if (globalThis.isDebug) {
+                Helpers.addAxesHelper(mesh, sunRadius);
+            }
 
-            mesh.add(axes);
-
-            const light = new Three.PointLight("#ffffff", earthOrbitRadius, 0, 0.8);
-            this.add(light);
+            this.light = new Three.PointLight("#ffffff", earthOrbitRadius, 0, 0.8);
+            this.add(this.light);
         }
 
         // Earth
@@ -71,20 +91,27 @@ export class SolarSystem extends Three.Group {
             let mesh = new Three.Mesh(geometry, material);
             mesh.position.set(earthOrbitRadius, 0, 0);
             this.add(mesh);
-            this.Earth = mesh;
+            this.Planet = mesh;
 
-            const axes = new Three.AxesHelper(earthRadius);
-            (axes.material as Three.Material).depthTest = false;
-            axes.renderOrder = 1;
-
-            mesh.add(axes);
+            if (globalThis.isDebug) {
+                Helpers.addAxesHelper(mesh, earthRadius);
+            }
         }
     }
 
     animate(time: number) {
         time *= 0.001;
 
-        this.Earth.setRotationFromAxisAngle(new Three.Vector3(0, 1, 0), time * 0.1);
-        this.Sun.setRotationFromAxisAngle(new Three.Vector3(0, 1, 0), time * 0.01);
+        this.Planet.setRotationFromAxisAngle(new Three.Vector3(0, 1, 0), time * 0.1);
+        this.Star.setRotationFromAxisAngle(new Three.Vector3(0, 1, 0), time * 0.01);
+    }
+
+    show() {
+        this.light.decay = 0.8;
+    }
+
+    hide() {
+        this.light.decay = 100;
     }
 }
+
