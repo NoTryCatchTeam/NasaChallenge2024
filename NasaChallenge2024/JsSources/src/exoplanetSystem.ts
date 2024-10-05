@@ -6,15 +6,18 @@ export class ExoplanetSystem extends Three.Group {
         super();
     }
 
-    public Star: Three.Mesh<Three.SphereGeometry>;
+    public Star: Three.Mesh<Three.SphereGeometry, Three.MeshPhongMaterial>;
 
-    public Planet: Three.Mesh<Three.SphereGeometry>;
+    public Planet: Three.Mesh<Three.SphereGeometry, Three.MeshPhongMaterial>;
+
+    private light: Three.PointLight;
 
     async initAsync() {
 
-        const starRadius = 10;
+        // 1 Sun radius
+        const starRadius = 1;
+        // 1 Earth radius
         const planetRadius = 1;
-        const planetOrbitDistance = 15;
 
         // Star
         {
@@ -38,9 +41,9 @@ export class ExoplanetSystem extends Three.Group {
 
             mesh.add(axes);
 
-            const light = new Three.PointLight("#ffffff", 1000);
-            light.position.set(planetOrbitDistance - planetRadius * 20, 0, 0);
-            this.add(light);
+            this.light = new Three.PointLight("#ffffff", 1000);
+            // this.light.position.set(planetOrbitDistance - planetRadius * 20, 0, 0);
+            this.add(this.light);
         }
 
         // Planet
@@ -55,7 +58,6 @@ export class ExoplanetSystem extends Three.Group {
             });
 
             let mesh = new Three.Mesh(geometry, material);
-            mesh.position.set(planetOrbitDistance, 0, 0);
             this.add(mesh);
             this.Planet = mesh;
 
@@ -73,4 +75,68 @@ export class ExoplanetSystem extends Three.Group {
         this.Planet.setRotationFromAxisAngle(new Three.Vector3(0, 1, 0), time * 0.1);
         this.Star.setRotationFromAxisAngle(new Three.Vector3(0, 1, 0), time * 0.01);
     }
+
+    async prepare(data: ExoplanetData) {
+
+        // Prepare star
+        {
+            const currentScale = this.Star.scale;
+
+            // Scale factor is 'new star scale' * 1 / 'current star scale'
+            const scaleFactor = data.Star.SunRadius / currentScale.x;
+            this.Star.scale.set(scaleFactor, scaleFactor, scaleFactor);
+
+            const texture = await new Three.TextureLoader().loadAsync(data.Star.Texture);
+            texture.colorSpace = Three.SRGBColorSpace;
+
+            this.Star.material.emissiveMap = texture;
+        }
+
+        // Prepare planet
+        {
+            const currentScale = this.Planet.scale;
+
+            const scaleFactor = data.Planet.EarthRadius / currentScale.x;
+            this.Planet.scale.set(scaleFactor, scaleFactor, scaleFactor);
+
+            const texture = await new Three.TextureLoader().loadAsync(data.Planet.Texture);
+            texture.colorSpace = Three.SRGBColorSpace;
+
+            this.Planet.material.map = texture;
+
+            // 1 is 1 AU, so no need to multiply
+            this.Planet.position.set(data.Planet.OrbitalRadius, 0, 0);
+        }
+    }
+}
+
+export class ExoplanetData {
+
+    public Star: Star;
+
+    public Planet: Planet;
+}
+
+class Star {
+
+    public Id: number;
+
+    public Name: string;
+
+    public SunRadius: number;
+
+    public Texture: string;
+}
+
+class Planet {
+
+    public Id: number;
+
+    public Name: string;
+
+    public EarthRadius: number;
+
+    public Texture: string;
+
+    public OrbitalRadius: number;
 }
