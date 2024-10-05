@@ -1,40 +1,26 @@
 @import '../base/var';
 
 @font-face {
-    font-family: 'Onest';
-    src: url('#{$path-font-main}/OnestRegular.eot');
-    src: url('#{$path-font-main}/OnestRegular.eot?#iefix') format('embedded-opentype'),
-    url('#{$path-font-main}/OnestRegular.woff') format('woff'),
-    url('#{$path-font-main}/OnestRegular.woff2') format('woff2'),
-    url('#{$path-font-main}/OnestRegular.ttf') format('truetype'),
-    url('#{$path-font-main}/OnestRegular.svg#Sri-TSCRegular') format('svg');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Onest';
-    src: url('#{$path-font-main}/OnestMedium.eot');
-    src: url('#{$path-font-main}/OnestMedium.eot?#iefix') format('embedded-opentype'),
-    url('#{$path-font-main}/OnestMedium.woff') format('woff'),
-    url('#{$path-font-main}/OnestMedium.woff2') format('woff2'),
-    url('#{$path-font-main}/OnestMedium.ttf') format('truetype'),
-    url('#{$path-font-main}/OnestMedium.svg#Sri-TSCRegular') format('svg');
+    font-family: 'Inter';
+    src: url('#{$path-font-main-inter}/Inter_18pt-Regular.ttf') format('truetype');
     font-weight: 500;
     font-style: normal;
     font-display: swap;
 }
 
 @font-face {
-    font-family: 'Onest';
-    src: url('#{$path-font-main}/OnestBold.eot');
-    src: url('#{$path-font-main}/OnestBold.eot?#iefix') format('embedded-opentype'),
-    url('#{$path-font-main}/OnestBold.woff') format('woff'),
-    url('#{$path-font-main}/OnestBold.woff2') format('woff2'),
-    url('#{$path-font-main}/OnestBold.ttf') format('truetype'),
-    url('#{$path-font-main}/OnestBold.svg#Sri-TSCRegular') format('svg');
-    font-weight: 700;
+    font-family: 'Inter';
+    src: url('#{$path-font-main-inter}/Inter_24pt-Regular.ttf') format('truetype');
+    font-weight: 400;
     font-style: normal;
     font-display: swap;
 }
+
+@font-face {
+    font-family: 'Jaro';
+    src: url('#{$path-font-main-jaro}/Jaro_24.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
