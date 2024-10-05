@@ -1,0 +1,23 @@
+[
+    {
+      "type": "Auto",
+      "speed": 60 // мили/ч
+    },
+    {
+        "type": "BulletTrain",
+        "speed": 120
+    },
+    {
+        "type": "Jet",
+        "speed": 600
+    },
+    {
+        "type": "Voyager",
+        "speed": 38000
+    },
+    {
+        "type": "LightSpeed",
+        "speed": 671000000
+    }
+  ]
+  

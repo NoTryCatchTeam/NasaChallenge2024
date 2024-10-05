@@ -1,0 +1,73 @@
+[
+    {
+      "id": 1,
+      "name": "Kepler-16",
+      "sun_radius": 0.65,
+      "sun_mass": 0.69,
+      "texture_path": "/images/textures/star.jpg"
+    },
+    {
+        "id": 2,
+        "name": "Kepler-16 B",
+        //"sun_radius": no data, 
+        //"sun_mass": no data,
+        "texture_path": "/images/textures/star.jpg"
+    },
+    {
+        "id": 3,
+        "name": "Kepler-22",
+        "sun_mass": 0.86,
+        "sun_radius": 0.87,
+        "texture_path": "/images/textures/star.jpg"
+    },
+    {
+        "id": 4,
+        "name": "Kepler-22",
+        "sun_mass": 0.86,
+        "sun_radius": 0.87,
+        "texture_path": "/images/textures/star.jpg"
+    },
+    {
+        "id": 5,
+        "name": "Kepler-7",
+        "sun_mass": 1.36,
+        "sun_radius": 1.97,
+        "texture_path": "/images/textures/star.jpg"
+    },
+    {
+        "id": 6,
+        "name": "Kepler-452",
+        "sun_mass": 1.04,
+        "sun_radius": 1.11,
+        "texture_path": "/images/textures/star.jpg"
+    },
+    {
+        "id": 7,
+        "name": "GJ 504",
+        "sun_mass": 1.22,
+        "sun_radius": 1.26,
+        "texture_path": "/images/textures/star.jpg"
+    },
+    {
+        "id": 8,
+        "name": "HD 17156",
+        "sun_mass": 1.41,
+        "sun_radius": 1.55,
+        "texture_path": "/images/textures/star.jpg"
+    },
+    {
+        "id": 9,
+        "name": "AU Microscopii",
+        "sun_mass": 0.5,
+        "sun_radius": 0.82,
+        "texture_path": "/images/textures/star.jpg"
+    },
+    {
+        "id": 10,
+        "name": "TRAPPIST-1",
+        "sun_mass": 0.09,
+        "sun_radius": 0.12,
+        "texture_path": "/images/textures/star.jpg"
+    }
+  ]
+  

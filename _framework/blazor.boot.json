@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "NasaChallenge2024",
   "resources": {
-    "hash": "sha256-BWRbQPGdO0Rs3SxS1LEa2BlP/XEJvJyLcGwSi/DyC1E=",
+    "hash": "sha256-IRkFV/vp+vzf7w44i3MXaSzu/6qBwsGadFiOe47JWss=",
     "jsModuleNative": {
       "dotnet.native.8.0.8.746giovk6l.js": "sha256-juC5sA7gHTLXFEhAKgdM2/RavswpwCtDfjYGsAz2FXg="
     },
@@ -33,7 +33,7 @@
       "Microsoft.Extensions.Primitives.wasm": "sha256-6187ynEahDlSLMBvD4vAmiLpZ3clRb5xu6rM7O8AxNo=",
       "Microsoft.JSInterop.wasm": "sha256-YrrPPJg6rA/Bmx1sladSdAwoqL78YSP+3xcjhBg0bnc=",
       "Microsoft.JSInterop.WebAssembly.wasm": "sha256-ZyIqQss3I64BQC2gc7JEDrkYq14vXKEXuw5vBJ5oFYM=",
-      "NasaChallenge2024.wasm": "sha256-Mz7kLLQnQvbrNiVPYC64Stccn8wXKJhDl3vyTH314hA=",
+      "NasaChallenge2024.wasm": "sha256-i69a5I94eoRMNdfqVLiauXSd2P+Hsn7Nw3tE5elKrtk=",
       "System.Collections.Concurrent.wasm": "sha256-NVEciweq4C45AijA3PT3fpwPDZ/4qnRVDko7sjqMGcc=",
       "System.Collections.wasm": "sha256-UlKGaoU+aSweZmPWzSH8CA2XajRK70pK6ZeC+19/vyM=",
       "System.ComponentModel.wasm": "sha256-GPAg/lqvtlGqfal3j6EPgQ+6mqlusQ30qCeS8LYv8ws=",
