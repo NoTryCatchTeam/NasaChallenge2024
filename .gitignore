@@ -7,7 +7,6 @@ riderModule.iml
 .idea/
 
 node_modules/
-package-lock.json
 
 wwwroot/js/
 wwwroot/css/**.css
