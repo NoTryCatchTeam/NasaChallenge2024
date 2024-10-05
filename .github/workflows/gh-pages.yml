@@ -27,7 +27,7 @@ jobs:
     - run: dotnet publish ./NasaChallenge2024/
     - run: echo "* binary" >> NasaChallenge2024/bin/Release/net8.0/publish/wwwroot/.gitattributes
     - run: touch NasaChallenge2024/bin/Release/net8.0/publish/wwwroot/.nojekyll
-    - run: sed -i 's+<base href="/" />+<base href="/NasaChallenge2024/" />+g' NasaChallenge2024/bin/Release/net8.0/publish/wwwroot/index.html
+    - run: sed -i 's+<base href="/"/>+<base href="/NasaChallenge2024/" />+g' NasaChallenge2024/bin/Release/net8.0/publish/wwwroot/index.html
     - name: Deploy 
       uses: JamesIves/github-pages-deploy-action@releases/v3                             
       with:  
