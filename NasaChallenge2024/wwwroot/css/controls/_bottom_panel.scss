@@ -1,0 +1,48 @@
+.bottom-panels {
+    position: absolute;
+    right: 24px;
+    bottom: 24px;
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+}
+
+.bottom-panels-item {
+    width: 215px;
+    height: 104px;
+    opacity: 70%;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+}
+
+.bottom-panels-item-1{
+    @extend .bottom-panels-item;
+    background: #1E1E1ECC;
+}
+
+.bottom-panels-item-2{
+    @extend .bottom-panels-item;
+    background: #46C0E533;
+}
+
+.bottom-panels-item-3{
+    @extend .bottom-panels-item;
+    background: #46E5A333;
+}
+
+.bottom-panels-item-number {
+    font-family: "Jaro";
+    font-size: 48px;
+    font-weight: 400;
+    line-height: 48px;
+    font-optical-sizing: 72px;
+}
+
+.bottom-panels-item-description {
+    font-family: "Inter";
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 20px;
+}
