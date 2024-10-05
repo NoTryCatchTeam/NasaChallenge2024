@@ -76,7 +76,7 @@ export class ExoplanetSystem extends Three.Group {
         this.Star.setRotationFromAxisAngle(new Three.Vector3(0, 1, 0), time * 0.01);
     }
 
-    async prepare(data: ExoplanetData) {
+    async prepare(data: ExoplanetSystemData) {
 
         // Prepare star
         {
@@ -110,7 +110,7 @@ export class ExoplanetSystem extends Three.Group {
     }
 }
 
-export class ExoplanetData {
+export class ExoplanetSystemData {
 
     public Star: Star;
 

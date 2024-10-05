@@ -1,7 +1,7 @@
 import * as Three from "three";
 import * as Addons from "three/addons";
 import { SolarSystem } from "./solarSystem";
-import { ExoplanetData, ExoplanetSystem } from "./exoplanetSystem";
+import { ExoplanetSystemData, ExoplanetSystem } from "./exoplanetSystem";
 
 let isInitialized = false;
 let scene: Three.Scene;
@@ -87,7 +87,7 @@ export async function initScene(canvasId: string, isDebug: boolean = false) {
     startRenderLoop(renderer);
 }
 
-export function showPlanet(data: ExoplanetData, isTargetStar: boolean) {
+export function showExoplanetSystemAsync(data: ExoplanetSystemData, isTargetStar: boolean) {
 
     exoplanetSystem.prepare(data);
 
@@ -98,7 +98,7 @@ export function showPlanet(data: ExoplanetData, isTargetStar: boolean) {
     sceneCamera.Controls.target.copy(targetWorldPos);
 }
 
-export function showSolarSystem(isTargetStar: boolean) {
+export function showSolarSystemAsync(isTargetStar: boolean) {
     const targetWorldPos = (isTargetStar ? solarSystem.Sun : solarSystem.Earth).getWorldPosition(new Three.Vector3());
     const cameraTargetOffset = (isTargetStar ? solarSystem.Sun : solarSystem.Earth).geometry.parameters.radius;
 
@@ -119,6 +119,7 @@ function startRenderLoop(renderer: Three.WebGLRenderer) {
         }
 
         solarSystem.animate(time);
+        exoplanetSystem.animate(time);
 
         sceneCamera.Controls.update();
 

@@ -4,7 +4,9 @@
 
 <h3 style="color: #fff">SceneDebug</h3>
 
-<button @onclick="ChangeSystemAsync" style="color: #fff; pointer-events: all;">Change system</button>
+<button @onclick="ShowExoplanetSystemAsync" style="color: #fff; pointer-events: all;">Show exoplanet system</button>
+
+<button @onclick="ShowSolarSystemAsync" style="color: #fff; pointer-events: all;">Show solar system</button>
 
 @code
 {
@@ -19,22 +21,48 @@
         }
 
         _mainJsModule = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scene.js");
-        await _mainJsModule.InvokeVoidAsync("initScene", "#scene-canvas");
+        await _mainJsModule.InvokeVoidAsync("initScene", "#scene-canvas", true);
     }
 
-    private async Task ChangeSystemAsync()
+    private async Task ShowExoplanetSystemAsync()
     {
-        var planets = await HttpClient.GetFromJsonAsync<IEnumerable<Planet>>("jsons/exoplanets.json");
-        var stars = await HttpClient.GetFromJsonAsync<IEnumerable<Star>>("jsons/stars.json");
+        var planets = await HttpClient.GetFromJsonAsync<Planet[]>("jsons/exoplanets.json");
+        var stars = await HttpClient.GetFromJsonAsync<Star[]>("jsons/stars.json");
 
         var planetData = planets.ElementAt(_exoplanetIterator++);
+        var star = stars.First(x => x.Id == planetData.HostStars.First());
 
-        await _mainJsModule.InvokeVoidAsync("changeSystem", System.Text.Json.JsonSerializer.Serialize(planetData));
+        await _mainJsModule.InvokeVoidAsync(
+        "showExoplanetSystemAsync",
+        JsonSerializer.Serialize(new ExoplanetData
+            {
+                Planet = new ExoplanetData.PlanetData
+                {
+                    Id = planetData.Id,
+                    Name = planetData.Name,
+                    OrbitalRadius = planetData.OrbitalRadius,
+                    EarthRadius = planetData.EarthRadius,
+                    Texture = planetData.Texture,
+                },
+                Star = new ExoplanetData.StarData
+                {
+                    Id = star.Id,
+                    Name = star.Name,
+                    SunRadius = star.SunRadius,
+                    Texture = star.Texture,
+                }
+            }),
+        true);
 
         if (_exoplanetIterator == planets.Count() - 1)
         {
             _exoplanetIterator = 2;
         }
+    }
+
+    private async Task ShowSolarSystemAsync()
+    {
+        await _mainJsModule.InvokeVoidAsync("showSolarSystemAsync", true);
     }
 
     private class Planet
@@ -45,6 +73,9 @@
 
         [JsonPropertyName("orbital_radius")]
         public float OrbitalRadius { get; set; }
+
+        [JsonPropertyName("earth_radius")]
+        public float EarthRadius { get; set; }
 
         [JsonPropertyName("host_stars_ids")]
         public IEnumerable<int> HostStars { get; set; }
