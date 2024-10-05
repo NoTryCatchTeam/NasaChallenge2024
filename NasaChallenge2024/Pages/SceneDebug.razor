@@ -3,6 +3,8 @@
 
 <h3 style="color: #fff">SceneDebug</h3>
 
+<button @onclick="ChangeSystemAsync">Change system</button>
+
 @code
 {
     private IJSObjectReference _mainJsModule;
@@ -16,5 +18,10 @@
 
         _mainJsModule = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scene.js");
         await _mainJsModule.InvokeVoidAsync("initScene", "#scene-canvas");
+    }
+
+    private async Task ChangeSystemAsync()
+    {
+        await _mainJsModule.InvokeVoidAsync("changeSystem");
     }
 }
