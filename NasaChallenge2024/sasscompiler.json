@@ -1,0 +1,11 @@
+{
+  "Arguments": "--error-css --style=expanded --source-map",
+  "Source": "wwwroot/css",
+  "Target": "wwwroot/css",
+
+  "Configurations": {
+    "Release": {
+      "Arguments": "--no-error-css --style=compressed --no-source-map"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+@page "/scene-debug"
+@inject IJSRuntime JsRuntime
+
+<h3 style="color: #fff">SceneDebug</h3>
+
+@code
+{
+    private IJSObjectReference _mainJsModule;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return;
+        }
+
+        _mainJsModule = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scene.js");
+        await _mainJsModule.InvokeVoidAsync("initScene", "#scene-canvas");
+    }
+}
