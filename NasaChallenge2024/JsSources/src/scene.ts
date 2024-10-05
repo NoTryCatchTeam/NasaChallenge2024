@@ -1,7 +1,7 @@
 import * as Three from "three";
 import * as Addons from "three/addons";
 import { SolarSystem } from "./solarSystem";
-import { ExoplanetSystem } from "./exoplanetSystem";
+import { ExoplanetData, ExoplanetSystem } from "./exoplanetSystem";
 
 let isInitialized = false;
 let scene: Three.Scene;
@@ -9,7 +9,7 @@ let sceneCamera: SceneCamera;
 let solarSystem: SolarSystem;
 let exoplanetSystem: ExoplanetSystem;
 
-export async function initScene(canvasId: string) {
+export async function initScene(canvasId: string, isDebug: boolean = false) {
 
     if (isInitialized) {
         return;
@@ -73,30 +73,37 @@ export async function initScene(canvasId: string) {
     sceneGroupsPositioner.positionGroup(exoplanetSystem);
     scene.add(exoplanetSystem);
 
-    const targetWorldPos = solarSystem.Earth.getWorldPosition(new Three.Vector3());
-    const cameraTargetOffset = solarSystem.Earth.geometry.parameters.radius;
-    sceneCamera.Camera.position.set(targetWorldPos.x - cameraTargetOffset * 2, targetWorldPos.y, targetWorldPos.z);
-    sceneCamera.Controls.target.copy(targetWorldPos);
+    if (isDebug) {
+        sceneCamera.Camera.position.set(10, 10, 10);
+    }
+    else {
+        const targetWorldPos = solarSystem.Earth.getWorldPosition(new Three.Vector3());
+        const cameraTargetOffset = solarSystem.Earth.geometry.parameters.radius;
+        sceneCamera.Camera.position.set(targetWorldPos.x - cameraTargetOffset * 2, targetWorldPos.y, targetWorldPos.z);
+        sceneCamera.Controls.target.copy(targetWorldPos);
+    }
 
     // Start render loop
     startRenderLoop(renderer);
 }
 
-let isTargetingSolarSystem = true;
+export function showPlanet(data: ExoplanetData, isTargetStar: boolean) {
 
-export function changeSystem() {
-    const targetWorldPos = !isTargetingSolarSystem ?
-        solarSystem.Earth.getWorldPosition(new Three.Vector3()) :
-        exoplanetSystem.Planet.getWorldPosition(new Three.Vector3());
+    exoplanetSystem.prepare(data);
 
-    const cameraTargetOffset = !isTargetingSolarSystem ?
-        solarSystem.Earth.geometry.parameters.radius :
-        exoplanetSystem.Planet.geometry.parameters.radius;
+    const targetWorldPos = (isTargetStar ? exoplanetSystem.Star : exoplanetSystem.Planet).getWorldPosition(new Three.Vector3());
+    const cameraTargetOffset = (isTargetStar ? exoplanetSystem.Star : exoplanetSystem.Planet).geometry.parameters.radius;
 
     sceneCamera.Camera.position.set(targetWorldPos.x - cameraTargetOffset * 2, targetWorldPos.y, targetWorldPos.z);
     sceneCamera.Controls.target.copy(targetWorldPos);
+}
 
-    isTargetingSolarSystem = !isTargetingSolarSystem;
+export function showSolarSystem(isTargetStar: boolean) {
+    const targetWorldPos = (isTargetStar ? solarSystem.Sun : solarSystem.Earth).getWorldPosition(new Three.Vector3());
+    const cameraTargetOffset = (isTargetStar ? solarSystem.Sun : solarSystem.Earth).geometry.parameters.radius;
+
+    sceneCamera.Camera.position.set(targetWorldPos.x - cameraTargetOffset * 2, targetWorldPos.y, targetWorldPos.z);
+    sceneCamera.Controls.target.copy(targetWorldPos);
 }
 
 function startRenderLoop(renderer: Three.WebGLRenderer) {
