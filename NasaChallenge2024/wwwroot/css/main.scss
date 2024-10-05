@@ -8,6 +8,7 @@
 
 @import 'controls/progress';
 @import 'controls/slider';
+@import 'controls/vr';
 
 #app {
     width: 100%;
@@ -19,7 +20,6 @@
     z-index: 1;
     background-color: #010101;
     color: #FFFFFF;
-
 }
 
 #scene-canvas {
@@ -100,18 +100,6 @@
     opacity: 100%;
 }
 
-
-.vr {
-    position: absolute;
-    bottom: 24px;
-    left: 240px;
-    gap: 12px;
-    display: flex;
-    font-family: "Inter";
-    font-size: 18px;
-    font-weight: 500;
-}
-
-.vr-button {
-    pointer-events: all;
+.invisible {
+    display: none !important;
 }
