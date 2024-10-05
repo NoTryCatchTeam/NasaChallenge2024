@@ -11,3 +11,5 @@ node_modules/
 NasaChallenge2024/wwwroot/js/**
 **.css
 **.css.map
+
+.vscode/
