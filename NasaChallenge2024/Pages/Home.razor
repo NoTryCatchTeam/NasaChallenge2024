@@ -5,6 +5,9 @@
 
 <PageTitle>Main</PageTitle>
 
+<label class="object-name @UIVisibility">@SpaceObject.Name.ToUpper()</label>
+<label class="object-host-name @UIVisibility">@SpaceObject.Host.Name.ToUpper()</label>
+
 <div class="user-panel">
     <button class="vr-button">
         <div class="vr"><img class="visor" src="images/visor.svg" alt="visor" />VR Mode</div>
@@ -17,49 +20,134 @@
         </label>
     </div>
     <div class="user">
-        MISTER TURBO
+        @User.Name
         <div class="progress-bar-container">
-            <div class="progress-bar-indicator" style="width:60%"></div>
+            <div class="progress-bar-indicator" style="width:@User.Completion%"></div>
         </div>
     </div>
     <div class="avatar">
         <img src="images/avatar.svg" alt="avatar" />
-        <div class="score">654</div>
+        <div class="score">@User.UserScore</div>
     </div>
 </div>
 
 <div class="menu @UIVisibility">
-    <button class="menu-item" autofocus><img class="starFour" src="images/starFour.svg" alt="starFour" />Main</button>
-    <button class="menu-item"><img class="planet" src="images/planet.svg" alt="planet" />Planets</button>
+    <button class="menu-item" autofocus><img class="planets" src="images/planet.svg" alt="planet" />Planets</button>
     <button class="menu-item"><img class="flyingSaucer" src="images/flyingSaucer.svg"
             alt="flyingSaucer" />Observatories</button>
 </div>
 
-
-
+<div class="object-panel @UIVisibility">
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Planet Name</label>
+        <label class="object-panel-item-value">@SpaceObject.Name</label>
+    </div>
+    <hr>
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Host Name</label>
+        <label class="object-panel-item-value">@SpaceObject.Host.Name</label>
+    </div>
+    <hr>
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Number of planet</label>
+        <label class="object-panel-item-value">@SpaceObject.Number</label>
+    </div>
+    <hr>
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Status</label>
+        <label class="object-panel-item-value">@SpaceObject.Status</label>
+    </div>
+    <hr>
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Stellar Effective Temperature [K]</label>
+        <label class="object-panel-item-value">@SpaceObject.Host.SolarTemp</label>
+    </div>
+    <hr>
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Stellar Radius [Solar Radius]</label>
+        <label class="object-panel-item-value">@SpaceObject.Host.SolarRadius</label>
+    </div>
+    <hr>
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Stellar Mass [Solar Mass]</label>
+        <label class="object-panel-item-value">@SpaceObject.Host.SolarMass</label>
+    </div>
+    <hr>
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Detected by</label>
+        <label class="object-panel-item-value">@SpaceObject.DetectedBy</label>
+    </div>
+    <hr>
+    <div class="object-panel-item">
+        <label class="object-panel-item-key">Observed by</label>
+        <label class="object-panel-item-value">@SpaceObject.ObservedBy</label>
+    </div>
+</div>
 
 <div class="bottom-panels @UIVisibility">
-    <div class="bottom-panels-item"></div>
-    <div class="bottom-panels-item"></div>
-    <div class="bottom-panels-item"></div>
+    <div class="bottom-panels-item-1">
+        <label class="bottom-panels-item-number">@SpaceObject.DiscoveryYear</label>
+        <label class="bottom-panels-item-description">discovery year</label>
+    </div>
+    <div class="bottom-panels-item-2"><label class="bottom-panels-item-number">@SpaceObject.OrbitalRadius</label>
+        <label class="bottom-panels-item-description">orbital radius (AU)</label>
+    </div>
+    <div class="bottom-panels-item-3"><label class="bottom-panels-item-number">@SpaceObject.OrbitalPeriod</label>
+        <label class="bottom-panels-item-description">orbital period (days)</label>
+    </div>
 </div>
 
 
 @code
 {
     private IJSObjectReference _mainJsModule;
-    
+
     //var exoplanets = await Http.GetFromJsonAsync<Exoplanet[]>("jsons/exoplanets.json");
     //var observatories = await Http.GetFromJsonAsync<Observatory[]>("jsons/observatories.json");
     //var starts = await Http.GetFromJsonAsync<Star[]>("jsons/stars.json");
     //var telescopes = await Http.GetFromJsonAsync<Telescope[]>("jsons/telescopes.json");
     //var travelTypes = await Http.GetFromJsonAsync<TravelType[]>("jsons/travel-types.json");
 
+
+
+    public SpaceObject SpaceObject { get; set; } = new SpaceObject
+        {
+            Name = "Kepler-186f",
+
+            Number = 5,
+
+            DiscoveryYear = 2014,
+
+            OrbitalRadius = 0.7048f,
+
+            OrbitalPeriod = 228.8f,
+
+            Status = "Published Confirmed",
+
+            DetectedBy = "Transit",
+
+            ObservedBy = "Kepler",
+
+            Host = new SpaceObjectHost
+            {
+                Name = "Kepler 186",
+                SolarTemp = "3748±75",
+                SolarRadius = "0.539±0.015"
+
+            }
+        };
+
+    public User User { get; set; } = new User
+        {
+            Name = "MISTER NITRO",
+            Completion = 30,
+            UserScore = 658
+        };
+
     [Parameter]
     public bool IsUIChecked { get; set; } = true;
     private bool isUIChecked;
     private string UIVisibility;
-
     protected override void OnParametersSet()
     {
         isUIChecked = this.IsUIChecked;
@@ -78,6 +166,8 @@
     private void UICheckboxChanged(ChangeEventArgs e)
     {
         var value = e.Value;
-        this.UIVisibility = (bool)value==false ? "invisible" : string.Empty;
+        this.UIVisibility = (bool)value == false ? "invisible" : string.Empty;
     }
+
+
 }
