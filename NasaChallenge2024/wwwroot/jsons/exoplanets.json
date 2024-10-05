@@ -1,0 +1,363 @@
+[
+  {
+    "id": 1,
+    "name": "Kepler-16 b",
+    "discovered": 2011,
+    "planet_type": "Gas Giant",
+    "brief_description": "A giant planet composed mainly of gas",
+    "description": "Kepler-16b is a world where two suns set over the horizon instead of just one, the first Tatooine-like planet found in our galaxy.",
+    "orbital_radius": 0.7048, // AU (Астрономическая единица (а.е.) — это среднее расстояние от Земли до Солнца (около 149,6 миллионов километров), используется для измерения расстояний в Солнечной системе.) Расстояние от планеты до звезды вокруг, которой она вращается
+    "orbital_period": 228.8, // days
+    "orbital_eccentricity": 0.0069, // Характеристика отвечающая насколько круглая орбита у планеты, 0 - идельно круглая, 1 элипс
+    "earth_radius": 8.5,
+    "jupiter_radius": 0.754,
+    "earth_mass": 105.8,
+    "jupiter_mass": 0.333,
+    "earth_distance": 245,
+    "host_stars_ids": [
+      1,
+      2
+    ],
+    "detection_method": "Transit",
+    "telescope_ids": [
+      1
+    ],
+    "texture_path": "/images/textures/gasgaint.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Kepler-22 b",
+    "discovered": 2011,
+    "planet_type": "Super Earth",
+    "brief_description": "A potentially rocky world, larger than Earth",
+    "description": "A possible ocean world orbiting in the habitable zone—the region around a star where the temperature is right for liquid water, a requirement for life on Earth.",
+    "orbital_radius": 0.812,
+    "orbital_period": 289.9,
+    "orbital_eccentricity": 0.72,
+    "earth_radius": 2.1,
+    "jupiter_radius": 0.187,
+    "earth_mass": 9.1,
+    "jupiter_mass": 0.029,
+    "earth_distance": 635,
+    "host_stars_ids": [
+      3
+    ],
+    "detection_method": "Transit",
+    "telescope_ids": [
+      1
+    ],
+    "texture_path": "/images/textures/kepler-22_b.jpeg"
+  },
+  {
+    "id": 3,
+    "name": "Kepler-7 b",
+    "discovered": 2009,
+    "planet_type": "Gas Giant",
+    "brief_description": "A giant planet composed mainly of gas",
+    "description": "A massive world called a hot Jupiter, Kepler-7b was the first exoplanet to have its clouds mapped.",
+    "orbital_radius": 0.06067,
+    "orbital_period": 4.9,
+    "orbital_eccentricity": 0,
+    "earth_radius": 18.18,
+    "jupiter_radius": 1.622,
+    "earth_mass": 140,
+    "jupiter_mass": 0.441,
+    "earth_distance": 3000,
+    "host_stars_ids": [
+      4
+    ],
+    "detection_method": "Transit",
+    "telescope_ids": [
+      1
+    ],
+    "texture_path": "/images/textures/gasgaint.jpg"
+  },
+  {
+    "id": 4,
+    "name": "Kepler-452 b",
+    "discovered": 2015,
+    "planet_type": "Super Earth",
+    "brief_description": "A potentially rocky world, larger than Earth",
+    "description": "An \"Earth-cousin\" that orbits a star like our sun in the habitable zone, where liquid water could exist.",
+    "orbital_radius": 1.046,
+    "orbital_period": 384.8,
+    "orbital_eccentricity": 0,
+    "earth_radius": 1.63,
+    "jupiter_radius": 0.145,
+    "earth_mass": 3.29,
+    "jupiter_mass": 0.01035,
+    "earth_distance": 2000,
+    "host_stars_ids": [
+      5
+    ],
+    "detection_method": "Transit",
+    "telescope_ids": [
+      1
+    ],
+    "texture_path": "/images/textures/kepler-452_b.jpeg"
+  },
+  {
+    "id": 5,
+    "name": "GJ 504 b",
+    "discovered": 2013,
+    "planet_type": "Gas Giant",
+    "brief_description": "A puffy pink planet",
+    "description": "If we could travel to this giant planet, we would see a world still glowing from the heat of its formation with a color reminiscent of a dark cherry blossom, a dull magenta.",
+    "orbital_radius": 43.5,
+    //"orbital_period": no data,
+    "orbital_eccentricity": 0,
+    "earth_radius": 12.99,
+    "jupiter_radius": 1.16,
+    "earth_mass": 1271.3,
+    "jupiter_mass": 4,
+    "earth_distance": 57,
+    "host_stars_ids": [
+      6
+    ],
+    "detection_method": "Imaging",
+    "telescope_ids": [
+      2
+    ],
+    "texture_path": "/images/textures/gj_504_b.jpeg"
+  },
+  {
+    "id": 6,
+    "name": "HD 17156 b",
+    "discovered": 2007,
+    "planet_type": "Gas Giant",
+    "brief_description": "A giant planet composed mostly of gas; named for Alaskan river",
+    "description": "A giant planet composed mostly of gas. Also given the name Mulchatna, for a river in Alaska that supports indigenous and native populations.",
+    "orbital_radius": 0.16278,
+    "orbital_period": 21.2,
+    "orbital_eccentricity": 0.68,
+    "earth_radius": 12.3,
+    "jupiter_radius": 1.1,
+    "earth_mass": 1116,
+    "jupiter_mass": 3.51,
+    "earth_distance": 255,
+    "host_stars_ids": [
+      7
+    ],
+    "detection_method": "Radial Velocity",
+    "telescope_ids": [
+      2
+    ],
+    "texture_path": "/images/textures/gasgaint.jpg"
+  },
+  {
+    "id": 7,
+    "name": "AU Microscopii b",
+    "discovered": 2020,
+    "planet_type": "Neptune-like",
+    "brief_description": "A young planet blasted by its angry young star",
+    "description": "Located less than 32 light-years from Earth, AU Microscopii is among the youngest planetary systems ever observed by astronomers, and its star throws vicious temper tantrums!",
+    "orbital_radius": 0.0645,
+    "orbital_period": 8.5,
+    "orbital_eccentricity": 0.186,
+    "earth_radius": 12.3,
+    "jupiter_radius": 0.353,
+    "earth_mass": 20.12,
+    "jupiter_mass": 3.51,
+    "earth_distance": 32,
+    "host_stars_ids": [
+      8
+    ],
+    "detection_method": "Transit",
+    "telescope_ids": [
+      3
+    ],
+    "texture_path": "/images/textures/AU_Mic_b.jpeg"
+  },
+  {
+    "id": 8,
+    "name": "AU Microscopii b",
+    "discovered": 2020,
+    "planet_type": "Neptune-like",
+    "brief_description": "A young planet blasted by its angry young star",
+    "description": "Located less than 32 light-years from Earth, AU Microscopii is among the youngest planetary systems ever observed by astronomers, and its star throws vicious temper tantrums!",
+    "orbital_radius": 0.0645,
+    "orbital_period": 8.5,
+    "orbital_eccentricity": 0.186,
+    "earth_radius": 4,
+    "jupiter_radius": 0.353,
+    "earth_mass": 20.12,
+    "jupiter_mass": 0.633,
+    "earth_distance": 32,
+    "host_stars_ids": [
+      9
+    ],
+    "detection_method": "Transit",
+    "satellite_ids": [
+      1
+    ],
+    "texture_path": "/images/textures/AU_Mic_b.jpeg"
+  },
+  {
+    "id": 9,
+    "name": "TRAPPIST-1 b",
+    "discovered": 2016,
+    "planet_type": "Super Earth",
+    "brief_description": "A potentially rocky world, larger than Earth",
+    "description": "TRAPPIST-1 b is a super Earth exoplanet that orbits an M-type star. Its mass is 1.374 Earths, it takes 1.5 days to complete one orbit of its star, and is 0.01154 AU from its star. Its discovery was announced in 2016.",
+    "orbital_radius": 0.01154,
+    "orbital_period": 1.5,
+    "orbital_eccentricity": 0.00622,
+    "earth_radius": 1.116,
+    "jupiter_radius": 0.09956,
+    "earth_mass": 1.374,
+    "jupiter_mass": 0.004323,
+    "earth_distance": 41,
+    "host_stars_ids": [
+      10
+    ],
+    "detection_method": "Transit",
+    "observatory_ids": [
+      1
+    ],
+    "texture_path": "/images/textures/TRAPPIST-1_b.jpeg"
+  },
+  {
+    "id": 10,
+    "name": "TRAPPIST-1 c",
+    "discovered": 2016,
+    "planet_type": "Super Earth",
+    "brief_description": "A potentially rocky world, larger than Earth",
+    "description": "TRAPPIST-1 c is a super Earth exoplanet that orbits an M-type star. Its mass is 1.308 Earths, it takes 2.4 days to complete one orbit of its star, and is 0.0158 AU from its star. Its discovery was announced in 2016.",
+    "orbital_radius": 0.0158,
+    "orbital_period": 2.4,
+    "orbital_eccentricity": 0.00654,
+    "earth_radius": 1.097,
+    "jupiter_radius": 0.09787,
+    "earth_mass": 1.308,
+    "jupiter_mass": 0.004115,
+    "earth_distance": 41,
+    "host_stars_ids": [
+      10
+    ],
+    "detection_method": "Transit",
+    "observatory_ids": [
+      1
+    ],
+    "texture_path": "/images/textures/TRAPPIST-1_c.jpeg"
+  },
+  {
+    "id": 11,
+    "name": "TRAPPIST-1 d",
+    "discovered": 2016,
+    "planet_type": "Terrestrial",
+    "brief_description": "A rocky world outside our solar system",
+    "description": "The third planet from its star is illustrated here with a narrow band of water between the hot day side and icy night side of the planet.",
+    "orbital_radius": 0.02227,
+    "orbital_period": 4,
+    "orbital_eccentricity": 0.00837,
+    "earth_radius": 0.788,
+    "jupiter_radius": 0.0707,
+    "earth_mass": 0.388,
+    "jupiter_mass": 0.00122,
+    "earth_distance": 41,
+    "host_stars_ids": [
+      10
+    ],
+    "detection_method": "Transit",
+    "observatory_ids": [
+      1
+    ],
+    "texture_path": "/images/textures/TRAPPIST-1_base.jpeg"
+  },
+  {
+    "id": 12,
+    "name": "TRAPPIST-1 e",
+    "discovered": 2017,
+    "planet_type": "Terrestrial",
+    "brief_description": "A rocky world outside our solar system",
+    "description": "TRAPPIST-1 e is a terrestrial exoplanet that orbits an M-type star. Its mass is 0.692 Earths, it takes 6.1 days to complete one orbit of its star, and is 0.02925 AU from its star. Its discovery was announced in 2017.",
+    "orbital_radius": 0.02925,
+    "orbital_period": 6.1,
+    "orbital_eccentricity": 0.0051,
+    "earth_radius": 0.92,
+    "jupiter_radius": 0.0821,
+    "earth_mass": 0.692,
+    "jupiter_mass": 0.00218,
+    "earth_distance": 41,
+    "host_stars_ids": [
+      10
+    ],
+    "detection_method": "Transit",
+    "observatory_ids": [
+      1
+    ],
+    "texture_path": "/images/textures/TRAPPIST-1_base.jpeg"
+  },
+  {
+    "id": 13,
+    "name": "TRAPPIST-1 f",
+    "discovered": 2017,
+    "planet_type": "Super Earth",
+    "brief_description": "A potentially rocky world, larger than Earth",
+    "description": "TRAPPIST-1 f is a super Earth exoplanet that orbits an M-type star. Its mass is 1.039 Earths, it takes 9.2 days to complete one orbit of its star, and is 0.03849 AU from its star. Its discovery was announced in 2017.",
+    "orbital_radius": 0.03849,
+    "orbital_period": 9.2,
+    "orbital_eccentricity": 0.01007,
+    "earth_radius": 1.045,
+    "jupiter_radius": 0.09323,
+    "earth_mass": 1.039,
+    "jupiter_mass": 0.003269,
+    "earth_distance": 41,
+    "host_stars_ids": [
+      10
+    ],
+    "detection_method": "Transit",
+    "observatory_ids": [
+      1
+    ],
+    "texture_path": "/images/textures/TRAPPIST-1_base.jpeg"
+  },
+  {
+    "id": 14,
+    "name": "TRAPPIST-1 g",
+    "discovered": 2017,
+    "planet_type": "Super Earth",
+    "brief_description": "A potentially rocky world, larger than Earth",
+    "description": "TRAPPIST-1 g is a super Earth exoplanet that orbits an M-type star. Its mass is 1.321 Earths, it takes 12.4 days to complete one orbit of its star, and is 0.04683 AU from its star. Its discovery was announced in 2017.",
+    "orbital_radius": 0.04683,
+    "orbital_period": 12.4,
+    "orbital_eccentricity": 0.00208,
+    "earth_radius": 1.129,
+    "jupiter_radius": 0.1007,
+    "earth_mass": 1.321,
+    "jupiter_mass": 0.004156,
+    "earth_distance": 41,
+    "host_stars_ids": [
+      10
+    ],
+    "detection_method": "Transit",
+    "observatory_ids": [
+      1
+    ],
+    "texture_path": "/images/textures/TRAPPIST-1_g.jpeg"
+  },
+  {
+    "id": 15,
+    "name": "TRAPPIST-1 h",
+    "discovered": 2017,
+    "planet_type": "Terrestrial",
+    "brief_description": "A rocky world outside our solar system",
+    "description": "TRAPPIST-1 h is a terrestrial exoplanet that orbits an M-type star. Its mass is 0.326 Earths, it takes 18.8 days to complete one orbit of its star, and is 0.06189 AU from its star. Its discovery was announced in 2017.",
+    "orbital_radius": 0.06189,
+    "orbital_period": 18.8,
+    "orbital_eccentricity": 0.00567,
+    "earth_radius": 0.755,
+    "jupiter_radius": 0.0674,
+    "earth_mass": 0.326,
+    "jupiter_mass": 0.00103,
+    "earth_distance": 41,
+    "host_stars_ids": [
+      10
+    ],
+    "detection_method": "Transit",
+    "observatory_ids": [
+      1
+    ],
+    "texture_path": "/images/textures/TRAPPIST-1_h.jpeg"
+  }
+]
