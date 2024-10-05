@@ -1,5 +1,7 @@
 ﻿@page "/"
+@using NasaChallenge2024.Definitions.Models
 @inject IJSRuntime JsRuntime
+@inject HttpClient Http
 
 <PageTitle>INDEX</PageTitle>
 
@@ -30,6 +32,12 @@
 @code
 {
     private IJSObjectReference _mainJsModule;
+    
+    //var exoplanets = await Http.GetFromJsonAsync<Exoplanet[]>("jsons/exoplanets.json");
+    //var observatories = await Http.GetFromJsonAsync<Observatory[]>("jsons/observatories.json");
+    //var starts = await Http.GetFromJsonAsync<Star[]>("jsons/stars.json");
+    //var telescopes = await Http.GetFromJsonAsync<Telescope[]>("jsons/telescopes.json");
+    //var travelTypes = await Http.GetFromJsonAsync<TravelType[]>("jsons/travel-types.json");
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

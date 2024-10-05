@@ -1,2 +1,21 @@
-{
-}
+[
+    {
+        "id": 1,
+        "name": "La Silla Observatory",
+        "established_year": 1964,
+        "latitude": -29.25627,
+        "longitude": -70.73805,
+        "description": "La Silla Observatory is an astronomical observatory in Chile with three telescopes built and operated by the European Southern Observatory (ESO)."
+      },
+      {
+        "id": 2,
+        "name": "Subaru Observatory",
+        "established_year": 1999,
+        "latitude": 19.8255556,
+        "longitude": -155.4761111,
+        "description": "La Silla Observatory is an astronomical observatory in Chile with three telescopes built and operated by the European Southern Observatory (ESO).",
+        "telescope_ids": [
+          2
+        ]
+      }
+]
