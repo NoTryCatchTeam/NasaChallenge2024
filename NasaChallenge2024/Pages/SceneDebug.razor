@@ -1,4 +1,5 @@
 @page "/scene-debug"
+@using NasaChallenge2024.Definitions.Models
 @inject IJSRuntime JsRuntime
 @inject HttpClient HttpClient
 
@@ -26,33 +27,32 @@
 
     private async Task ShowExoplanetSystemAsync()
     {
-        var planets = await HttpClient.GetFromJsonAsync<Planet[]>("jsons/exoplanets.json");
+        var planets = await HttpClient.GetFromJsonAsync<Exoplanet[]>("jsons/exoplanets.json");
         var stars = await HttpClient.GetFromJsonAsync<Star[]>("jsons/stars.json");
 
         var planetData = planets.ElementAt(_exoplanetIterator++);
-        var star = stars.First(x => x.Id == planetData.HostStars.First());
+        var star = stars.First(x => x.Id == planetData.HostStarIds.First());
 
-        await _mainJsModule.InvokeVoidAsync(
-        "showExoplanetSystemAsync",
-        JsonSerializer.Serialize(new ExoplanetData
+        var systemData = new ExoplanetSystemData
             {
-                Planet = new ExoplanetData.PlanetData
+                Planet = new ExoplanetSystemData.PlanetData
                 {
                     Id = planetData.Id,
                     Name = planetData.Name,
                     OrbitalRadius = planetData.OrbitalRadius,
-                    EarthRadius = planetData.EarthRadius,
-                    Texture = planetData.Texture,
+                    EarthRadius = planetData.EarthRadius ?? 1,
+                    Texture = planetData.TexturePath,
                 },
-                Star = new ExoplanetData.StarData
+                Star = new ExoplanetSystemData.StarData
                 {
                     Id = star.Id,
                     Name = star.Name,
-                    SunRadius = star.SunRadius,
-                    Texture = star.Texture,
+                    SunRadius = star.SunRadius ?? 1,
+                    Texture = star.TexturePath,
                 }
-            }),
-        true);
+            };
+
+        await _mainJsModule.InvokeVoidAsync("showExoplanetSystemAsync", systemData, false);
 
         if (_exoplanetIterator == planets.Count() - 1)
         {
@@ -62,46 +62,14 @@
 
     private async Task ShowSolarSystemAsync()
     {
-        await _mainJsModule.InvokeVoidAsync("showSolarSystemAsync", true);
+        await _mainJsModule.InvokeVoidAsync("showSolarSystemAsync", false);
     }
 
-    private class Planet
+    private class ExoplanetSystemData
     {
-        public int Id { get; set; }
+        public StarData Star { get; set; }
 
-        public string Name { get; set; }
-
-        [JsonPropertyName("orbital_radius")]
-        public float OrbitalRadius { get; set; }
-
-        [JsonPropertyName("earth_radius")]
-        public float EarthRadius { get; set; }
-
-        [JsonPropertyName("host_stars_ids")]
-        public IEnumerable<int> HostStars { get; set; }
-
-        [JsonPropertyName("texture_path")]
-        public string Texture { get; set; }
-    }
-
-    private class Star
-    {
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-
-        [JsonPropertyName("sun_radius")]
-        public float SunRadius { get; set; }
-
-        [JsonPropertyName("texture_path")]
-        public string Texture { get; set; }
-    }
-
-    private class ExoplanetData
-    {
-        public StarData Star;
-
-        public PlanetData Planet;
+        public PlanetData Planet { get; set; }
 
         public class StarData
         {

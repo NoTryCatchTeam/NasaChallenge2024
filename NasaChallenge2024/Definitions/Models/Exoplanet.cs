@@ -23,25 +23,25 @@ public class Exoplanet
     public string Description { get; set; }
 
     [JsonPropertyName("orbital_radius")]
-    public double? OrbitalRadius { get; set; }
+    public float OrbitalRadius { get; set; }
 
     [JsonPropertyName("orbital_period")]
-    public double? OrbitalPeriod { get; set; }
+    public float? OrbitalPeriod { get; set; }
 
     [JsonPropertyName("orbital_eccentricity")]
-    public double? OrbitalEccentricity { get; set; }
+    public float? OrbitalEccentricity { get; set; }
 
     [JsonPropertyName("earth_radius")]
-    public double? EarthRadius { get; set; }
+    public float? EarthRadius { get; set; }
 
     [JsonPropertyName("jupiter_radius")]
-    public double? JupiterRadius { get; set; }
+    public float? JupiterRadius { get; set; }
 
     [JsonPropertyName("earth_mass")]
-    public double? EarthMass { get; set; }
+    public float? EarthMass { get; set; }
 
     [JsonPropertyName("jupiter_mass")]
-    public double? JupiterMass { get; set; }
+    public float? JupiterMass { get; set; }
 
     [JsonPropertyName("earth_distance")]
     public int? EarthDistance { get; set; }

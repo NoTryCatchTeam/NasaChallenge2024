@@ -41,7 +41,7 @@ export async function initScene(canvasId: string, isDebug: boolean = false) {
 
     // Setup camera
     {
-        const camera = new Three.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+        const camera = new Three.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
         scene.add(camera);
 
         const controls = new Addons.OrbitControls(camera, canvas);
@@ -74,7 +74,10 @@ export async function initScene(canvasId: string, isDebug: boolean = false) {
     scene.add(exoplanetSystem);
 
     if (isDebug) {
-        sceneCamera.Camera.position.set(10, 10, 10);
+        const targetWorldPos = solarSystem.Earth.getWorldPosition(new Three.Vector3());
+        const cameraTargetOffset = solarSystem.Earth.geometry.parameters.radius;
+        sceneCamera.Camera.position.set(targetWorldPos.x - cameraTargetOffset * 2, targetWorldPos.y, targetWorldPos.z);
+        sceneCamera.Controls.target.copy(targetWorldPos);
     }
     else {
         const targetWorldPos = solarSystem.Earth.getWorldPosition(new Three.Vector3());
@@ -87,12 +90,12 @@ export async function initScene(canvasId: string, isDebug: boolean = false) {
     startRenderLoop(renderer);
 }
 
-export function showExoplanetSystemAsync(data: ExoplanetSystemData, isTargetStar: boolean) {
+export async function showExoplanetSystemAsync(data: ExoplanetSystemData, isTargetStar: boolean) {
 
-    exoplanetSystem.prepare(data);
+    await exoplanetSystem.prepareAsync(data);
 
     const targetWorldPos = (isTargetStar ? exoplanetSystem.Star : exoplanetSystem.Planet).getWorldPosition(new Three.Vector3());
-    const cameraTargetOffset = (isTargetStar ? exoplanetSystem.Star : exoplanetSystem.Planet).geometry.parameters.radius;
+    const cameraTargetOffset = isTargetStar ? exoplanetSystem.StarRadius : exoplanetSystem.PlanetRadius;
 
     sceneCamera.Camera.position.set(targetWorldPos.x - cameraTargetOffset * 2, targetWorldPos.y, targetWorldPos.z);
     sceneCamera.Controls.target.copy(targetWorldPos);
@@ -156,7 +159,7 @@ class SceneCamera {
 class SceneGroupPositioner {
 
     private sceneGroupXPosition = 0;
-    private sceneGroupXPositionIncrementor = 1000;
+    private sceneGroupXPositionIncrementor = 10000;
 
     positionGroup(group: Three.Object3D) {
         group.position.set(this.sceneGroupXPosition++ * this.sceneGroupXPositionIncrementor, 0, 0);
