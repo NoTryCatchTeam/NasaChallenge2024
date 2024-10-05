@@ -150,7 +150,6 @@ function startRenderLoop(renderer: Three.WebGLRenderer) {
         if (!isFocusOnScene) {
             const currentTarget = sceneCamera.Controls.target;
 
-            // Y dolly
             const newTarget = new Three.Vector3(
                 currentTarget.x + (.5 - mouseCoordinates.x) / 100,
                 currentTarget.y + (.5 - mouseCoordinates.y) / 100,
