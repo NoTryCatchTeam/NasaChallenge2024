@@ -6,16 +6,19 @@ export class SolarSystem extends Three.Group {
         super();
     }
 
-    public static getEarthRadiusScene(): number {
+    // Earth radius
+    public static getEarthRadius(): number {
         return 1;
     }
 
-    public static getSunRadiusScene(): number {
-        return 149 * this.getEarthRadiusScene();
+    // Sun radius
+    public static getSunRadius(): number {
+        return 149 * this.getEarthRadius();
     }
 
-    public static getEarthOrbitDistanceScene(): number {
-        return 100 + this.getSunRadiusScene();
+    // Earth Orbital radius
+    public static getEarthOrbitalRadius(): number {
+        return 1000 + this.getSunRadius() + this.getEarthRadius();
     }
 
     public Sun: Three.Mesh<Three.SphereGeometry>;
@@ -24,9 +27,9 @@ export class SolarSystem extends Three.Group {
 
     async initAsync() {
 
-        const sunRadius = SolarSystem.getSunRadiusScene();
-        const earthRadius = SolarSystem.getEarthRadiusScene();
-        const earthOrbitDistance = SolarSystem.getEarthOrbitDistanceScene();
+        const sunRadius = SolarSystem.getSunRadius();
+        const earthRadius = SolarSystem.getEarthRadius();
+        const earthOrbitRadius = SolarSystem.getEarthOrbitalRadius();
 
         // Sun
         {
@@ -50,8 +53,7 @@ export class SolarSystem extends Three.Group {
 
             mesh.add(axes);
 
-            const light = new Three.PointLight("#ffffff", 1000);
-            light.position.set(earthOrbitDistance - earthRadius * 20, 0, 0);
+            const light = new Three.PointLight("#ffffff", earthOrbitRadius, 0, 0.8);
             this.add(light);
         }
 
@@ -67,7 +69,7 @@ export class SolarSystem extends Three.Group {
             });
 
             let mesh = new Three.Mesh(geometry, material);
-            mesh.position.set(earthOrbitDistance, 0, 0);
+            mesh.position.set(earthOrbitRadius, 0, 0);
             this.add(mesh);
             this.Earth = mesh;
 
