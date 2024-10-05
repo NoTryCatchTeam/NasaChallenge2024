@@ -6,13 +6,19 @@ $color-background-border: rgba(224, 229, 235, 1);
 $color-background-accent: rgba(238, 30, 35, 1);
 $color-indicator: #1579CE;
 $color-select: #F6F7F9;
+$color_link: rgba(229, 70, 229, 1);
+
 
 $color-text-primary: rgba(20, 20, 20, 1);
 $color-text-secondary: rgba(114, 114, 114, 1);
 $color-text-link: rgba(238, 30, 35, 1);
 $color-text-primary-inverse: #fff;
 
+$color-info-title: rgba(255, 255, 255, 0.7);
+$color-info-rows-divider: rgba(255, 255, 255, 0.2);
+
 $color-gray-05: rgba(20, 20, 20, 0.05);
+$color-background-table: rgba(30, 30, 30, 0.8);
 $color-gray-60: rgba(20, 20, 20, 0.6);
 
 $color-black-60: rgba(0, 0, 0, 0.6);
@@ -33,3 +39,6 @@ $transition: all $transition-sec ease;
 
 // shadows
 $shadow-base: 0 4px 20px 0 rgba(0, 0, 0, 0.15);
+
+// border-radius
+$border-radius-base: 24px;
