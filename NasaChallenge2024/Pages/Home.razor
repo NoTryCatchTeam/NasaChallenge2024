@@ -1,19 +1,18 @@
 ﻿@page "/"
+@using NasaChallenge2024.Definitions.Models
 @inject IJSRuntime JsRuntime
+@inject HttpClient Http
 
 <PageTitle>Main</PageTitle>
 
-<img class="logo" src="images/exoplan.svg" alt="logo" />
-
-
-
-
-
 <div class="user-panel">
+    <button class="vr-button">
+        <div class="vr"><img class="visor" src="images/visor.svg" alt="visor" />VR Mode</div>
+    </button>
     <div id="ui-switch">
-        UI
+        <label class="ui-text">UI</label>
         <label class="switch">
-            <input type="checkbox">
+            <input type="checkbox" checked="@isUIChecked" @oninput="UICheckboxChanged">
             <span class="slider"></span>
         </label>
     </div>
@@ -22,7 +21,6 @@
         <div class="progress-bar-container">
             <div class="progress-bar-indicator" style="width:60%"></div>
         </div>
-        @* <progress id="progress" value="32" max="100"> 32% </progress> *@
     </div>
     <div class="avatar">
         <img src="images/avatar.svg" alt="avatar" />
@@ -30,7 +28,7 @@
     </div>
 </div>
 
-<div class="menu">
+<div class="menu @UIVisibility">
     <button class="menu-item" autofocus><img class="starFour" src="images/starFour.svg" alt="starFour" />Main</button>
     <button class="menu-item"><img class="planet" src="images/planet.svg" alt="planet" />Planets</button>
     <button class="menu-item"><img class="flyingSaucer" src="images/flyingSaucer.svg"
@@ -38,11 +36,9 @@
 </div>
 
 
-<button class="vr-button">
-    <div class="vr"><img class="visor" src="images/visor.svg" alt="visor" />VR Mode</div>
-</button>
 
-<div class="bottom-panels">
+
+<div class="bottom-panels @UIVisibility">
     <div class="bottom-panels-item"></div>
     <div class="bottom-panels-item"></div>
     <div class="bottom-panels-item"></div>
@@ -52,7 +48,22 @@
 @code
 {
     private IJSObjectReference _mainJsModule;
+    
+    //var exoplanets = await Http.GetFromJsonAsync<Exoplanet[]>("jsons/exoplanets.json");
+    //var observatories = await Http.GetFromJsonAsync<Observatory[]>("jsons/observatories.json");
+    //var starts = await Http.GetFromJsonAsync<Star[]>("jsons/stars.json");
+    //var telescopes = await Http.GetFromJsonAsync<Telescope[]>("jsons/telescopes.json");
+    //var travelTypes = await Http.GetFromJsonAsync<TravelType[]>("jsons/travel-types.json");
 
+    [Parameter]
+    public bool IsUIChecked { get; set; } = true;
+    private bool isUIChecked;
+    private string UIVisibility;
+
+    protected override void OnParametersSet()
+    {
+        isUIChecked = this.IsUIChecked;
+    }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!firstRender)
@@ -62,5 +73,11 @@
 
         _mainJsModule = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/main.js");
         await _mainJsModule.InvokeVoidAsync("hello");
+    }
+
+    private void UICheckboxChanged(ChangeEventArgs e)
+    {
+        var value = e.Value;
+        this.UIVisibility = (bool)value==false ? "invisible" : string.Empty;
     }
 }

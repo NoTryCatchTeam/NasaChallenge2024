@@ -1,2 +1,35 @@
-{
-}
+[
+    {
+      "id": 1,
+      "name": "Kepler / K2",
+      "mission_type": "Space Telescope",
+      "launch_date": "2009-03-06",
+      "destination": "Heliocentric orbit",
+      "objective": "Search for exoplanets",
+      "type": "Space",
+      "description": "The Kepler space telescope was NASA’s first planet-hunting mission, assigned to search a portion of the Milky Way galaxy for Earth-sized planets orbiting stars outside our solar system. During nine years in deep space Kepler, and its second act, the extended mission dubbed K2, showed our galaxy contains billions of hidden \"exoplanets,\" many of which could be promising places for life. They proved that our night sky is filled with more planets than even stars — knowledge that revolutionizes the understanding of our place in the cosmos.",
+      "texture_path": "https://upload.wikimedia.org/wikipedia/commons/4/45/Kepler_Space_Telescope_spacecraft_model_2.png"
+    },
+    {
+        "id": 2,
+        "name": "Subaru Telescope",
+        "mission_type": "Earth Telescope",
+        "launch_date": "1999-01-01",
+        "objective": "Search for exoplanets",
+        "type": "Earth",
+        "observatory_id": 2,
+        "description": "Subaru is an 8.2-meter optical-infrared telescope near the summit of Maunakea, Hawaii, operated by the National Astronomical Observatory of Japan (NAOJ), National Institutes of Natural Sciences.",
+        "texture_path": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/MaunaKea_Subaru.jpg/2560px-MaunaKea_Subaru.jpg"
+      },
+      {
+          "id": 3,
+          "name": "TESS (Transiting Exoplanet Survey Satellite)",
+          "mission_type": "Space Telescope",
+          "launch_date": "2018-04-18",
+          "objective": "Extended mission",
+          "wave_light": "Visible light",
+          "type": "Space",
+          "description": "NASA’s TESS discovers exoplanets, worlds beyond our solar system. In the course of its extended observations of the sky, TESS also finds and monitors all types of objects that change in brightness, from nearby asteroids to pulsating stars and distant galaxies containing supernovae.",
+          "texture_path": "https://upload.wikimedia.org/wikipedia/commons/c/c2/Transiting_Exoplanet_Survey_Satellite_artist_concept_%28transparent_background%29.png"
+        }
+]
