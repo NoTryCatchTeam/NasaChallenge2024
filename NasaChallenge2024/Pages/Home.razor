@@ -2,10 +2,10 @@
 
 <PageTitle>Main</PageTitle>
 
-<label class="object-name @GetExoplanetElementsVisibility()">@SpaceObject.Name.ToUpper()</label>
-<label class="object-host-name @GetExoplanetElementsVisibility()">@SpaceObject.Host.Name.ToUpper()</label>
+<label class="object-name @GetExoplanetElementsVisibility() animate__animated animate__fadeInDown">@SpaceObject.Name.ToUpper()</label>
+<label class="object-host-name @GetExoplanetElementsVisibility() animate__animated animate__fadeInDown">@SpaceObject.Host.Name.ToUpper()</label>
 
-<div class="home-tools-panel">
+<div class="home-tools-panel animate__animated animate__fadeInDown">
     <button class="vr-button">
         <div class="vr"><img class="visor" src="images/visor.svg" alt="visor" />VR Mode</div>
     </button>
@@ -21,7 +21,7 @@
 </div>
 
 
-<div class="radius-panel @GetExoplanetElementsVisibility()">
+<div class="radius-panel @GetExoplanetElementsVisibility() animate__animated animate__fadeIn animate__slow">
     <span>orbital radius (Earth)</span>
     <div class="radius">@SpaceObject.EarthRadius 
         <button>compare<img src="images/ic_arrow_right.svg">
@@ -29,7 +29,7 @@
     </div>
 </div>
 
-<div class="object-panel @GetExoplanetElementsVisibility()">
+<div class="object-panel @GetExoplanetElementsVisibility() animate__animated animate__fadeInRight">
     <div class="object-panel-item">
         <label class="object-panel-item-key">Planet Name</label>
         <label class="object-panel-item-value">@SpaceObject.Name</label>
@@ -76,7 +76,7 @@
     </div>
 </div>
 
-<div class="distance-panel @GetExoplanetElementsVisibility()">
+<div class="distance-panel @GetExoplanetElementsVisibility() animate__animated animate__fadeInUp">
     <div class="distance-panel-buttons">
         <div class="distance-panel-buttons-item">
             <input type="radio" id="light-rb" name="distance" value="light" checked @onchange="OnDistanceChange"/>
@@ -112,7 +112,7 @@
     </div>
 </div>
 
-<div class="planets-panel @GetExoplanetElementsVisibility()">
+<div class="planets-panel @GetExoplanetElementsVisibility() animate__animated animate__fadeInRight">
     <button class="card" @onclick="HandleExoplanetsButtonClick">
         <img src="images/ic_table.svg"/>
         ALL PLANETS
@@ -123,7 +123,7 @@
     </button>
 </div>
 
-<div class="bottom-panels @GetExoplanetElementsVisibility()">
+<div class="bottom-panels @GetExoplanetElementsVisibility() animate__animated animate__fadeInUp">
     <div class="bottom-panels-item-1">
         <label class="bottom-panels-item-number">@SpaceObject.DiscoveryYear</label>
         <label class="bottom-panels-item-description">discovery year</label>
@@ -136,6 +136,6 @@
     </div>
 </div>
 
-<div class="@GetExoplanetTabletElementsVisibility()">
+<div class="@GetExoplanetTabletElementsVisibility() animate__animated animate__fadeIn">
     <ExoplanetsLayout OnExoplanetSelected="SelectedExoplanetAsync" OnObservatorySelected="HandleObservatorySelectedEvent"/>
 </div>

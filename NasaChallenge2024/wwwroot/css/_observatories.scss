@@ -62,16 +62,19 @@
     top: 120px;
     cursor: pointer;
     pointer-events: all;
+    transition: all 0.2s ease;
 
     img {
       width: 100%;
       height: auto;
+      transition: all 0.2s ease;
     }
 
     p {
       font-size: 18px;
       line-height: 20px;
       font-weight: 500;
+      transition: all 0.2s ease;
     }
 
     &:nth-child(1) {
@@ -90,6 +93,7 @@
       width: 600px;
       height: 600px;
       left: 250px;
+      transition: all 0.2s ease;
 
       p {
         position: absolute;
@@ -101,6 +105,8 @@
         line-height: 150px;
         font-optical-sizing: 72px;
         text-transform: uppercase;
+        transition: all 0.2s ease;
+
         @include _laptop {
           font-size: 80px;
         }
