@@ -2,15 +2,21 @@ import * as Three from "three";
 
 import { SolarSystem } from "./solarSystem";
 
+let isInitialized = false;
 let observatories: Observatory[] = [];
 
-export function addObservatoriesData(data: Observatory[]) {
-    observatories = data;
-}
-
 export function renderObservatories(
+    data: Observatory[],
     observatoriesWrapper: HTMLElement,
     solarSystem: SolarSystem) {
+
+    if (isInitialized) {
+        return;
+    }
+
+    isInitialized = true;
+
+    observatories = data;
 
     const longFudge = Math.PI * 1.5;
     const latFudge = Math.PI;

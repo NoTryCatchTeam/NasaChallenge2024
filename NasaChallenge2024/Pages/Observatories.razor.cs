@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Text.Json;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using NasaChallenge2024.Definitions.Models;
@@ -76,13 +77,15 @@ public partial class Observatories : ComponentBase
 
         var earthObservatories = _observatories.Where(x => x.Type == "Earth").ToArray();
 
+        await JsRuntime.InvokeVoidAsync("console.log", earthObservatories);
+
         if (await _mainJsModule.InvokeAsync<bool>("initObservatoriesScene", "#scene-canvas", earthObservatories))
         {
         }
         else
         {
             // In case of navigation
-            await _mainJsModule.InvokeVoidAsync("showObservatoriesStateFirstTimeAsync", earthObservatories);
+            await _mainJsModule.InvokeVoidAsync("showObservatoriesStateFirstTimeAsync", [earthObservatories]);
         }
 
         await _mainJsModule.InvokeVoidAsync("passDotNet", _dotNet);

@@ -63,8 +63,7 @@ export async function initObservatoriesScene(
 
     await prepareScene(canvasId, isDebug);
 
-    Observatories.addObservatoriesData(data);
-    Observatories.renderObservatories(observatoriesWrapper, solarSystem);
+    Observatories.renderObservatories(data, observatoriesWrapper, solarSystem);
     await showObservatoriesStateAsync(true, false);
 
     startRenderLoop(renderer);
@@ -111,8 +110,7 @@ export async function showObservatoriesStateAsync(isPlanet: boolean, isAnimated:
 }
 
 export async function showObservatoriesStateFirstTimeAsync(data: Observatories.Observatory[]) {
-    Observatories.addObservatoriesData(data);
-    Observatories.renderObservatories(observatoriesWrapper, solarSystem);
+    Observatories.renderObservatories(data, observatoriesWrapper, solarSystem);
     await showObservatoriesStateAsync(true, false);
 }
 
@@ -123,7 +121,7 @@ export function setIsFocusActivePlanetOnScene(isFocus: boolean, isAnimated: bool
     sceneCamera.changeCameraSettings(newCameraSettings.position, newCameraSettings.lookAt, isAnimated);
 }
 
-export function passDotNet(dotNet: any){
+export function passDotNet(dotNet: any) {
     globalThis.dotNet = dotNet;
 }
 
