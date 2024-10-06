@@ -103,7 +103,7 @@
                     @if (exoplanet.TelescopeIds?.FirstOrDefault() is { } telescopeId && _telescopes.FirstOrDefault(t => t.Id == telescopeId) is { } telescope)
                     {
                         <td>
-                            <button class="info-table-cell value">
+                            <button class="info-table-cell value" @onclick="() => OnTelescopeClickAction(telescope)">
                                 @telescope.Name
                                 <img src="images/ic_arrow_up_right.svg">
                             </button>
@@ -136,6 +136,9 @@
     [Parameter]
     public EventCallback<Observatory> OnObservatorySelected { get; set; }
     
+    [Parameter]
+    public EventCallback<Telescope> OnTelescopeSelected { get; set; }
+    
     private Exoplanet[] _exoplanets;
     private Observatory[] _observatories;
     private Star[] _starts;
@@ -152,4 +155,6 @@
     private Task OnExoplanetClickAction(Exoplanet exoplanet) => OnExoplanetSelected.InvokeAsync(exoplanet);
     
     private Task OnObservatoryClickAction(Observatory observatory) => OnObservatorySelected.InvokeAsync(observatory);
+    
+    private Task OnTelescopeClickAction(Telescope telescope) => OnTelescopeSelected.InvokeAsync(telescope);
 }
