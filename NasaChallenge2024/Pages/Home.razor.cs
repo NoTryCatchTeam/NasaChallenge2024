@@ -37,6 +37,7 @@ namespace NasaChallenge2024.Pages
             Number = 5,
 
             Distance = 580,
+            EarthRadius = 0.1283f,
 
             DiscoveryYear = 2014,
 
