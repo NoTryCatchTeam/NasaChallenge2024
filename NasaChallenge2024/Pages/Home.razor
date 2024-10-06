@@ -85,27 +85,27 @@
 <div class="distance-panel @UIVisibility">
     <div class="distance-panel-buttons">
         <div class="distance-panel-buttons-item">
-            <input type="radio" id="light-rb" name="distance" value="light speed" checked />
+            <input type="radio" id="light-rb" name="distance" value="light" checked @onchange="OnDistanceChange"/>
             <label for="light-rb">LIGHT SPEED</label>
         </div>
 
         <div  class="distance-panel-buttons-item">
-            <input type="radio" id="auto-rb" name="distance" value="auto" />
+            <input type="radio" id="auto-rb" name="distance" value="auto" @onchange="OnDistanceChange" />
             <label for="auto-rb">AUTO</label>
         </div>
 
         <div  class="distance-panel-buttons-item">
-            <input type="radio" id="train-rb" name="distance" value="bullet train" />
+            <input type="radio" id="train-rb" name="distance" value="train" @onchange="OnDistanceChange" />
             <label for="train-rb">BULLET TRAIN</label>
         </div>
 
                 <div  class="distance-panel-buttons-item">
-            <input type="radio" id="jet-rb" name="distance" value="jet" />
+            <input type="radio" id="jet-rb" name="distance" value="jet" @onchange="OnDistanceChange" />
             <label for="jet-rb">JET</label>
         </div>
 
                 <div  class="distance-panel-buttons-item">
-            <input type="radio" id="voyager-rb" name="distance" value="voyager" />
+            <input type="radio" id="voyager-rb" name="distance" value="voyager" @onchange="OnDistanceChange" />
             <label for="voyager-rb">VOYAGER</label>
         </div>
     </div>

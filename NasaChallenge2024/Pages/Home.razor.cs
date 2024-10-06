@@ -28,6 +28,8 @@ namespace NasaChallenge2024.Pages
 
             Number = 5,
 
+            Distance = 580,
+
             DiscoveryYear = 2014,
 
             OrbitalRadius = 0.7048f,
@@ -56,8 +58,8 @@ namespace NasaChallenge2024.Pages
             UserScore = 658
         };
 
-        public string TravelSpeed {get; set;} = "671 Million miles per hour";
-        public string TravelTime {get; set;} = "245 Years";
+        public string TravelSpeed { get; set; }
+        public string TravelTime { get; set; }
 
 
         [Parameter]
@@ -74,13 +76,17 @@ namespace NasaChallenge2024.Pages
         protected override void OnParametersSet()
         {
             isUIChecked = this.IsUIChecked;
+            OnDistanceChange(new ChangeEventArgs() { Value = "light" });
         }
+
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
+
             if (!firstRender)
             {
                 return;
             }
+
 
             var planets = await HttpClient.GetFromJsonAsync<Exoplanet[]>("jsons/exoplanets.json");
             var stars = await HttpClient.GetFromJsonAsync<Star[]>("jsons/stars.json");
@@ -109,6 +115,7 @@ namespace NasaChallenge2024.Pages
 
             _mainJsModule = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scene.js");
             await _mainJsModule.InvokeVoidAsync("initScene", "#scene-canvas", systemData);
+
         }
 
         private async Task UICheckboxChangedAsync(ChangeEventArgs e)
@@ -117,6 +124,39 @@ namespace NasaChallenge2024.Pages
             this.UIVisibility = (bool)value == false ? "invisible" : string.Empty;
 
             await _mainJsModule.InvokeVoidAsync("setIsFocusOnScene", !(bool)value);
+        }
+
+        private void OnDistanceChange(ChangeEventArgs args)
+        {
+            const double LYMiles = 5878625373184;
+            var dtype = args.Value.ToString();
+            switch (dtype)
+            {
+                case "light":
+                    TravelTime = SpaceObject.Distance.HasValue ? Convert.ToInt32(SpaceObject.Distance * LYMiles / (186000d * 60 * 60 * 24 * 365)).ToString() + " years" : "unknown";
+                    TravelSpeed = SpaceObject.Distance.HasValue ? "186,000 miles per second" : "unknown";
+                    break;
+                case "auto":
+                    TravelTime = SpaceObject.Distance.HasValue ? Convert.ToInt32(SpaceObject.Distance * LYMiles / (80d * 60 * 24 * 365)).ToString() + " years" : "unknown";
+                    TravelSpeed = "80 miles per hour";
+                    break;
+                case "train":
+                    TravelTime = SpaceObject.Distance.HasValue ? Convert.ToInt32(SpaceObject.Distance * LYMiles / (186d * 60 * 24 * 365)).ToString() + " years" : "unknown";
+                    TravelSpeed = "186 miles per hour";
+                    break;
+                case "jet":
+                    TravelTime = SpaceObject.Distance.HasValue ? Convert.ToInt32(SpaceObject.Distance * LYMiles / (1300d * 60 * 24 * 365)).ToString() + " years" : "unknown";
+                    TravelSpeed = "1,300 miles per hour";
+                    break;
+                case "voyager":
+                    TravelTime = SpaceObject.Distance.HasValue ? Convert.ToInt32(SpaceObject.Distance * LYMiles / (34391d * 60 * 24 * 365)).ToString() + " years" : "unknown";
+                    TravelSpeed = "34,391 miles per hour";
+                    break;
+                default:
+                    TravelTime = "unknown";
+                    TravelSpeed = "unknown";
+                    break;
+            }
         }
 
         private void HandleExoplanetsButtonClick()

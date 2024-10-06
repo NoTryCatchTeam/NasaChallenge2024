@@ -6,6 +6,8 @@ public class SpaceObject
 
     public uint Number {get;set;}
 
+    public int? Distance {get;set;}
+
      public uint DiscoveryYear { get; set; }
 
     public float OrbitalRadius { get; set; } 
