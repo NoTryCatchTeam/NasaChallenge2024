@@ -1,5 +1,4 @@
 @page "/learn"
-@inject JSRuntime JsRuntime
 
 <PageTitle>Learn</PageTitle>
 
@@ -33,6 +32,9 @@
 
 
 @code {
+    [Inject]
+    public IJSRuntime JsRuntime { get; set; }
+    
     private class Course
     {
         public string Name { get; set; }
@@ -62,16 +64,6 @@
                 "#sound"
             },
             ImagePath = "images/courses/2.png"
-        },
-        new Course
-        {
-            Name = "Audio of Juno’s Ganymede Flyby",
-            Tags = new []
-            {
-                "#space",
-                "#sound"
-            },
-            ImagePath = "images/courses/3.png"
         },
         new Course
         {
