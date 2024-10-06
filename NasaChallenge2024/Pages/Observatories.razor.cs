@@ -8,7 +8,7 @@ namespace NasaChallenge2024.Pages;
 
 public partial class Observatories : ComponentBase
 {
-    private bool _isSpaceObservatories = false;
+    private bool _isSpaceObservatories;
     private bool _isEarthObservatoryWindowVisible;
     private bool _isSpaceObservatoryFloatingWindowVisible;
 
@@ -26,12 +26,20 @@ public partial class Observatories : ComponentBase
     private string _id;
     private SpaceObservatoryWindow _spaceObservatoryWindowRef;
     private EarthObservatoryWindow _earthObservatoryWindowRef;
+    private Observatory _selectedObservatory;
+    private double _screenWidth, _screenHalfHeight;
+    private double? _spaceColumnWidth;
+    private double _spaceElementsLeft = 225;
+    private Observatory[] _spaceObservatories;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
 
         _id = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query).TryGetValue("id", out var id) ? id : default(string);
+        
+        _screenWidth = await JsRuntime.InvokeAsync<double>("getScreenWidth");
+        _screenHalfHeight = await JsRuntime.InvokeAsync<double>("getScreenHeight") / 2;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -42,6 +50,13 @@ public partial class Observatories : ComponentBase
         }
 
         var observatories = await HttpClient.GetFromJsonAsync<Observatory[]>("jsons/observatories.json");
+        
+        _spaceObservatories = observatories.Where(o => o.Type == "Space").ToArray();
+
+        if (_spaceObservatories.Length > 0 && (_screenWidth - _spaceElementsLeft) / _spaceObservatories.Length is var spaceElementWidth and > 0)
+        {
+            _spaceColumnWidth = spaceElementWidth;
+        }
 
         if (_id != null && observatories.FirstOrDefault(o => o.Id.ToString() == _id) is { } observatory)
         {
@@ -87,6 +102,7 @@ public partial class Observatories : ComponentBase
 
     private async Task SelectSpaceObservatory(Observatory observatory)
     {
+        _selectedObservatory = observatory;
         _isEarthObservatoryWindowVisible = false;
         _spaceObservatoryWindowRef.SelectObservatory(observatory);
         _isSpaceObservatoryFloatingWindowVisible = true;
@@ -95,6 +111,7 @@ public partial class Observatories : ComponentBase
     
     private async Task SelectEarthObservatory(Observatory observatory)
     {
+        _selectedObservatory = observatory;
         _isSpaceObservatoryFloatingWindowVisible = false;
         _earthObservatoryWindowRef.SelectObservatory(observatory);
         _isEarthObservatoryWindowVisible = true;
@@ -103,12 +120,14 @@ public partial class Observatories : ComponentBase
     
     private void HandleSpaceObservatoryWindowCloseClickedEvent()
     {
+        _selectedObservatory = null;
         _isSpaceObservatoryFloatingWindowVisible = false;
         StateHasChanged();
     }
     
     private void HandleEarthObservatoryWindowCloseClickedEvent()
     {
+        _selectedObservatory = null;
         _isEarthObservatoryWindowVisible = false;
         StateHasChanged();
     }
