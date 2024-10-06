@@ -2,40 +2,25 @@
 
 <PageTitle>Main</PageTitle>
 
-<label class="object-name @UIVisibility">@SpaceObject.Name.ToUpper()</label>
-<label class="object-host-name @UIVisibility">@SpaceObject.Host.Name.ToUpper()</label>
+<label class="object-name @GetExoplanetElementsVisibility()">@SpaceObject.Name.ToUpper()</label>
+<label class="object-host-name @GetExoplanetElementsVisibility()">@SpaceObject.Host.Name.ToUpper()</label>
 
-<div class="user-panel">
+<div class="home-tools-panel">
     <button class="vr-button">
         <div class="vr"><img class="visor" src="images/visor.svg" alt="visor" />VR Mode</div>
     </button>
     <div id="ui-switch">
         <label class="ui-text">UI</label>
         <label class="switch">
-            <input type="checkbox" checked="@isUIChecked" @oninput="UICheckboxChangedAsync">
+            <input type="checkbox" checked="@_isUIChecked" @oninput="UICheckboxChangedAsync">
             <span class="slider"></span>
         </label>
     </div>
-    <div class="user">
-        @User.Name
-        <div class="progress-bar-container">
-            <div class="progress-bar-indicator" style="width:@User.Completion%"></div>
-        </div>
-    </div>
-    <div class="avatar">
-        <img src="images/avatar.svg" alt="avatar" />
-        <div class="score">@User.UserScore</div>
-    </div>
+    
+    <UserPanelLayot/>
 </div>
 
-<div class="menu @UIVisibility">
-    <button class="menu-item" autofocus><img class="planets" src="images/planet.svg" alt="planet" />PLANETS</button>
-    <button class="menu-item"><img src="images/flyingSaucer.svg" alt="flyingSaucer" />OBSERVATORIES</button>
-    <button class="menu-item"><img src="images/strategy.svg" alt="strategy" />QUIZ</button>
-    <button class="menu-item"><img src="images/graduationCap.svg" alt="graduationCap" />LEARN</button>
-</div>
-
-<div class="object-panel @UIVisibility">
+<div class="object-panel @GetExoplanetElementsVisibility()">
     <div class="object-panel-item">
         <label class="object-panel-item-key">Planet Name</label>
         <label class="object-panel-item-value">@SpaceObject.Name</label>
@@ -82,7 +67,7 @@
     </div>
 </div>
 
-<div class="distance-panel @UIVisibility">
+<div class="distance-panel @GetExoplanetElementsVisibility()">
     <div class="distance-panel-buttons">
         <div class="distance-panel-buttons-item">
             <input type="radio" id="light-rb" name="distance" value="light" checked @onchange="OnDistanceChange"/>
@@ -99,27 +84,26 @@
             <label for="train-rb">BULLET TRAIN</label>
         </div>
 
-                <div  class="distance-panel-buttons-item">
+        <div  class="distance-panel-buttons-item">
             <input type="radio" id="jet-rb" name="distance" value="jet" @onchange="OnDistanceChange" />
             <label for="jet-rb">JET</label>
         </div>
 
-                <div  class="distance-panel-buttons-item">
+        <div  class="distance-panel-buttons-item">
             <input type="radio" id="voyager-rb" name="distance" value="voyager" @onchange="OnDistanceChange" />
             <label for="voyager-rb">VOYAGER</label>
         </div>
     </div>
     <div class="distance">
-         <img src="images/rocketLaunch.svg"/>
+        <img src="images/rocketLaunch.svg"/>
         <div class="distance-description">
-        <label><span class="distance-text-bold">Travel speed:</span> @TravelSpeed</label>
-        <label><span class="distance-text-bold">Travel time:</span> @TravelTime</label>
+            <label><span class="distance-text-bold">Travel speed:</span> @TravelSpeed</label>
+            <label><span class="distance-text-bold">Travel time:</span> @TravelTime</label>
         </div>
     </div>
 </div>
 
-
-<div class="planets-panel @UIVisibility">
+<div class="planets-panel @GetExoplanetElementsVisibility()">
     <button class="card" @onclick="HandleExoplanetsButtonClick">
         <img src="images/ic_table.svg"/>
         ALL PLANETS
@@ -130,7 +114,7 @@
     </button>
 </div>
 
-<div class="bottom-panels @UIVisibility">
+<div class="bottom-panels @GetExoplanetElementsVisibility()">
     <div class="bottom-panels-item-1">
         <label class="bottom-panels-item-number">@SpaceObject.DiscoveryYear</label>
         <label class="bottom-panels-item-description">discovery year</label>
@@ -143,16 +127,6 @@
     </div>
 </div>
 
-<div class="@(_isExoplanetTableVisible && isUIChecked ? string.Empty : "invisible")">
-    <ExoplanetsLayout OnExoplanetSelected="HandleExoplanetSelectedEvent" OnObservatorySelected="HandleObservatorySelectedEvent"/>
+<div class="@GetExoplanetTabletElementsVisibility()">
+    <ExoplanetsLayout OnExoplanetSelected="SelectedExoplanetAsync" OnObservatorySelected="HandleObservatorySelectedEvent"/>
 </div>
-
-<div class="@(_isObservatoryWindowVisible && isUIChecked ? string.Empty : "invisible")">
-    <ObservatoryWindow OnWindowCloseClicked="HandleObservatoryWindowCloseClickedEvent" @ref="_observatoryWindowRef"/>
-</div>
-
-<div class="@(_isTelescopeFloatingWindowVisible && isUIChecked ? string.Empty : "invisible")">
-    <TelescopeFloatingWindow OnWindowCloseClicked="HandleTelescopeWindowCloseClickedEvent" @ref="_telescopeFloatingWindowRef"/>
-</div>
-
-

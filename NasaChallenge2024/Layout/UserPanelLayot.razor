@@ -1,0 +1,25 @@
+@using NasaChallenge2024.Definitions.Models
+
+<div class="user-panel">
+    <div class="user">
+        @User.Name
+        <div class="progress-bar-container">
+            <div class="progress-bar-indicator" style="width:@User.Completion%"></div>
+        </div>
+    </div>
+    <div class="avatar">
+        <img src="images/avatar.svg" alt="avatar" />
+        <div class="score">@User.UserScore</div>
+    </div>
+</div>
+
+@code {
+
+    public User User { get; set; } = new User
+    {
+        Name = "MISTER NITRO",
+        Completion = 30,
+        UserScore = 658
+    };
+
+}

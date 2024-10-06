@@ -1,8 +1,9 @@
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using NasaChallenge2024.Definitions.Constants;
 using NasaChallenge2024.Definitions.Models;
-using NasaChallenge2024.Layout;
+using NasaChallenge2024.Services;
 
 namespace NasaChallenge2024.Pages
 {
@@ -10,8 +11,16 @@ namespace NasaChallenge2024.Pages
     {
         [Inject]
         IJSRuntime JsRuntime { get; set; }
+        
         [Inject]
         HttpClient HttpClient { get; set; }
+        
+        [Inject]
+        UiIVisibilityService UiIVisibilityService { get; set; }
+        
+        [Inject]
+        NavigationManager NavigationManager { get; set; }
+        
         private IJSObjectReference _mainJsModule;
 
         //var exoplanets = await Http.GetFromJsonAsync<Exoplanet[]>("jsons/exoplanets.json");
@@ -19,7 +28,6 @@ namespace NasaChallenge2024.Pages
         //var starts = await Http.GetFromJsonAsync<Star[]>("jsons/stars.json");
         //var telescopes = await Http.GetFromJsonAsync<Telescope[]>("jsons/telescopes.json");
         //var travelTypes = await Http.GetFromJsonAsync<TravelType[]>("jsons/travel-types.json");
-
 
 
         public SpaceObject SpaceObject { get; set; } = new SpaceObject
@@ -51,85 +59,54 @@ namespace NasaChallenge2024.Pages
             }
         };
 
-        public User User { get; set; } = new User
-        {
-            Name = "MISTER NITRO",
-            Completion = 30,
-            UserScore = 658
-        };
-
         public string TravelSpeed { get; set; }
         public string TravelTime { get; set; }
 
 
         [Parameter]
         public bool IsUIChecked { get; set; } = true;
-        private bool isUIChecked;
-        private string UIVisibility;
-        private bool _isExoplanetTableVisible;
-        private bool _isObservatoryWindowVisible;
-        private bool _isTelescopeFloatingWindowVisible;
+        private bool _isUIChecked;
+        private bool _isExoplanetsTableVisible;
+        private string _id;
+        private Star[] _stars;
 
-        private ObservatoryWindow _observatoryWindowRef;
-        private TelescopeFloatingWindow _telescopeFloatingWindowRef;
+        private string GetExoplanetElementsVisibility() => _isUIChecked && !_isExoplanetsTableVisible ? string.Empty : "invisible";
+        
+        private string GetExoplanetTabletElementsVisibility() => _isUIChecked && _isExoplanetsTableVisible ? string.Empty : "invisible";
 
         protected override void OnParametersSet()
         {
-            isUIChecked = this.IsUIChecked;
+            _isUIChecked = this.IsUIChecked;
             OnDistanceChange(new ChangeEventArgs() { Value = "light" });
+        }
+        
+        protected override void OnInitialized()
+        {
+            var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+
+            _id = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query).TryGetValue("id", out var id) ? id : default(string);
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-
             if (!firstRender)
             {
                 return;
             }
 
-
             var planets = await HttpClient.GetFromJsonAsync<Exoplanet[]>("jsons/exoplanets.json");
-            var stars = await HttpClient.GetFromJsonAsync<Star[]>("jsons/stars.json");
-
-            var planetData = planets.ElementAt(9);
-            var star = stars.First(x => x.Id == planetData.HostStarIds.First());
-
-            var systemData = new ExoplanetSystemData
-            {
-                Planet = new ExoplanetSystemData.PlanetData
-                {
-                    Id = planetData.Id,
-                    Name = planetData.Name,
-                    OrbitalRadius = planetData.OrbitalRadius,
-                    EarthRadius = planetData.EarthRadius ?? 1,
-                    Texture = planetData.TexturePath,
-                },
-                Star = new ExoplanetSystemData.StarData
-                {
-                    Id = star.Id,
-                    Name = star.Name,
-                    SunRadius = star.SunRadius ?? 1,
-                    Texture = star.TexturePath,
-                }
-            };
+            _stars = await HttpClient.GetFromJsonAsync<Star[]>("jsons/stars.json");
 
             _mainJsModule = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scene.js");
-
-            if (await _mainJsModule.InvokeAsync<bool>("initHomeScene", "#scene-canvas", systemData))
-            {
-                return;
-            }
-
-            // In case of navigation
-            await _mainJsModule.InvokeVoidAsync("showHomeStateAsync", systemData, false);
+            
+            await SelectedExoplanetAsync(planets.FirstOrDefault(p => p.Id.ToString() == _id) ?? planets.ElementAt(9));
         }
 
         private async Task UICheckboxChangedAsync(ChangeEventArgs e)
         {
-            var value = e.Value;
-            this.UIVisibility = (bool)value == false ? "invisible" : string.Empty;
-
-            await _mainJsModule.InvokeVoidAsync("setIsFocusActivePlanetOnScene", !(bool)value);
+            _isUIChecked = (bool)e.Value;
+            UiIVisibilityService.Notify(_isUIChecked);
+            await _mainJsModule.InvokeVoidAsync("setIsFocusActivePlanetOnScene", !_isUIChecked);
         }
 
         private void OnDistanceChange(ChangeEventArgs args)
@@ -167,34 +144,48 @@ namespace NasaChallenge2024.Pages
 
         private void HandleExoplanetsButtonClick()
         {
-            _isExoplanetTableVisible = true;
+            _isExoplanetsTableVisible = true;
             StateHasChanged();
         }
-
-        private void HandleExoplanetSelectedEvent(Exoplanet exoplanet)
+        
+        private async Task SelectedExoplanetAsync(Exoplanet exoplanet)
         {
-            _isExoplanetTableVisible = false;
-            StateHasChanged();
-        }
+            var star = _stars.First(x => x.Id == exoplanet.HostStarIds.First());
 
+            var systemData = new ExoplanetSystemData
+            {
+                Planet = new ExoplanetSystemData.PlanetData
+                {
+                    Id = exoplanet.Id,
+                    Name = exoplanet.Name,
+                    OrbitalRadius = exoplanet.OrbitalRadius,
+                    EarthRadius = exoplanet.EarthRadius ?? 1,
+                    Texture = exoplanet.TexturePath,
+                },
+                Star = new ExoplanetSystemData.StarData
+                {
+                    Id = star.Id,
+                    Name = star.Name,
+                    SunRadius = star.SunRadius ?? 1,
+                    Texture = star.TexturePath,
+                }
+            };
+
+            _isExoplanetsTableVisible = false;
+            StateHasChanged();
+            
+            if (await _mainJsModule.InvokeAsync<bool>("initHomeScene", "#scene-canvas", systemData))
+            {
+                return;
+            }
+
+            // In case of navigation
+            await _mainJsModule.InvokeVoidAsync("showHomeStateAsync", systemData, false);
+        }
+    
         public void HandleObservatorySelectedEvent(Observatory observatory)
         {
-            _isExoplanetTableVisible = false;
-            _isObservatoryWindowVisible = true;
-            _observatoryWindowRef.SelectObservatory(observatory);
-            StateHasChanged();
-        }
-
-        private void HandleObservatoryWindowCloseClickedEvent()
-        {
-            _isObservatoryWindowVisible = false;
-            StateHasChanged();
-        }
-
-        private void HandleTelescopeWindowCloseClickedEvent()
-        {
-            _isTelescopeFloatingWindowVisible = false;
-            StateHasChanged();
+            NavigationManager.NavigateTo($"{Paths.OBSERVATORIES_PATH}?id={observatory.Id}");
         }
     }
 }
