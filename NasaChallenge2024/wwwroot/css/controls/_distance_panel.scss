@@ -33,3 +33,26 @@
 .distance-panel-buttons-item {
     pointer-events: all;
 }
+
+.distance {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    opacity: 70%;
+}
+
+.distance-description {
+    display: flex;
+    flex-direction: column;
+    font-family: "Inter";
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 20px;
+}
+
+.distance-text-bold{
+    font-family: "Inter";
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 20px;
+}
