@@ -96,13 +96,9 @@ export async function initScene(
 
     if (initialExoplanet != null) {
         await showHomeStateAsync(initialExoplanet);
-
-        setIsFocusActivePlanetOnScene(false);
     }
     else {
-        await showObservatoriesStateAsync(false);
-
-        setIsFocusActivePlanetOnScene(true);
+        await showObservatoriesStateAsync(true);
     }
 
     window.addEventListener("mousemove", onMouseMove, false);
@@ -116,6 +112,7 @@ export async function initScene(
 // Home state
 export async function showHomeStateAsync(data: ExoplanetSystemData, isAnimated: boolean = true) {
     await showExoplanetSystemAsync(data);
+    sceneCamera.resetControlsDistance();
 
     sceneCamera.IsDirectOnPlanet = false;
     setIsFocusActivePlanetOnScene(false, isAnimated);
@@ -125,8 +122,25 @@ export async function showHomeStateAsync(data: ExoplanetSystemData, isAnimated: 
 export async function showObservatoriesStateAsync(isPlanet: boolean, isAnimated: boolean = true) {
     showSolarSystem();
 
-    sceneCamera.IsDirectOnPlanet = true;
-    setIsFocusActivePlanetOnScene(true, isAnimated);
+    const planetRadius = activeSystem.getPlanetRadius();
+
+    sceneCamera.Controls.minDistance = planetRadius * 1.5;
+    sceneCamera.Controls.maxDistance = planetRadius * 2;
+
+    if (isPlanet) {
+        sceneCamera.IsDirectOnPlanet = true;
+        setIsFocusActivePlanetOnScene(true, isAnimated);
+    } else {
+        sceneCamera.IsFocusOnScene = false;
+
+        const targetWorldPos = activeSystem.Planet.getWorldPosition(new Three.Vector3());
+
+        var newCameraPosition = new Three.Vector3(targetWorldPos.x - planetRadius * 2, targetWorldPos.y, targetWorldPos.z);
+        var targetDeltaY = (targetWorldPos.x - newCameraPosition.x) * Math.tan(45 * Math.PI / 180);
+        var newCameraLookAt = new Three.Vector3(targetWorldPos.x, targetWorldPos.y + targetDeltaY, targetWorldPos.z);
+
+        sceneCamera.changeCameraSettings(newCameraPosition, newCameraLookAt, isAnimated);
+    }
 }
 
 // Changes focus on planet: focus - move planet in the center, allow gestures; unfocus - move planet aside, disable gestures
@@ -173,9 +187,9 @@ function startRenderLoop(renderer: Three.WebGLRenderer) {
                 const currentTarget = sceneCamera.Controls.target;
 
                 const newTarget = new Three.Vector3(
-                    currentTarget.x + (.5 - mouseCoordinates.x) / 100,
+                    currentTarget.x + (Math.abs(currentTarget.z - sceneCamera.Camera.position.z) < 1e7 ? 0 : (.5 - mouseCoordinates.x) / 100),
                     currentTarget.y + (.5 - mouseCoordinates.y) / 100,
-                    currentTarget.z + (.5 - mouseCoordinates.x) / 100
+                    currentTarget.z + (mouseCoordinates.x - .5) / 100
                 );
 
                 if (Math.abs(sceneCamera.FocusedCameraTarget.x - newTarget.x) <= activeSystem.getPlanetRadius() / 10) {
@@ -247,28 +261,6 @@ function calculateCameraSettingsForActiveSystem(isDirect: boolean): { position: 
 
     return { position: newCameraPosition, lookAt: newCameraLookAt };
 }
-
-// function calculateCameraSettingsToObservePlanet(isDirect: boolean): { position: Three.Vector3, lookAt: Three.Vector3 } {
-//     const targetWorldPos = activeSystem.Planet.getWorldPosition(new Three.Vector3());
-//     const cameraTargetOffset = activeSystem.getPlanetRadius();
-
-//     let xOffset = - 2 * cameraTargetOffset;
-//     let zOffset = isDirect ? 0 : 2 * cameraTargetOffset;
-
-//     var newCameraPosition = new Three.Vector3(
-//         targetWorldPos.x + xOffset,
-//         targetWorldPos.y,
-//         targetWorldPos.z + zOffset
-//     );
-
-//     var newCameraLookAt = new Three.Vector3(
-//         targetWorldPos.x,
-//         targetWorldPos.y,
-//         targetWorldPos.z
-//     );
-
-//     return { position: newCameraPosition, lookAt: newCameraLookAt };
-// }
 
 function onMouseMove(ev: MouseEvent) {
     mouseCoordinates.x = ev.clientX / window.innerWidth;

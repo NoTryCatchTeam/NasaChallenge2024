@@ -73,4 +73,9 @@ export class SceneCamera {
             this.CameraAnimator.start();
         }
     }
+
+    resetControlsDistance() {
+        this.Controls.maxDistance = Infinity;
+        this.Controls.minDistance = 0;
+    }
 }
