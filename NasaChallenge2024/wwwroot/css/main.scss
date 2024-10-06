@@ -19,7 +19,7 @@
 @import 'base/_floating-window';
 
 body {
-  background-color: #010101;
+  background-image: url(../images/image_background_stars.jpg);
 }
 
 #app {
@@ -71,6 +71,9 @@ body {
     font-weight: 600;
     line-height: 24px;
     opacity: 70%;
+    @include _laptop {
+      top: 169px;;
+    }
 }
 
 input {
