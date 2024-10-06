@@ -76,6 +76,16 @@ body {
     }
 }
 
+.compare {
+  position: absolute;
+  top: 350px;
+  right: 700px;
+  @include _laptop {
+    top: 250px;
+    right: 600px;
+  }
+}
+
 input {
     pointer-events: all;
 }
