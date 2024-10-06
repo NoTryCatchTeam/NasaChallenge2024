@@ -9,11 +9,23 @@ public partial class Observatories : ComponentBase
 {
     [Inject]
     public IJSRuntime JsRuntime { get; set; }
+    
+    [Inject]
+    NavigationManager NavigationManager { get; set; }
 
     [Inject]
     public HttpClient HttpClient { get; set; }
 
     private IJSObjectReference _mainJsModule;
+    
+    private string _id;
+
+    protected override void OnInitialized()
+    {
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+
+        _id = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query).TryGetValue("id", out var id) ? id : default(string);
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
