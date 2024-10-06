@@ -1,6 +1,8 @@
+using System.Net.Http.Json;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using NasaChallenge2024.Definitions.Models;
+using NasaChallenge2024.Layout;
 
 namespace NasaChallenge2024.Pages
 {
@@ -8,6 +10,8 @@ namespace NasaChallenge2024.Pages
     {
         [Inject]
         IJSRuntime JsRuntime { get; set; }
+        [Inject]
+        HttpClient HttpClient { get; set; }
         private IJSObjectReference _mainJsModule;
 
         //var exoplanets = await Http.GetFromJsonAsync<Exoplanet[]>("jsons/exoplanets.json");
@@ -15,6 +19,8 @@ namespace NasaChallenge2024.Pages
         //var starts = await Http.GetFromJsonAsync<Star[]>("jsons/stars.json");
         //var telescopes = await Http.GetFromJsonAsync<Telescope[]>("jsons/telescopes.json");
         //var travelTypes = await Http.GetFromJsonAsync<TravelType[]>("jsons/travel-types.json");
+
+
 
         public SpaceObject SpaceObject { get; set; } = new SpaceObject
         {
@@ -50,14 +56,21 @@ namespace NasaChallenge2024.Pages
             UserScore = 658
         };
 
+        public string TravelSpeed {get; set;}
+        public string TravelTime {get; set;}
+
+
         [Parameter]
         public bool IsUIChecked { get; set; } = true;
-
-        public string TravelTime {get;set;}
-
-        public string TravelSpeed {get;set;}
         private bool isUIChecked;
         private string UIVisibility;
+        private bool _isExoplanetTableVisible;
+        private bool _isObservatoryWindowVisible;
+        private bool _isTelescopeFloatingWindowVisible;
+
+        private ObservatoryWindow _observatoryWindowRef;
+        private TelescopeFloatingWindow _telescopeFloatingWindowRef;
+
         protected override void OnParametersSet()
         {
             isUIChecked = this.IsUIChecked;
@@ -69,14 +82,81 @@ namespace NasaChallenge2024.Pages
                 return;
             }
 
-            _mainJsModule = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/main.js");
-            await _mainJsModule.InvokeVoidAsync("hello");
+            var planets = await HttpClient.GetFromJsonAsync<Exoplanet[]>("jsons/exoplanets.json");
+            var stars = await HttpClient.GetFromJsonAsync<Star[]>("jsons/stars.json");
+
+            var planetData = planets.ElementAt(9);
+            var star = stars.First(x => x.Id == planetData.HostStarIds.First());
+
+            var systemData = new ExoplanetSystemData
+            {
+                Planet = new ExoplanetSystemData.PlanetData
+                {
+                    Id = planetData.Id,
+                    Name = planetData.Name,
+                    OrbitalRadius = planetData.OrbitalRadius,
+                    EarthRadius = planetData.EarthRadius ?? 1,
+                    Texture = planetData.TexturePath,
+                },
+                Star = new ExoplanetSystemData.StarData
+                {
+                    Id = star.Id,
+                    Name = star.Name,
+                    SunRadius = star.SunRadius ?? 1,
+                    Texture = star.TexturePath,
+                }
+            };
+
+            _mainJsModule = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scene.js");
+            await _mainJsModule.InvokeVoidAsync("initScene", "#scene-canvas", systemData);
         }
 
-        private void UICheckboxChanged(ChangeEventArgs e)
+        private async Task UICheckboxChangedAsync(ChangeEventArgs e)
         {
             var value = e.Value;
             this.UIVisibility = (bool)value == false ? "invisible" : string.Empty;
+
+            await _mainJsModule.InvokeVoidAsync("setIsFocusOnScene", !(bool)value);
+        }
+
+        private void HandleExoplanetsButtonClick()
+        {
+            _isExoplanetTableVisible = true;
+            StateHasChanged();
+        }
+
+        private void HandleExoplanetSelectedEvent(Exoplanet exoplanet)
+        {
+            _isExoplanetTableVisible = false;
+            StateHasChanged();
+        }
+
+        public void HandleObservatorySelectedEvent(Observatory observatory)
+        {
+            _isExoplanetTableVisible = false;
+            _isObservatoryWindowVisible = true;
+            _observatoryWindowRef.SelectObservatory(observatory);
+            StateHasChanged();
+        }
+
+        public void HandleTelescopeSelectedEvent(Telescope telescope)
+        {
+            _isExoplanetTableVisible = false;
+            _isTelescopeFloatingWindowVisible = true;
+            _telescopeFloatingWindowRef.SelectObservatory(telescope);
+            StateHasChanged();
+        }
+
+        private void HandleObservatoryWindowCloseClickedEvent()
+        {
+            _isObservatoryWindowVisible = false;
+            StateHasChanged();
+        }
+
+        private void HandleTelescopeWindowCloseClickedEvent()
+        {
+            _isTelescopeFloatingWindowVisible = false;
+            StateHasChanged();
         }
     }
 }
