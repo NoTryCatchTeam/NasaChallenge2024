@@ -1,6 +1,9 @@
 @import 'var';
 
 .cards-page-container{
+  max-width: calc(100vw - 250px - 24px);
+  max-height: calc(100vh - 60px - 24px);
+  overflow-y: scroll;
   position: absolute;
   top: 60px;
   left: 250px;
@@ -28,7 +31,8 @@
 .cards-container {
   display: flex;
   gap: 24px;
-
+  flex-wrap: wrap;
+  
   .item-card {
     overflow: hidden;
     height: 291px;
@@ -37,10 +41,34 @@
     border-radius: $border-radius-base;
     pointer-events: all;
     
-    .preview-image {
+    .preview-image-container{
+      position: relative;
       height: 146px;
       width: 100%;
       background-color: $color-card-image-preview;
+
+      .preview-image {
+        height: 100%;
+        width: 100%;
+      }
+      
+      .play-preview-container{
+        position: absolute;
+        top: 51px;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        background-color: $color-info-rows-divider;
+        padding: 6px;
+        border-radius: 32px;
+        height: 44px;
+        width: 44px;
+        
+        .play-preview-image{
+          height: 32px;
+          width: 32px;
+        }
+      }
     }
 
     .card-content-container {

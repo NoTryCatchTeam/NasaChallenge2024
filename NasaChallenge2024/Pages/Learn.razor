@@ -1,0 +1,116 @@
+@page "/learn"
+
+<PageTitle>Learn</PageTitle>
+
+<div class="cards-page-container">
+    <label class="title">Learn</label>
+    <label class="sub-title">A DATABASE OF SCIENTIFIC MATERIAL IN ACCESSIBLE FORMATS TO EXPLORE THE ACCUMULATED KNOWLEDGE OVER MANY YEARS</label>
+    
+    <div class="cards-container" style="margin-top: 40px;">
+        @foreach (var course in _courses)
+        {
+            <div class="item-card">
+                <div class="preview-image-container" src="@course.ImagePath">
+                    <img class="preview-image" src="@course.ImagePath"/>
+                    <div class="play-preview-container">
+                        <img class="play-preview-image" src="images/ic_play.svg"/>
+                    </div>
+                </div>
+                <div class="card-content-container">
+                    <span class="title">@course.Name.ToUpper()</span>
+                    <div class="sub-title-container">
+                        @foreach (var tag in course.Tags)
+                        {
+                            <span>@tag</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@code {
+    [Inject]
+    public IJSRuntime JsRuntime { get; set; }
+    
+    private class Course
+    {
+        public string Name { get; set; }
+        
+        public string ImagePath { get; set; }
+        
+        public string[] Tags { get; set; }
+    }
+
+    private Course[] _courses = new[]
+    {
+        new Course
+        {
+            Name = "A new mission\u2028from Nasa",
+            Tags = new []
+            {
+                "#missions"
+            },
+            ImagePath = "images/courses/1.png"
+        },
+        new Course
+        {
+            Name = "Sounds of Mars from Perseverance Rover",
+            Tags = new []
+            {
+                "#space",
+                "#sound"
+            },
+            ImagePath = "images/courses/2.png"
+        },
+        new Course
+        {
+            Name = "Audio of Juno’s Ganymede Flyby",
+            Tags = new []
+            {
+                "#space",
+                "#sound"
+            },
+            ImagePath = "images/courses/3.png"
+        },
+        new Course
+        {
+            Name = "NASA's SpaceX Crew-8: Science, Innovation, and Discovery",
+            Tags = new []
+            {
+                "#nasa",
+                "#crew-8"
+            },
+            ImagePath = "images/courses/4.png"
+        },
+        new Course
+        {
+            Name = "Why is Venus Called Earth’s Evil Twin? We Asked a NASA Scientist\n10 Questions\n#nasaexpert",
+            Tags = new []
+            {
+                "#nasaexpert",
+            },
+            ImagePath = "images/courses/5.png"
+        },
+    };
+
+    private IJSObjectReference _mainJsModule;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return;
+        }
+
+        _mainJsModule = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scene.js");
+
+        if (!await _mainJsModule.InvokeAsync<bool>("initFreeCameraScene", "#scene-canvas"))
+        {
+            await _mainJsModule.InvokeVoidAsync("showFreeCameraStateAsync");
+        }
+    }
+    
+}
