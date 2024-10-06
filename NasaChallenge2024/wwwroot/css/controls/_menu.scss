@@ -38,7 +38,7 @@
 }
 
 
-.menu-item a:focus {
+.menu-item a.active {
     background: linear-gradient(90deg, #EF48EF 0%, #010101 100%);
     opacity: 100%;
 }
