@@ -1,15 +1,9 @@
 ﻿@page "/"
-@using NasaChallenge2024.Definitions.Models
-@using NasaChallenge2024.Services
-@using static NasaChallenge2024.Pages.SceneDebug
-@inject IJSRuntime JsRuntime
-@inject HttpClient HttpClient
-@inject UiIVisibilityService UiIVisibilityService
 
 <PageTitle>Main</PageTitle>
 
-<label class="object-name @GetUiVisibility()">@SpaceObject.Name.ToUpper()</label>
-<label class="object-host-name @GetUiVisibility()">@SpaceObject.Host.Name.ToUpper()</label>
+<label class="object-name @GetExoplanetElementsVisibility()">@SpaceObject.Name.ToUpper()</label>
+<label class="object-host-name @GetExoplanetElementsVisibility()">@SpaceObject.Host.Name.ToUpper()</label>
 
 <div class="home-tools-panel">
     <button class="vr-button">
@@ -26,13 +20,7 @@
     <UserPanelLayot/>
 </div>
 
-<div class="menu @GetUiVisibility()">
-    <button class="menu-item" autofocus><img class="planets" src="images/planet.svg" alt="planet" />Planets</button>
-    <button class="menu-item"><img class="flyingSaucer" src="images/flyingSaucer.svg"
-            alt="flyingSaucer" />Observatories</button>
-</div>
-
-<div class="object-panel @GetUiVisibility()">
+<div class="object-panel @GetExoplanetElementsVisibility()">
     <div class="object-panel-item">
         <label class="object-panel-item-key">Planet Name</label>
         <label class="object-panel-item-value">@SpaceObject.Name</label>
@@ -79,7 +67,43 @@
     </div>
 </div>
 
-<div class="planets-panel @GetUiVisibility()">
+<div class="distance-panel @GetExoplanetElementsVisibility()">
+    <div class="distance-panel-buttons">
+        <div class="distance-panel-buttons-item">
+            <input type="radio" id="light-rb" name="distance" value="light" checked @onchange="OnDistanceChange"/>
+            <label for="light-rb">LIGHT SPEED</label>
+        </div>
+
+        <div  class="distance-panel-buttons-item">
+            <input type="radio" id="auto-rb" name="distance" value="auto" @onchange="OnDistanceChange" />
+            <label for="auto-rb">AUTO</label>
+        </div>
+
+        <div  class="distance-panel-buttons-item">
+            <input type="radio" id="train-rb" name="distance" value="train" @onchange="OnDistanceChange" />
+            <label for="train-rb">BULLET TRAIN</label>
+        </div>
+
+        <div  class="distance-panel-buttons-item">
+            <input type="radio" id="jet-rb" name="distance" value="jet" @onchange="OnDistanceChange" />
+            <label for="jet-rb">JET</label>
+        </div>
+
+        <div  class="distance-panel-buttons-item">
+            <input type="radio" id="voyager-rb" name="distance" value="voyager" @onchange="OnDistanceChange" />
+            <label for="voyager-rb">VOYAGER</label>
+        </div>
+    </div>
+    <div class="distance">
+        <img src="images/rocketLaunch.svg"/>
+        <div class="distance-description">
+            <label><span class="distance-text-bold">Travel speed:</span> @TravelSpeed</label>
+            <label><span class="distance-text-bold">Travel time:</span> @TravelTime</label>
+        </div>
+    </div>
+</div>
+
+<div class="planets-panel @GetExoplanetElementsVisibility()">
     <button class="card" @onclick="HandleExoplanetsButtonClick">
         <img src="images/ic_table.svg"/>
         ALL PLANETS
@@ -90,7 +114,7 @@
     </button>
 </div>
 
-<div class="bottom-panels @GetUiVisibility()">
+<div class="bottom-panels @GetExoplanetElementsVisibility()">
     <div class="bottom-panels-item-1">
         <label class="bottom-panels-item-number">@SpaceObject.DiscoveryYear</label>
         <label class="bottom-panels-item-description">discovery year</label>
@@ -103,136 +127,6 @@
     </div>
 </div>
 
-@code
-{
-    private IJSObjectReference _mainJsModule;
-
-    //var exoplanets = await Http.GetFromJsonAsync<Exoplanet[]>("jsons/exoplanets.json");
-    //var observatories = await Http.GetFromJsonAsync<Observatory[]>("jsons/observatories.json");
-    //var starts = await Http.GetFromJsonAsync<Star[]>("jsons/stars.json");
-    //var telescopes = await Http.GetFromJsonAsync<Telescope[]>("jsons/telescopes.json");
-    //var travelTypes = await Http.GetFromJsonAsync<TravelType[]>("jsons/travel-types.json");
-
-    public SpaceObject SpaceObject { get; set; } = new SpaceObject
-        {
-            Name = "Kepler-186f",
-
-            Number = 5,
-
-            DiscoveryYear = 2014,
-
-            OrbitalRadius = 0.7048f,
-
-            OrbitalPeriod = 228.8f,
-
-            Status = "Published Confirmed",
-
-            DetectedBy = "Transit",
-
-            ObservedBy = "Kepler",
-
-            Host = new SpaceObjectHost
-            {
-                Name = "Kepler 186",
-                SolarTemp = "3748±75",
-                SolarRadius = "0.539±0.015"
-
-            }
-        };
-
-    [Parameter]
-    public bool IsUIChecked { get; set; } = true;
-    private bool _isUIChecked;
-
-    private string GetUiVisibility() => _isUIChecked ? string.Empty : "invisible";
-    
-    private ObservatoryWindow _observatoryWindowRef;
-    private TelescopeFloatingWindow _telescopeFloatingWindowRef;
-    
-    protected override void OnParametersSet()
-    {
-        _isUIChecked = IsUIChecked;
-    }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (!firstRender)
-        {
-            return;
-        }
-
-        var planets = await HttpClient.GetFromJsonAsync<Exoplanet[]>("jsons/exoplanets.json");
-        var stars = await HttpClient.GetFromJsonAsync<Star[]>("jsons/stars.json");
-
-        var planetData = planets.ElementAt(9);
-        var star = stars.First(x => x.Id == planetData.HostStarIds.First());
-
-        var systemData = new ExoplanetSystemData
-        {
-            Planet = new ExoplanetSystemData.PlanetData
-            {
-                Id = planetData.Id,
-                Name = planetData.Name,
-                OrbitalRadius = planetData.OrbitalRadius,
-                EarthRadius = planetData.EarthRadius ?? 1,
-                Texture = planetData.TexturePath,
-            },
-            Star = new ExoplanetSystemData.StarData
-            {
-                Id = star.Id,
-                Name = star.Name,
-                SunRadius = star.SunRadius ?? 1,
-                Texture = star.TexturePath,
-            }
-        };
-
-        _mainJsModule = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scene.js");
-        await _mainJsModule.InvokeVoidAsync("initScene", "#scene-canvas", systemData);
-    }
-
-    private async Task UICheckboxChangedAsync(ChangeEventArgs e)
-    {
-        UiIVisibilityService.Notify(_isUIChecked);
-        await _mainJsModule.InvokeVoidAsync("setIsFocusOnScene", !_isUIChecked);
-    }
-    
-
-    private void HandleExoplanetsButtonClick()
-    {
-        _isExoplanetTableVisible = true;
-        StateHasChanged();
-    }
-    
-    private void HandleExoplanetSelectedEvent(Exoplanet exoplanet)
-    {
-        _isExoplanetTableVisible = false;
-        StateHasChanged();
-    }
-    
-    public void HandleObservatorySelectedEvent(Observatory observatory)
-    {
-        _isExoplanetTableVisible = false;
-        _isObservatoryWindowVisible = true;
-        _observatoryWindowRef.SelectObservatory(observatory);
-        StateHasChanged();
-    }
-    
-    public void HandleTelescopeSelectedEvent(Telescope telescope)
-    {
-        _isExoplanetTableVisible = false;
-        _isTelescopeFloatingWindowVisible = true;
-        _telescopeFloatingWindowRef.SelectObservatory(telescope);
-        StateHasChanged();
-    }
-
-    private void HandleObservatoryWindowCloseClickedEvent()
-    {
-        _isObservatoryWindowVisible = false;
-        StateHasChanged();
-    }
-
-    private void HandleTelescopeWindowCloseClickedEvent()
-    {
-        _isTelescopeFloatingWindowVisible = false;
-        StateHasChanged();
-    }
-}
+<div class="@GetExoplanetTabletElementsVisibility()">
+    <ExoplanetsLayout OnExoplanetSelected="SelectedExoplanetAsync" OnObservatorySelected="HandleObservatorySelectedEvent" OnTelescopeSelected="HandleTelescopeSelectedEvent"/>
+</div>

@@ -42,19 +42,6 @@ h6 {
     @include header-8;
 }
 
-// .info-label {
-//     @include body-s;
-//     font-family: "Onest", serif;
-//     color: rgba(0, 0, 0, 0.6);
-//     font-weight: 400;
-// }
-
-// .indicator-label {
-//     @include body-s;
-//     font-family: "Onest", serif;
-//     color: $color-indicator;
-//     font-weight: 400;
-// }
 input {
     border: 1px solid $color-background-border;
     border-radius: 8px;

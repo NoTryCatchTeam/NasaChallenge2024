@@ -1,14 +1,13 @@
 ﻿@using NasaChallenge2024.Services
+@using NasaChallenge2024.Definitions.Constants
 @inject UiIVisibilityService UiIVisibilityService
+@inject NavigationManager NavigationManager
 
 <div class="menu @GetUiVisibility()">
-    <button class="menu-item" autofocus>
-        <img class="planets" src="images/planet.svg" alt="planet"/>Planets
-    </button>
-    <button class="menu-item">
-        <img class="flyingSaucer" src="images/flyingSaucer.svg"
-             alt="flyingSaucer"/>Observatories
-    </button>
+    <button class="menu-item" autofocus @onclick="NavigateToPlanetsAsync"><img class="planets" src="images/planet.svg" alt="planet" />PLANETS</button>
+    <button class="menu-item" @onclick="NavigateToObservatoriesAsync"><img src="images/flyingSaucer.svg" alt="flyingSaucer" />OBSERVATORIES</button>
+    <button class="menu-item" @onclick="NavigateToQuizAsync"><img src="images/strategy.svg" alt="strategy" />QUIZ</button>
+    <button class="menu-item" @onclick="NavigateToLearnAsync"><img src="images/graduationCap.svg" alt="graduationCap" />LEARN</button>
 </div>
 
 @code{
@@ -29,6 +28,15 @@
     private void HandleUiVisibilityUpdated(bool uiIVisibility)
     {
         _uiIVisibility = uiIVisibility;
+        StateHasChanged();
     }
+
+    private void NavigateToPlanetsAsync() => NavigationManager.NavigateTo(Paths.EXOPLANETS_PATH);
+    
+    private void NavigateToObservatoriesAsync() => NavigationManager.NavigateTo(Paths.OBSERVATORIES_PATH);
+    
+    private void NavigateToQuizAsync() => NavigationManager.NavigateTo(Paths.QUIZZES_PATH);
+    
+    private void NavigateToLearnAsync() => NavigationManager.NavigateTo(Paths.LEARN_PATH);
 
 }

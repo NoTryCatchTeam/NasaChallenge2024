@@ -60,7 +60,7 @@
                 </tr>
                 <tr @onclick="() => OnExoplanetClickAction(exoplanet)">
                     <td>
-                        <img class="info-table-cell-img" src="@exoplanet.TexturePath"/>
+                        <img class="info-table-cell-value-img" src="@exoplanet.TexturePath"/>
                     </td>
 
                     <td>
@@ -70,10 +70,7 @@
                     @if (_starts.FirstOrDefault(s => exoplanet.HostStarIds.Contains(s.Id)) is { } star)
                     {
                         <td>
-                            <button class="info-table-cell value">
-                                @star.Name
-                                <img src="images/ic_arrow_up_right.svg">
-                            </button>
+                            <div class="info-table-cell value">@star.Name</div>
                         </td>
 
                         <td>
