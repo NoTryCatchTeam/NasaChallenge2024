@@ -1,0 +1,78 @@
+@import 'var';
+
+.cards-page-container{
+  position: absolute;
+  top: 60px;
+  left: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  
+  .title {
+    font-family: "Jaro";
+    font-size: 120px;
+    font-weight: 400;
+    line-height: 150px;
+    font-optical-sizing: 72px;
+  }
+
+  .sub-title {
+    font-family: "Inter";
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 24px;
+    opacity: 70%;
+  }
+}
+
+.cards-container {
+  display: flex;
+  gap: 24px;
+
+  .item-card {
+    overflow: hidden;
+    height: 291px;
+    width: 261px;
+    background-color: $color-background-table;
+    border-radius: $border-radius-base;
+    pointer-events: all;
+    
+    .preview-image {
+      height: 146px;
+      width: 100%;
+      background-color: $color-card-image-preview;
+    }
+
+    .card-content-container {
+      height: 145px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      .title {
+        font-family: "Jaro";
+        font-size: 24px;
+        font-weight: 400;
+        line-height: 24px;
+      }
+
+      .sub-title-container {
+        display: flex;
+        gap: 8px;
+        margin-top: 36px;
+        align-items: center;
+
+        font-size: 15px;
+        color: $color-info-title;
+        
+        .time-indicator{
+          background-color: $color_link;
+          border-radius:3px;
+          width: 6px;
+          height: 6px;
+        }
+      }
+    }
+  }
+}
