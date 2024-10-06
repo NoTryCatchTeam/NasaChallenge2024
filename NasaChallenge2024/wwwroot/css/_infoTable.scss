@@ -1,0 +1,107 @@
+@import 'base/var';
+@import 'base/mixins';
+
+.info-table-container {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    position: absolute;
+    top: 120px;
+    right: 24px;
+    background-color: $color-background-table;
+    padding: 20px;
+    border-radius: $border-radius-base;
+    pointer-events: all;
+    max-width: calc(100% - 257px - 24px);
+    max-height: calc(100% - 120px - 40px);
+    overflow-y: scroll;
+}
+
+.info-table-toolbar{
+    display: flex;
+    gap: 24px;
+
+    .search-container{
+        display: flex;
+        align-items: center;
+        height: 32px;
+        border-radius: 8px;
+        background-color: $color-background-search;
+        vertical-align: middle;
+        width: 260px;
+        padding: 0 8px;
+
+        .search-input{
+            padding: 0;
+            border: transparent 0;
+            margin-left: 8px;
+            background: transparent;
+            font-family: "Inter";
+            font-size: 15px;
+            font-weight: 600;
+            width: 100%;
+            color: $color-text-primary-inverse;
+        }
+
+        input::placeholder {
+            color: $color-info-title;
+            opacity: 1;
+        }
+    }
+
+    .filter-container{
+        display: flex;
+        align-items: center;
+        height: 32px;
+        border-radius: 8px;
+        color: $color-info-title;
+        background-color: $color-background-search;
+        vertical-align: middle;
+        padding: 6px 12px;
+        font-family: "Inter";
+        font-size: 15px;
+        font-weight: 600;
+
+        img{
+            margin-right: 8px;
+        }
+    }
+}
+
+.info-separator {
+    height: 1px;
+    background-color: $color-info-rows-divider;
+    margin: 8px 0;
+}
+
+.info-table-cell.title {
+    text-align: left;
+    color: $color-info-title;
+    vertical-align: middle;
+    margin: 4px 8px;
+}
+
+.info-table-cell {
+    vertical-align: middle;
+    margin: 4px 8px;
+}
+
+.info-table-cell-img {
+    border-radius: $border-radius-base;
+    width: 40px;
+    height: 40px;
+}
+
+.info-table-cell.value {
+    text-align: left;
+    color: $color-text-primary-inverse;
+}
+
+button.info-table-cell.value {
+     text-align: left;
+    color: $color_link;
+ }
+
+.info-table-cell.value.right {
+    text-align: right;
+}

@@ -1,0 +1,47 @@
+@using NasaChallenge2024.Definitions.Models
+
+@if (_observatory != null)
+{
+    <div class="floating-window-container">
+        <img class="floating-window-header-image" src="images/img_observatory.png"/>
+        <button class="floating-window-close" @onclick="OnCloseClickAction">
+            <img src="images/ic_cross.svg"/>
+        </button>
+        <div class="floating-window-container-content">
+            <label class="floating-window-header-title">@_observatory.Name</label>
+            <div class="floating-window-content">
+                <div class="object-panel-item">
+                    <label class="object-panel-item-key">Established Year</label>
+                    <label class="object-panel-item-value">@_observatory.EstablishedYear</label>
+                </div>
+                <hr>
+                <div class="object-panel-item">
+                    <label class="object-panel-item-key">Latitude</label>
+                    <label class="object-panel-item-value">@_observatory.Latitude</label>
+                </div>
+                <hr>
+                <div class="object-panel-item">
+                    <label class="object-panel-item-key">Longitude</label>
+                    <label class="object-panel-item-value">@_observatory.Longitude</label>
+                </div>
+                <hr>
+                <label>@_observatory.Description</label>
+            </div>
+        </div>
+    </div>
+}
+
+@code{
+    private Observatory _observatory;
+
+    [Parameter]
+   public EventCallback OnWindowCloseClicked { get; set; }
+
+    public void SelectObservatory(Observatory observatory)
+    {
+        _observatory = observatory;
+        StateHasChanged();
+    }
+
+    private Task OnCloseClickAction() => OnWindowCloseClicked.InvokeAsync(null);
+}

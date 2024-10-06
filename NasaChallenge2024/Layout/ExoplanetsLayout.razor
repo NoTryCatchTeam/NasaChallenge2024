@@ -1,0 +1,160 @@
+@using NasaChallenge2024.Definitions.Models
+@inject HttpClient Http
+
+<div class="info-table-container">
+    @if (_exoplanets == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+        <div class="info-table-toolbar">
+            <div class="search-container">
+                <img src="images/ic_magnifying_glass.svg"/>
+                <input type="text" class="search-input" placeholder="Search">
+            </div>
+            <div class="filter-container">
+                <img src="images/ic_filter.svg"/>
+                Filter
+            </div>
+        </div>
+        <table class="info-table">
+            <thead>
+                <tr>
+                    <th>
+                        <div class="info-table-cell title">Photo</div>
+                    </th>
+                    <th>
+                        <div class="info-table-cell title">Planet Name</div>
+                    </th>
+                    <th>
+                        <div class="info-table-cell title">Host name</div>
+                    </th>
+                    <th>
+                        <div class="info-table-cell title">Number of Planets</div>
+                    </th>
+                    <th>
+                        <div class="info-table-cell title">Status</div>
+                    </th>
+                    <th>
+                        <div class="info-table-cell title">Stellar Radius [Solar Radius]</div>
+                    </th>
+                    <th>
+                        <div class="info-table-cell title">Stellar Mass [Solar Mass]</div>
+                    </th>
+                    <th>
+                        <div class="info-table-cell title">Detected by</div>
+                    </th>
+                    <th>
+                        <div class="info-table-cell title">Observed by</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var exoplanet in _exoplanets)
+            {
+                <tr>
+                    <td colspan="9">
+                        <div class="info-separator"></div>
+                    </td>
+                </tr>
+                <tr @onclick="() => OnExoplanetClickAction(exoplanet)">
+                    <td>
+                        <img class="info-table-cell-img" src="@exoplanet.TexturePath"/>
+                    </td>
+
+                    <td>
+                        <div class="info-table-cell value">@exoplanet.Name</div>
+                    </td>
+
+                    @if (_starts.FirstOrDefault(s => exoplanet.HostStarIds.Contains(s.Id)) is { } star)
+                    {
+                        <td>
+                            <button class="info-table-cell value">
+                                @star.Name
+                                <img src="images/ic_arrow_up_right.svg">
+                            </button>
+                        </td>
+
+                        <td>
+                            <div class="info-table-cell value right">@star.ExoplanetIds.Count()</div>
+                        </td>
+
+                        <td>
+                            <div class="info-table-cell value">
+                                <img class="info-table-cell image" src="images/ic_seal_check.svg"/>
+                                Published Confirmed
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="info-table-cell value right">@star.SunRadius</div>
+                        </td>
+
+                        <td>
+                            <div class="info-table-cell value right">@star.SunMass</div>
+                        </td>
+                    }
+
+                    <td>
+                        <div class="info-table-cell value right">@exoplanet.DetectionMethod</div>
+                    </td>
+
+                    @if (exoplanet.TelescopeIds?.FirstOrDefault() is { } telescopeId && _telescopes.FirstOrDefault(t => t.Id == telescopeId) is { } telescope)
+                    {
+                        <td>
+                            <button class="info-table-cell value" @onclick="() => OnTelescopeClickAction(telescope)">
+                                @telescope.Name
+                                <img src="images/ic_arrow_up_right.svg">
+                            </button>
+                        </td>
+                    }
+
+                    @if (exoplanet.ObservatoryIds?.FirstOrDefault() is { } observatoryId && _observatories.FirstOrDefault(o => o.Id == observatoryId) is { } observatory)
+                    {
+                        <td>
+                            <button class="info-table-cell value" @onclick="() => OnObservatoryClickAction(observatory)">
+                                @observatory.Name
+                                <img src="images/ic_arrow_up_right.svg">
+                            </button>
+                        </td>
+                    }
+
+                    </tr>
+            }
+            </tbody>
+        </table>
+            
+            
+    }
+</div>
+
+@code{
+    [Parameter]
+    public EventCallback<Exoplanet> OnExoplanetSelected { get; set; }
+    
+    [Parameter]
+    public EventCallback<Observatory> OnObservatorySelected { get; set; }
+    
+    [Parameter]
+    public EventCallback<Telescope> OnTelescopeSelected { get; set; }
+    
+    private Exoplanet[] _exoplanets;
+    private Observatory[] _observatories;
+    private Star[] _starts;
+    private Telescope[] _telescopes;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _observatories = await Http.GetFromJsonAsync<Observatory[]>("jsons/observatories.json");
+        _starts = await Http.GetFromJsonAsync<Star[]>("jsons/stars.json");
+        _telescopes = await Http.GetFromJsonAsync<Telescope[]>("jsons/telescopes.json");
+        _exoplanets = await Http.GetFromJsonAsync<Exoplanet[]>("jsons/exoplanets.json");
+    }
+
+    private Task OnExoplanetClickAction(Exoplanet exoplanet) => OnExoplanetSelected.InvokeAsync(exoplanet);
+    
+    private Task OnObservatoryClickAction(Observatory observatory) => OnObservatorySelected.InvokeAsync(observatory);
+    
+    private Task OnTelescopeClickAction(Telescope telescope) => OnTelescopeSelected.InvokeAsync(telescope);
+}

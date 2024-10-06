@@ -23,7 +23,7 @@
       },
       {
           "id": 3,
-          "name": "TESS (Transiting Exoplanet Survey Satellite)",
+          "name": "TESS",
           "mission_type": "Space Telescope",
           "launch_date": "2018-04-18",
           "objective": "Extended mission",
