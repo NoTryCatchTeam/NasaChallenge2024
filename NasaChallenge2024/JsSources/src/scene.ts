@@ -71,6 +71,25 @@ export async function initObservatoriesScene(
     return true;
 }
 
+export async function initFreeCameraScene(
+    canvasId: string,
+    isDebug: boolean = false): Promise<boolean> {
+
+    if (isInitialized) {
+        return false;
+    }
+
+    isInitialized = true;
+
+    await prepareScene(canvasId, isDebug);
+
+    await showFreeCameraStateAsync();
+
+    startRenderLoop(renderer);
+
+    return true;
+}
+
 // Home state
 export async function showHomeStateAsync(data: ExoplanetSystemData, isAnimated: boolean = true) {
     await showExoplanetSystemAsync(data);
@@ -107,6 +126,18 @@ export async function showObservatoriesStateAsync(isPlanet: boolean, isAnimated:
     }
 
     changeState(isPlanet ? SceneState.ObservatoryEarth : SceneState.ObservatorySpace);
+}
+
+// Free camera state
+export async function showFreeCameraStateAsync(isAnimated: boolean = true) {
+    sceneCamera.IsFocusOnScene = false;
+
+    sceneCamera.changeCameraSettings(
+        new Three.Vector3(20000, 20000, 20000),
+        new Three.Vector3(20000 + 10, 20000 + 10, 20000 + 10),
+        isAnimated);
+
+    changeState(SceneState.Home);
 }
 
 export async function showObservatoriesStateFirstTimeAsync(data: Observatories.Observatory[]) {
@@ -240,15 +271,17 @@ function startRenderLoop(renderer: Three.WebGLRenderer) {
                     currentTarget.z + (mouseCoordinates.x - .5) / 100
                 );
 
-                if (Math.abs(sceneCamera.FocusedCameraTarget.x - newTarget.x) <= activeSystem.getPlanetRadius() / 10) {
+                var compareWith = activeSystem?.getPlanetRadius() ?? 2;
+
+                if (Math.abs(sceneCamera.FocusedCameraTarget.x - newTarget.x) <= compareWith / 10) {
                     currentTarget.x = newTarget.x;
                 }
 
-                if (Math.abs(sceneCamera.FocusedCameraTarget.y - newTarget.y) <= activeSystem.getPlanetRadius() / 10) {
+                if (Math.abs(sceneCamera.FocusedCameraTarget.y - newTarget.y) <= compareWith / 10) {
                     currentTarget.y = newTarget.y;
                 }
 
-                if (Math.abs(sceneCamera.FocusedCameraTarget.z - newTarget.z) <= activeSystem.getPlanetRadius() / 10) {
+                if (Math.abs(sceneCamera.FocusedCameraTarget.z - newTarget.z) <= compareWith / 10) {
                     currentTarget.z = newTarget.z;
                 }
 
@@ -332,6 +365,7 @@ class SceneGroupPositioner {
 enum SceneState {
     Home,
     ObservatoryEarth,
-    ObservatorySpace
+    ObservatorySpace,
+    FreeCamera,
 }
 

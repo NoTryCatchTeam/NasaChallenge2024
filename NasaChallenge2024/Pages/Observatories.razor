@@ -9,7 +9,8 @@
     @for (var i = 0; i < _spaceObservatories.Length; i++)
         {
             var spaceObservatory = _spaceObservatories[i];
-            <div class="telescope-item @GetSpaceObservatoryIsActiveClass(spaceObservatory)" @onclick="() => SelectSpaceObservatory(spaceObservatory)">
+            <div class="telescope-item @GetSpaceObservatoryIsActiveClass(spaceObservatory) animate__animated animate__fadeInDown"
+                @onclick="() => SelectSpaceObservatory(spaceObservatory)">
                 <img src="@spaceObservatory.TexturePath" />
                 <p>@spaceObservatory.Name</p>
             </div>
@@ -19,12 +20,16 @@
 }
 
 <button @onclick="ShowSpaceObservatoriesAsync"
-    class="observatory-switch-button top @GetVisibilityStyle(!_isSpaceObservatories && _selectedObservatory == null)"><img
-        src="images/ic_caret_up.svg" />Space Observatories</button>
+    class="observatory-switch-button top @GetVisibilityStyle(!_isSpaceObservatories && _selectedObservatory == null) animate__animated animate__fadeInDown">
+    <img src="images/ic_caret_up.svg" />
+    Space Observatories
+</button>
 
 <button @onclick="ShowEarthObservatoriesAsync"
-    class="observatory-switch-button bottom @GetVisibilityStyle(_isSpaceObservatories && _selectedObservatory == null)">Earth
-    Observatories<img src="images/ic_caret_down.svg" /></button>
+    class="observatory-switch-button bottom @GetVisibilityStyle(_isSpaceObservatories && _selectedObservatory == null) animate__animated animate__fadeInUp">Earth
+    Observatories
+    <img src="images/ic_caret_down.svg" />
+</button>
 
 <div class="@GetVisibilityStyle(_isSpaceObservatoryFloatingWindowVisible)">
     <SpaceObservatoryWindow OnWindowCloseClicked="HandleSpaceObservatoryWindowCloseClickedEvent"

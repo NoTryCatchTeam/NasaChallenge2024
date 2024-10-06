@@ -1,11 +1,13 @@
 @page "/quizzes"
+@inject IJSRuntime JsRuntime
 
 <PageTitle>Quizzes</PageTitle>
 
-<div class="cards-page-container">
+<div class="cards-page-container animate__animated animate__fadeInDown">
     <label class="title">QUIZZES</label>
-    <label class="sub-title">HI! 👋 HERE YOU CAN PRACTICE YOUR KNOWLEDGE. CHOOSE A QUIZ, ANSWER QUESTIONS AND IMPROVE YOUR KNOWLEDGE</label>
-    
+    <label class="sub-title">HI! 👋 HERE YOU CAN PRACTICE YOUR KNOWLEDGE. CHOOSE A QUIZ, ANSWER QUESTIONS AND IMPROVE
+        YOUR KNOWLEDGE</label>
+
     <div class="cards-container" style="margin-top: 40px;">
         @foreach (var quiz in _quizzes)
         {
@@ -29,44 +31,60 @@
     private class Quiz
     {
         public string Name { get; set; }
-        
+
         public int QuestionsCount { get; set; }
-        
+
         public TimeSpan Time { get; set; }
     }
 
     private Quiz[] _quizzes = new[]
     {
-        new Quiz
-        {
-            Name = "Who are you from the exoplanets?",
-            QuestionsCount = 10,
-            Time = TimeSpan.FromMinutes(5),
-        },
-        new Quiz
-        {
-            Name = "La Silla observatory",
-            QuestionsCount = 15,
-            Time = TimeSpan.FromMinutes(8),
-        },
-        new Quiz
-        {
-            Name = "La Silla observatory",
-            QuestionsCount = 4,
-            Time = TimeSpan.FromMinutes(5),
-        },
-        new Quiz
-        {
-            Name = "La Silla observatory",
-            QuestionsCount = 15,
-            Time = TimeSpan.FromMinutes(15),
-        },
-        new Quiz
-        {
-            Name = "La Silla observatory",
-            QuestionsCount = 10,
-            Time = TimeSpan.FromMinutes(9),
-        },
-    };
+new Quiz
+{
+Name = "Who are you from the exoplanets?",
+QuestionsCount = 10,
+Time = TimeSpan.FromMinutes(5),
+},
+new Quiz
+{
+Name = "La Silla observatory",
+QuestionsCount = 15,
+Time = TimeSpan.FromMinutes(8),
+},
+new Quiz
+{
+Name = "La Silla observatory",
+QuestionsCount = 4,
+Time = TimeSpan.FromMinutes(5),
+},
+new Quiz
+{
+Name = "La Silla observatory",
+QuestionsCount = 15,
+Time = TimeSpan.FromMinutes(15),
+},
+new Quiz
+{
+Name = "La Silla observatory",
+QuestionsCount = 10,
+Time = TimeSpan.FromMinutes(9),
+},
+};
 
+    private IJSObjectReference _mainJsModule;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return;
+        }
+
+        _mainJsModule = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scene.js");
+
+        if (!await _mainJsModule.InvokeAsync<bool>("initFreeCameraScene", "#scene-canvas"))
+        {
+            await _mainJsModule.InvokeVoidAsync("showFreeCameraStateAsync");
+        }
+    }
 }
