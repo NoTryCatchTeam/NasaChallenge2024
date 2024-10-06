@@ -109,7 +109,7 @@ namespace NasaChallenge2024.Pages
 
             _mainJsModule = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scene.js");
 
-            if (await _mainJsModule.InvokeAsync<bool>("initScene", "#scene-canvas", systemData))
+            if (await _mainJsModule.InvokeAsync<bool>("initHomeScene", "#scene-canvas", systemData))
             {
                 return;
             }
