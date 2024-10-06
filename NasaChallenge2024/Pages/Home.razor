@@ -1,44 +1,38 @@
 ﻿@page "/"
 @using NasaChallenge2024.Definitions.Models
+@using NasaChallenge2024.Services
 @using static NasaChallenge2024.Pages.SceneDebug
 @inject IJSRuntime JsRuntime
 @inject HttpClient HttpClient
+@inject UiIVisibilityService UiIVisibilityService
 
 <PageTitle>Main</PageTitle>
 
-<label class="object-name @UIVisibility">@SpaceObject.Name.ToUpper()</label>
-<label class="object-host-name @UIVisibility">@SpaceObject.Host.Name.ToUpper()</label>
+<label class="object-name @GetUiVisibility()">@SpaceObject.Name.ToUpper()</label>
+<label class="object-host-name @GetUiVisibility()">@SpaceObject.Host.Name.ToUpper()</label>
 
-<div class="user-panel">
+<div class="home-tools-panel">
     <button class="vr-button">
         <div class="vr"><img class="visor" src="images/visor.svg" alt="visor" />VR Mode</div>
     </button>
     <div id="ui-switch">
         <label class="ui-text">UI</label>
         <label class="switch">
-            <input type="checkbox" checked="@isUIChecked" @oninput="UICheckboxChangedAsync">
+            <input type="checkbox" checked="@_isUIChecked" @oninput="UICheckboxChangedAsync">
             <span class="slider"></span>
         </label>
     </div>
-    <div class="user">
-        @User.Name
-        <div class="progress-bar-container">
-            <div class="progress-bar-indicator" style="width:@User.Completion%"></div>
-        </div>
-    </div>
-    <div class="avatar">
-        <img src="images/avatar.svg" alt="avatar" />
-        <div class="score">@User.UserScore</div>
-    </div>
+    
+    <UserPanelLayot/>
 </div>
 
-<div class="menu @UIVisibility">
+<div class="menu @GetUiVisibility()">
     <button class="menu-item" autofocus><img class="planets" src="images/planet.svg" alt="planet" />Planets</button>
     <button class="menu-item"><img class="flyingSaucer" src="images/flyingSaucer.svg"
             alt="flyingSaucer" />Observatories</button>
 </div>
 
-<div class="object-panel @UIVisibility">
+<div class="object-panel @GetUiVisibility()">
     <div class="object-panel-item">
         <label class="object-panel-item-key">Planet Name</label>
         <label class="object-panel-item-value">@SpaceObject.Name</label>
@@ -85,7 +79,7 @@
     </div>
 </div>
 
-<div class="planets-panel @UIVisibility">
+<div class="planets-panel @GetUiVisibility()">
     <button class="card" @onclick="HandleExoplanetsButtonClick">
         <img src="images/ic_table.svg"/>
         ALL PLANETS
@@ -96,7 +90,7 @@
     </button>
 </div>
 
-<div class="bottom-panels @UIVisibility">
+<div class="bottom-panels @GetUiVisibility()">
     <div class="bottom-panels-item-1">
         <label class="bottom-panels-item-number">@SpaceObject.DiscoveryYear</label>
         <label class="bottom-panels-item-description">discovery year</label>
@@ -109,18 +103,6 @@
     </div>
 </div>
 
-<div class="@(_isExoplanetTableVisible && isUIChecked ? string.Empty : "invisible")">
-    <ExoplanetsLayout OnExoplanetSelected="HandleExoplanetSelectedEvent" OnObservatorySelected="HandleObservatorySelectedEvent" OnTelescopeSelected="HandleTelescopeSelectedEvent"/>
-</div>
-
-<div class="@(_isObservatoryWindowVisible && isUIChecked ? string.Empty : "invisible")">
-    <ObservatoryWindow OnWindowCloseClicked="HandleObservatoryWindowCloseClickedEvent" @ref="_observatoryWindowRef"/>
-</div>
-
-<div class="@(_isTelescopeFloatingWindowVisible && isUIChecked ? string.Empty : "invisible")">
-    <TelescopeFloatingWindow OnWindowCloseClicked="HandleTelescopeWindowCloseClickedEvent" @ref="_telescopeFloatingWindowRef"/>
-</div>
-
 @code
 {
     private IJSObjectReference _mainJsModule;
@@ -130,8 +112,6 @@
     //var starts = await Http.GetFromJsonAsync<Star[]>("jsons/stars.json");
     //var telescopes = await Http.GetFromJsonAsync<Telescope[]>("jsons/telescopes.json");
     //var travelTypes = await Http.GetFromJsonAsync<TravelType[]>("jsons/travel-types.json");
-
-
 
     public SpaceObject SpaceObject { get; set; } = new SpaceObject
         {
@@ -160,27 +140,18 @@
             }
         };
 
-    public User User { get; set; } = new User
-        {
-            Name = "MISTER NITRO",
-            Completion = 30,
-            UserScore = 658
-        };
-
     [Parameter]
     public bool IsUIChecked { get; set; } = true;
-    private bool isUIChecked;
-    private string UIVisibility;
-    private bool _isExoplanetTableVisible;
-    private bool _isObservatoryWindowVisible;
-    private bool _isTelescopeFloatingWindowVisible;
+    private bool _isUIChecked;
+
+    private string GetUiVisibility() => _isUIChecked ? string.Empty : "invisible";
     
     private ObservatoryWindow _observatoryWindowRef;
     private TelescopeFloatingWindow _telescopeFloatingWindowRef;
     
     protected override void OnParametersSet()
     {
-        isUIChecked = this.IsUIChecked;
+        _isUIChecked = IsUIChecked;
     }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -220,11 +191,10 @@
 
     private async Task UICheckboxChangedAsync(ChangeEventArgs e)
     {
-        var value = e.Value;
-        this.UIVisibility = (bool)value == false ? "invisible" : string.Empty;
-
-        await _mainJsModule.InvokeVoidAsync("setIsFocusOnScene", !(bool)value);
+        UiIVisibilityService.Notify(_isUIChecked);
+        await _mainJsModule.InvokeVoidAsync("setIsFocusOnScene", !_isUIChecked);
     }
+    
 
     private void HandleExoplanetsButtonClick()
     {

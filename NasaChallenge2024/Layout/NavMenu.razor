@@ -1,18 +1,34 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">NasaChallenge2024</a>
-        <button title="Navigation menu" class="navbar-toggler">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
+﻿@using NasaChallenge2024.Services
+@inject UiIVisibilityService UiIVisibilityService
+
+<div class="menu @GetUiVisibility()">
+    <button class="menu-item" autofocus>
+        <img class="planets" src="images/planet.svg" alt="planet"/>Planets
+    </button>
+    <button class="menu-item">
+        <img class="flyingSaucer" src="images/flyingSaucer.svg"
+             alt="flyingSaucer"/>Observatories
+    </button>
 </div>
 
-<div class="nav-scrollable">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-    </nav>
-</div>
+@code{
+    private bool _uiIVisibility = true;
+    
+    private string GetUiVisibility() => _uiIVisibility ? string.Empty : "invisible";
+    
+    public void Dispose()
+    {
+        UiIVisibilityService.OnUiVisibilityUpdated -= HandleUiVisibilityUpdated;
+    }
+    
+    protected override void OnInitialized()
+    {
+        UiIVisibilityService.OnUiVisibilityUpdated += HandleUiVisibilityUpdated;
+    }
+
+    private void HandleUiVisibilityUpdated(bool uiIVisibility)
+    {
+        _uiIVisibility = uiIVisibility;
+    }
+
+}
