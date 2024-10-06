@@ -5,12 +5,19 @@ import * as Tween from "@tweenjs/tween.js";
 import { BaseSystem, SolarSystem } from "./solarSystem";
 import { ExoplanetSystemData, ExoplanetSystem } from "./exoplanetSystem";
 import { SceneCamera } from "./sceneCamera";
+import * as Observatories from "./observatories";
 
 const initialSceneAngle = -160;
 
 let isInitialized = false;
+
+let canvas: HTMLElement;
+let observatoriesWrapper: HTMLElement;
+
+let renderer: Three.WebGLRenderer;
 let scene: Three.Scene;
 let sceneCamera: SceneCamera;
+let sceneState: SceneState;
 let mouseCoordinates = { x: .5, y: .5 };
 
 // Star systems
@@ -22,26 +29,126 @@ declare global {
     var isDebug: boolean;
 }
 
-/**
- * @returns true if initialize process was performed, false overwise
- */
-export async function initScene(
+export async function initHomeScene(
     canvasId: string,
-    initialExoplanet: ExoplanetSystemData = null,
+    data: ExoplanetSystemData,
     isDebug: boolean = false): Promise<boolean> {
 
     if (isInitialized) {
         return false;
     }
 
-    globalThis.isDebug = isDebug;
+    isInitialized = true;
+
+    await prepareScene(canvasId, isDebug);
+
+    await showHomeStateAsync(data);
+
+    startRenderLoop(renderer);
+
+    return true;
+}
+
+export async function initObservatoriesScene(
+    canvasId: string,
+    data: Observatories.Observatory[],
+    isDebug: boolean = false): Promise<boolean> {
+
+    if (isInitialized) {
+        return false;
+    }
 
     isInitialized = true;
 
-    const canvas: HTMLElement = document.querySelector(canvasId);
+    await prepareScene(canvasId, isDebug);
+
+    Observatories.addObservatoriesData(data);
+    Observatories.renderObservatories(observatoriesWrapper, solarSystem);
+    await showObservatoriesStateAsync(true, false);
+
+    startRenderLoop(renderer);
+
+    return true;
+}
+
+// Home state
+export async function showHomeStateAsync(data: ExoplanetSystemData, isAnimated: boolean = true) {
+    await showExoplanetSystemAsync(data);
+    sceneCamera.resetControlsDistance();
+
+    sceneCamera.IsDirectOnPlanet = false;
+    setIsFocusActivePlanetOnScene(false, isAnimated);
+
+    changeState(SceneState.Home);
+}
+
+// Observatories state
+export async function showObservatoriesStateAsync(isPlanet: boolean, isAnimated: boolean = true) {
+    showSolarSystem();
+
+    const planetRadius = activeSystem.getPlanetRadius();
+
+    sceneCamera.Controls.minDistance = planetRadius * 1.5;
+    sceneCamera.Controls.maxDistance = planetRadius * 2;
+
+    if (isPlanet) {
+        sceneCamera.IsDirectOnPlanet = true;
+        setIsFocusActivePlanetOnScene(true, isAnimated);
+    } else {
+        sceneCamera.IsFocusOnScene = false;
+
+        const targetWorldPos = activeSystem.Planet.getWorldPosition(new Three.Vector3());
+
+        var newCameraPosition = new Three.Vector3(targetWorldPos.x - planetRadius * 2, targetWorldPos.y, targetWorldPos.z);
+        var targetDeltaY = (targetWorldPos.x - newCameraPosition.x) * Math.tan(45 * Math.PI / 180);
+        var newCameraLookAt = new Three.Vector3(targetWorldPos.x, targetWorldPos.y + targetDeltaY, targetWorldPos.z);
+
+        sceneCamera.changeCameraSettings(newCameraPosition, newCameraLookAt, isAnimated);
+    }
+
+    changeState(isPlanet ? SceneState.ObservatoryEarth : SceneState.ObservatorySpace);
+}
+
+// Changes focus on planet: focus - move planet in the center, allow gestures; unfocus - move planet aside, disable gestures
+export function setIsFocusActivePlanetOnScene(isFocus: boolean, isAnimated: boolean = true) {
+    sceneCamera.IsFocusOnScene = isFocus;
+    const newCameraSettings = calculateCameraSettingsForActiveSystem(sceneCamera.IsDirectOnPlanet);
+    sceneCamera.changeCameraSettings(newCameraSettings.position, newCameraSettings.lookAt, isAnimated);
+}
+
+async function showExoplanetSystemAsync(data: ExoplanetSystemData) {
+    solarSystem.hide();
+    exoplanetSystem.show();
+
+    await exoplanetSystem.prepareAsync(data);
+
+    activeSystem = exoplanetSystem;
+}
+
+function showSolarSystem() {
+    exoplanetSystem.hide();
+    solarSystem.show();
+
+    activeSystem = solarSystem;
+}
+
+function changeState(newState: SceneState) {
+    sceneState = newState;
+
+    observatoriesWrapper.style.display = sceneState != SceneState.ObservatoryEarth ? 'none' : '';
+}
+
+async function prepareScene(
+    canvasId: string,
+    isDebug: boolean = false) {
+
+    globalThis.isDebug = isDebug;
+
+    canvas = document.querySelector(canvasId);
+    observatoriesWrapper = document.querySelector('#earth-observatories-labels');
 
     // Create renderer
-    const renderer = new Three.WebGLRenderer({
+    renderer = new Three.WebGLRenderer({
         antialias: true,
         canvas: canvas,
         alpha: true,
@@ -57,7 +164,6 @@ export async function initScene(
         texture.mapping = Three.EquirectangularReflectionMapping;
         texture.colorSpace = Three.SRGBColorSpace;
         scene.background = texture;
-        // scene.background = new Three.Color("#787878");
     }
 
     // Setup camera
@@ -67,7 +173,6 @@ export async function initScene(
 
         const controls = new Addons.OrbitControls(camera, canvas);
         controls.target.set(0, 0, 0);
-        // controls.enablePan = false;
         controls.dampingFactor = 0.2
         controls.enableDamping = true;
 
@@ -94,76 +199,7 @@ export async function initScene(
     sceneGroupsPositioner.positionGroup(exoplanetSystem);
     scene.add(exoplanetSystem);
 
-    if (initialExoplanet != null) {
-        await showHomeStateAsync(initialExoplanet);
-    }
-    else {
-        await showObservatoriesStateAsync(true);
-    }
-
     window.addEventListener("mousemove", onMouseMove, false);
-
-    // Start render loop
-    startRenderLoop(renderer);
-
-    return true;
-}
-
-// Home state
-export async function showHomeStateAsync(data: ExoplanetSystemData, isAnimated: boolean = true) {
-    await showExoplanetSystemAsync(data);
-    sceneCamera.resetControlsDistance();
-
-    sceneCamera.IsDirectOnPlanet = false;
-    setIsFocusActivePlanetOnScene(false, isAnimated);
-}
-
-// Observatories state
-export async function showObservatoriesStateAsync(isPlanet: boolean, isAnimated: boolean = true) {
-    showSolarSystem();
-
-    const planetRadius = activeSystem.getPlanetRadius();
-
-    sceneCamera.Controls.minDistance = planetRadius * 1.5;
-    sceneCamera.Controls.maxDistance = planetRadius * 2;
-
-    if (isPlanet) {
-        sceneCamera.IsDirectOnPlanet = true;
-        setIsFocusActivePlanetOnScene(true, isAnimated);
-    } else {
-        sceneCamera.IsFocusOnScene = false;
-
-        const targetWorldPos = activeSystem.Planet.getWorldPosition(new Three.Vector3());
-
-        var newCameraPosition = new Three.Vector3(targetWorldPos.x - planetRadius * 2, targetWorldPos.y, targetWorldPos.z);
-        var targetDeltaY = (targetWorldPos.x - newCameraPosition.x) * Math.tan(45 * Math.PI / 180);
-        var newCameraLookAt = new Three.Vector3(targetWorldPos.x, targetWorldPos.y + targetDeltaY, targetWorldPos.z);
-
-        sceneCamera.changeCameraSettings(newCameraPosition, newCameraLookAt, isAnimated);
-    }
-}
-
-// Changes focus on planet: focus - move planet in the center, allow gestures; unfocus - move planet aside, disable gestures
-export function setIsFocusActivePlanetOnScene(isFocus: boolean, isAnimated: boolean = true) {
-    sceneCamera.IsFocusOnScene = isFocus;
-    const newCameraSettings = calculateCameraSettingsForActiveSystem(sceneCamera.IsDirectOnPlanet);
-    sceneCamera.changeCameraSettings(newCameraSettings.position, newCameraSettings.lookAt, isAnimated);
-}
-
-async function showExoplanetSystemAsync(data: ExoplanetSystemData) {
-    solarSystem.hide();
-    exoplanetSystem.show();
-
-    await exoplanetSystem.prepareAsync(data);
-
-    activeSystem = exoplanetSystem;
-}
-
-function showSolarSystem() {
-    exoplanetSystem.hide();
-    solarSystem.show();
-
-    activeSystem = solarSystem;
 }
 
 function startRenderLoop(renderer: Three.WebGLRenderer) {
@@ -178,7 +214,10 @@ function startRenderLoop(renderer: Three.WebGLRenderer) {
             sceneCamera.Camera.updateProjectionMatrix();
         }
 
-        solarSystem.animate(time);
+        if (sceneState != SceneState.ObservatoryEarth) {
+            solarSystem.animate(time);
+        }
+
         exoplanetSystem.animate(time);
 
         // If camera is not animating then use other existed calculations and changes
@@ -208,6 +247,10 @@ function startRenderLoop(renderer: Three.WebGLRenderer) {
             }
 
             sceneCamera.Controls.update();
+        }
+
+        if (sceneState == SceneState.ObservatoryEarth) {
+            Observatories.updateObservatoriesLabels(canvas, sceneCamera.Camera, solarSystem);
         }
 
         renderer.render(scene, sceneCamera.Camera);
@@ -277,5 +320,9 @@ class SceneGroupPositioner {
     }
 }
 
-class SceneCameraAnimationProperties {
+enum SceneState {
+    Home,
+    ObservatoryEarth,
+    ObservatorySpace
 }
+

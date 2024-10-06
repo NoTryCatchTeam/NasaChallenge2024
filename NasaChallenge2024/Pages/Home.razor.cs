@@ -174,7 +174,7 @@ namespace NasaChallenge2024.Pages
             _isExoplanetsTableVisible = false;
             StateHasChanged();
             
-            if (await _mainJsModule.InvokeAsync<bool>("initScene", "#scene-canvas", systemData))
+            if (await _mainJsModule.InvokeAsync<bool>("initHomeScene", "#scene-canvas", systemData))
             {
                 return;
             }
