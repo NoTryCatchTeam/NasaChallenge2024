@@ -2,9 +2,13 @@ import * as Three from "three";
 
 import { SolarSystem } from "./solarSystem";
 
-let observatories: { name: string, position: Three.Vector3, element: HTMLDivElement }[] = [];
+let observatories: Observatory[] = [];
 
-export function initObservatoriesData(
+export function addObservatoriesData(data: Observatory[]) {
+    observatories = data;
+}
+
+export function renderObservatories(
     observatoriesWrapper: HTMLElement,
     solarSystem: SolarSystem) {
 
@@ -24,35 +28,18 @@ export function initObservatoriesData(
     positionHelper.position.z = solarSystem.getPlanetRadius();
     latHelper.add(positionHelper);
 
-    const observatoryInfos =
-        [
-            {
-                name: "La Silla Observatory",
-                lat: -29.25627,
-                long: -70.73805
-            },
-            {
-                name: "Subaru Observatory",
-                lat: 19.8255556,
-                long: -155.4761111,
-            }
-        ];
+    for (const observatory of observatories) {
 
-    for (const observatoryInfo of observatoryInfos) {
-
-        const { lat, long, name } = observatoryInfo;
-
-        longHelper.rotation.y = Three.MathUtils.degToRad(long) + longFudge;
-        latHelper.rotation.x = Three.MathUtils.degToRad(lat) + latFudge;
+        longHelper.rotation.y = Three.MathUtils.degToRad(observatory.longitude) + longFudge;
+        latHelper.rotation.x = Three.MathUtils.degToRad(observatory.latitude) + latFudge;
 
         positionHelper.updateWorldMatrix(true, false);
-        const position = positionHelper.getWorldPosition(new Three.Vector3());
+        observatory.position = positionHelper.getWorldPosition(new Three.Vector3());
 
         const element = document.createElement('div');
-        element.textContent = name;
+        element.textContent = observatory.name;
         observatoriesWrapper.appendChild(element);
-
-        observatories.push({ name, position, element });
+        observatory.element = element;
     }
 }
 
@@ -93,4 +80,17 @@ export function updateObservatoriesLabels(
 
         element.style.zIndex = ((- tempV.z * .5 + .5) * 100000 | 0).toString();
     }
+}
+
+export class Observatory {
+
+    public name: string;
+
+    public latitude: number;
+
+    public longitude: number;
+
+    public position: Three.Vector3;
+
+    public element: HTMLDivElement;
 }

@@ -14,6 +14,7 @@ let isInitialized = false;
 let canvas: HTMLElement;
 let observatoriesWrapper: HTMLElement;
 
+let renderer: Three.WebGLRenderer;
 let scene: Three.Scene;
 let sceneCamera: SceneCamera;
 let sceneState: SceneState;
@@ -28,93 +29,43 @@ declare global {
     var isDebug: boolean;
 }
 
-/**
- * @returns true if initialize process was performed, false overwise
- */
-export async function initScene(
+export async function initHomeScene(
     canvasId: string,
-    initialExoplanet: ExoplanetSystemData = null,
+    data: ExoplanetSystemData,
     isDebug: boolean = false): Promise<boolean> {
 
     if (isInitialized) {
         return false;
     }
 
-    globalThis.isDebug = isDebug;
+    isInitialized = true;
+
+    await prepareScene(canvasId, isDebug);
+
+    await showHomeStateAsync(data);
+
+    startRenderLoop(renderer);
+
+    return true;
+}
+
+export async function initObservatoriesScene(
+    canvasId: string,
+    data: Observatories.Observatory[],
+    isDebug: boolean = false): Promise<boolean> {
+
+    if (isInitialized) {
+        return false;
+    }
 
     isInitialized = true;
 
-    // Get needed DOM elemets
-    canvas = document.querySelector(canvasId);
-    observatoriesWrapper = document.querySelector('#earth-observatories-labels');
+    await prepareScene(canvasId, isDebug);
 
-    // Create renderer
-    const renderer = new Three.WebGLRenderer({
-        antialias: true,
-        canvas: canvas,
-        alpha: true,
-    });
+    Observatories.addObservatoriesData(data);
+    Observatories.renderObservatories(observatoriesWrapper, solarSystem);
+    await showObservatoriesStateAsync(true, false);
 
-    renderer.setPixelRatio(window.devicePixelRatio);
-
-    // Setup scene
-    {
-        scene = new Three.Scene();
-        const texture = await new Three.TextureLoader()
-            .loadAsync("images/image_background_stars.jpg");
-        texture.mapping = Three.EquirectangularReflectionMapping;
-        texture.colorSpace = Three.SRGBColorSpace;
-        scene.background = texture;
-        // scene.background = new Three.Color("#787878");
-    }
-
-    // Setup camera
-    {
-        const camera = new Three.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
-        scene.add(camera);
-
-        const controls = new Addons.OrbitControls(camera, canvas);
-        controls.target.set(0, 0, 0);
-        // controls.enablePan = false;
-        controls.dampingFactor = 0.2
-        controls.enableDamping = true;
-
-        sceneCamera = new SceneCamera(camera, controls);
-    }
-
-    // Add ambient light
-    {
-        const light = new Three.AmbientLight("#ffffff", 0.1);
-        scene.add(light);
-    }
-
-    const sceneGroupsPositioner = new SceneGroupPositioner();
-
-    // Add sun-earth system
-    solarSystem = new SolarSystem();
-    await solarSystem.initAsync();
-    sceneGroupsPositioner.positionGroup(solarSystem);
-    scene.add(solarSystem);
-
-    // Add exoplanet system
-    exoplanetSystem = new ExoplanetSystem();
-    await exoplanetSystem.initAsync();
-    sceneGroupsPositioner.positionGroup(exoplanetSystem);
-    scene.add(exoplanetSystem);
-
-
-    if (initialExoplanet != null) {
-        await showHomeStateAsync(initialExoplanet);
-    }
-    else {
-        await showObservatoriesStateAsync(true);
-    }
-
-    Observatories.initObservatoriesData(observatoriesWrapper, solarSystem);
-
-    window.addEventListener("mousemove", onMouseMove, false);
-
-    // Start render loop
     startRenderLoop(renderer);
 
     return true;
@@ -185,6 +136,70 @@ function changeState(newState: SceneState) {
     sceneState = newState;
 
     observatoriesWrapper.style.display = sceneState != SceneState.ObservatoryEarth ? 'none' : '';
+}
+
+async function prepareScene(
+    canvasId: string,
+    isDebug: boolean = false) {
+
+    globalThis.isDebug = isDebug;
+
+    canvas = document.querySelector(canvasId);
+    observatoriesWrapper = document.querySelector('#earth-observatories-labels');
+
+    // Create renderer
+    renderer = new Three.WebGLRenderer({
+        antialias: true,
+        canvas: canvas,
+        alpha: true,
+    });
+
+    renderer.setPixelRatio(window.devicePixelRatio);
+
+    // Setup scene
+    {
+        scene = new Three.Scene();
+        const texture = await new Three.TextureLoader()
+            .loadAsync("images/image_background_stars.jpg");
+        texture.mapping = Three.EquirectangularReflectionMapping;
+        texture.colorSpace = Three.SRGBColorSpace;
+        scene.background = texture;
+    }
+
+    // Setup camera
+    {
+        const camera = new Three.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+        scene.add(camera);
+
+        const controls = new Addons.OrbitControls(camera, canvas);
+        controls.target.set(0, 0, 0);
+        controls.dampingFactor = 0.2
+        controls.enableDamping = true;
+
+        sceneCamera = new SceneCamera(camera, controls);
+    }
+
+    // Add ambient light
+    {
+        const light = new Three.AmbientLight("#ffffff", 0.1);
+        scene.add(light);
+    }
+
+    const sceneGroupsPositioner = new SceneGroupPositioner();
+
+    // Add sun-earth system
+    solarSystem = new SolarSystem();
+    await solarSystem.initAsync();
+    sceneGroupsPositioner.positionGroup(solarSystem);
+    scene.add(solarSystem);
+
+    // Add exoplanet system
+    exoplanetSystem = new ExoplanetSystem();
+    await exoplanetSystem.initAsync();
+    sceneGroupsPositioner.positionGroup(exoplanetSystem);
+    scene.add(exoplanetSystem);
+
+    window.addEventListener("mousemove", onMouseMove, false);
 }
 
 function startRenderLoop(renderer: Three.WebGLRenderer) {

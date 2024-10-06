@@ -1,5 +1,7 @@
+using System.Net.Http.Json;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using NasaChallenge2024.Definitions.Models;
 
 namespace NasaChallenge2024.Pages;
 
@@ -7,6 +9,9 @@ public partial class Observatories : ComponentBase
 {
     [Inject]
     public IJSRuntime JsRuntime { get; set; }
+
+    [Inject]
+    public HttpClient HttpClient { get; set; }
 
     private IJSObjectReference _mainJsModule;
 
@@ -17,9 +22,11 @@ public partial class Observatories : ComponentBase
             return;
         }
 
+        var observatories = await HttpClient.GetFromJsonAsync<Observatory[]>("jsons/observatories.json");
+
         _mainJsModule = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scene.js");
 
-        if (await _mainJsModule.InvokeAsync<bool>("initScene", "#scene-canvas"))
+        if (await _mainJsModule.InvokeAsync<bool>("initObservatoriesScene", "#scene-canvas", observatories))
         {
             return;
         }
