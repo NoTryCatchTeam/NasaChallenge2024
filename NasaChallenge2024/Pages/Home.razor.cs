@@ -56,8 +56,8 @@ namespace NasaChallenge2024.Pages
             UserScore = 658
         };
 
-        public string TravelSpeed {get; set;} = "671 Million miles per hour";
-        public string TravelTime {get; set;} = "245 Years";
+        public string TravelSpeed { get; set; } = "671 Million miles per hour";
+        public string TravelTime { get; set; } = "245 Years";
 
 
         [Parameter]
@@ -108,7 +108,14 @@ namespace NasaChallenge2024.Pages
             };
 
             _mainJsModule = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scene.js");
-            await _mainJsModule.InvokeVoidAsync("initScene", "#scene-canvas", systemData);
+
+            if (await _mainJsModule.InvokeAsync<bool>("initScene", "#scene-canvas", systemData))
+            {
+                return;
+            }
+
+            // In case of navigation
+            await _mainJsModule.InvokeVoidAsync("showHomeStateAsync", systemData, false);
         }
 
         private async Task UICheckboxChangedAsync(ChangeEventArgs e)
@@ -116,7 +123,7 @@ namespace NasaChallenge2024.Pages
             var value = e.Value;
             this.UIVisibility = (bool)value == false ? "invisible" : string.Empty;
 
-            await _mainJsModule.InvokeVoidAsync("setIsFocusOnScene", !(bool)value);
+            await _mainJsModule.InvokeVoidAsync("setIsFocusActivePlanetOnScene", !(bool)value);
         }
 
         private void HandleExoplanetsButtonClick()
