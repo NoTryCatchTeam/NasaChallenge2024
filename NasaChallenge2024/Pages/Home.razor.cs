@@ -56,8 +56,8 @@ namespace NasaChallenge2024.Pages
             UserScore = 658
         };
 
-        public string TravelSpeed {get; set;}
-        public string TravelTime {get; set;}
+        public string TravelSpeed {get; set;} = "671 Million miles per hour";
+        public string TravelTime {get; set;} = "245 Years";
 
 
         [Parameter]
