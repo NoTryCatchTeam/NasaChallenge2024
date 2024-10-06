@@ -20,6 +20,15 @@
     <UserPanelLayot/>
 </div>
 
+
+<div class="radius-panel @GetExoplanetElementsVisibility()">
+    <span>orbital radius (Earth)</span>
+    <div class="radius">@SpaceObject.EarthRadius 
+        <button>compare<img src="images/ic_arrow_right.svg">
+        </button>
+    </div>
+</div>
+
 <div class="object-panel @GetExoplanetElementsVisibility()">
     <div class="object-panel-item">
         <label class="object-panel-item-key">Planet Name</label>

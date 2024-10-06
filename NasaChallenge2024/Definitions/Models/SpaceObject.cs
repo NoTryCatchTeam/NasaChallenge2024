@@ -12,6 +12,8 @@ public class SpaceObject
 
     public float OrbitalRadius { get; set; } 
 
+    public float EarthRadius {get;set;}
+
     public float OrbitalPeriod { get; set; } 
 
     public string Status {get;set;}
