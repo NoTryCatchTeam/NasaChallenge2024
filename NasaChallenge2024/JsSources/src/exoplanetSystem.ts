@@ -31,6 +31,7 @@ export class ExoplanetSystem extends BaseSystem {
 
             const texture = await new Three.TextureLoader().loadAsync("images/image_texture_sun.jpg");
             texture.colorSpace = Three.SRGBColorSpace;
+            texture.anisotropy = 4;
 
             const material = new Three.MeshPhongMaterial({
                 emissiveMap: texture,
