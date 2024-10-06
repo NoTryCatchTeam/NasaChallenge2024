@@ -22,7 +22,7 @@
     "telescope_ids": [
       1
     ],
-    "texture_path": "/images/textures/gasgaint.jpg"
+    "texture_path": "images/textures/gasgaint.jpg"
   },
   {
     "id": 2,
@@ -46,7 +46,7 @@
     "telescope_ids": [
       1
     ],
-    "texture_path": "/images/textures/kepler-22_b.jpeg"
+    "texture_path": "images/textures/kepler-22_b.jpeg"
   },
   {
     "id": 3,
@@ -70,7 +70,7 @@
     "telescope_ids": [
       1
     ],
-    "texture_path": "/images/textures/gasgaint.jpg"
+    "texture_path": "images/textures/gasgaint.jpg"
   },
   {
     "id": 4,
@@ -94,7 +94,7 @@
     "telescope_ids": [
       1
     ],
-    "texture_path": "/images/textures/kepler-452_b.jpeg"
+    "texture_path": "images/textures/kepler-452_b.jpeg"
   },
   {
     "id": 5,
@@ -117,7 +117,7 @@
     "telescope_ids": [
       2
     ],
-    "texture_path": "/images/textures/gj_504_b.jpeg"
+    "texture_path": "images/textures/gj_504_b.jpeg"
   },
   {
     "id": 6,
@@ -141,7 +141,7 @@
     "telescope_ids": [
       2
     ],
-    "texture_path": "/images/textures/gasgaint.jpg"
+    "texture_path": "images/textures/gasgaint.jpg"
   },
   {
     "id": 7,
@@ -165,7 +165,7 @@
     "telescope_ids": [
       3
     ],
-    "texture_path": "/images/textures/AU_Mic_b.jpeg"
+    "texture_path": "images/textures/AU_Mic_b.jpeg"
   },
   {
     "id": 8,
@@ -189,7 +189,7 @@
     "observatory_ids": [
       1
     ],
-    "texture_path": "/images/textures/TRAPPIST-1_b.jpeg"
+    "texture_path": "images/textures/TRAPPIST-1_b.jpeg"
   },
   {
     "id": 9,
@@ -213,7 +213,7 @@
     "observatory_ids": [
       1
     ],
-    "texture_path": "/images/textures/TRAPPIST-1_c.jpeg"
+    "texture_path": "images/textures/TRAPPIST-1_c.jpeg"
   },
   {
     "id": 10,
@@ -237,7 +237,7 @@
     "observatory_ids": [
       1
     ],
-    "texture_path": "/images/textures/TRAPPIST-1_base.jpeg"
+    "texture_path": "images/textures/TRAPPIST-1_base.jpeg"
   },
   {
     "id": 11,
@@ -261,7 +261,7 @@
     "observatory_ids": [
       1
     ],
-    "texture_path": "/images/textures/TRAPPIST-1_base.jpeg"
+    "texture_path": "images/textures/TRAPPIST-1_base.jpeg"
   },
   {
     "id": 12,
@@ -285,7 +285,7 @@
     "observatory_ids": [
       1
     ],
-    "texture_path": "/images/textures/TRAPPIST-1_base.jpeg"
+    "texture_path": "images/textures/TRAPPIST-1_base.jpeg"
   },
   {
     "id": 13,
@@ -309,7 +309,7 @@
     "observatory_ids": [
       1
     ],
-    "texture_path": "/images/textures/TRAPPIST-1_g.jpeg"
+    "texture_path": "images/textures/TRAPPIST-1_g.jpeg"
   },
   {
     "id": 14,
@@ -333,6 +333,6 @@
     "observatory_ids": [
       1
     ],
-    "texture_path": "/images/textures/TRAPPIST-1_h.jpeg"
+    "texture_path": "images/textures/TRAPPIST-1_h.jpeg"
   }
 ]

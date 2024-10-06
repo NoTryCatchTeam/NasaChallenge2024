@@ -1,7 +1,5 @@
-@page "/exoplanets"
 @using NasaChallenge2024.Definitions.Models
 @inject HttpClient Http
-@inject NavigationManager NavigationManager
 
 <div class="info-table-container">
     @if (_exoplanets == null)
@@ -132,6 +130,9 @@
 </div>
 
 @code{
+    [Parameter]
+    public EventCallback<Exoplanet> OnExoplanetSelected { get; set; }
+    
     private Exoplanet[] _exoplanets;
     private Observatory[] _observatories;
     private Star[] _starts;
@@ -145,8 +146,6 @@
         _exoplanets = await Http.GetFromJsonAsync<Exoplanet[]>("jsons/exoplanets.json");
     }
 
-    private async Task OnExoplanetClickAction(Exoplanet exoplanet)
-    {
-        NavigationManager.NavigateTo(string.Empty);
-    }
+    private Task OnExoplanetClickAction(Exoplanet exoplanet) => OnExoplanetSelected.InvokeAsync(exoplanet);
+
 }
