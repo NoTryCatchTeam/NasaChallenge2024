@@ -2,18 +2,24 @@ import * as Three from "three";
 import * as Addons from "three/addons";
 import { BaseSystem, SolarSystem } from "./solarSystem";
 import { ExoplanetSystemData, ExoplanetSystem } from "./exoplanetSystem";
+import * as Tween from "@tweenjs/tween.js";
 
 const initialSceneAngle = -160;
 
 let isInitialized = false;
 let scene: Three.Scene;
 let sceneCamera: SceneCamera;
-let activeSystem: BaseSystem;
-let solarSystem: SolarSystem;
-let exoplanetSystem: ExoplanetSystem;
 let isFocusOnScene: boolean;
 let focusedCameraTarget: Three.Vector3;
 let mouseCoordinates = { x: .5, y: .5 };
+
+// Animatios
+let cameraAnimator: Tween.Tween;
+
+// Star systems
+let activeSystem: BaseSystem;
+let solarSystem: SolarSystem;
+let exoplanetSystem: ExoplanetSystem;
 
 declare global {
     var isDebug: boolean;
@@ -112,7 +118,7 @@ export async function showExoplanetSystemAsync(data: ExoplanetSystemData, isTarg
 
     activeSystem = exoplanetSystem;
 
-    calculateCameraPosition(isTargetStar);
+    changeCameraPosition(isTargetStar);
 }
 
 export function showSolarSystemAsync(isTargetStar: boolean) {
@@ -122,14 +128,13 @@ export function showSolarSystemAsync(isTargetStar: boolean) {
 
     activeSystem = solarSystem;
 
-    calculateCameraPosition(isTargetStar);
+    changeCameraPosition(isTargetStar);
 }
 
 export function setIsFocusOnScene(isFocus: boolean) {
 
     isFocusOnScene = isFocus;
-    sceneCamera.Controls.enabled = isFocusOnScene;
-    calculateCameraPosition(false);
+    changeCameraPosition(false);
 }
 
 function startRenderLoop(renderer: Three.WebGLRenderer) {
@@ -147,31 +152,34 @@ function startRenderLoop(renderer: Three.WebGLRenderer) {
         solarSystem.animate(time);
         exoplanetSystem.animate(time);
 
-        if (!isFocusOnScene) {
-            const currentTarget = sceneCamera.Controls.target;
+        // If camera is not animating then use other existed calculations and changes
+        if (!cameraAnimator?.update(time)) {
+            if (!isFocusOnScene) {
+                const currentTarget = sceneCamera.Controls.target;
 
-            const newTarget = new Three.Vector3(
-                currentTarget.x + (.5 - mouseCoordinates.x) / 100,
-                currentTarget.y + (.5 - mouseCoordinates.y) / 100,
-                currentTarget.z + (.5 - mouseCoordinates.x) / 100
-            );
+                const newTarget = new Three.Vector3(
+                    currentTarget.x + (.5 - mouseCoordinates.x) / 100,
+                    currentTarget.y + (.5 - mouseCoordinates.y) / 100,
+                    currentTarget.z + (.5 - mouseCoordinates.x) / 100
+                );
 
-            if (Math.abs(focusedCameraTarget.x - newTarget.x) <= activeSystem.getPlanetRadius() / 10) {
-                currentTarget.x = newTarget.x;
+                if (Math.abs(focusedCameraTarget.x - newTarget.x) <= activeSystem.getPlanetRadius() / 10) {
+                    currentTarget.x = newTarget.x;
+                }
+
+                if (Math.abs(focusedCameraTarget.y - newTarget.y) <= activeSystem.getPlanetRadius() / 10) {
+                    currentTarget.y = newTarget.y;
+                }
+
+                if (Math.abs(focusedCameraTarget.z - newTarget.z) <= activeSystem.getPlanetRadius() / 10) {
+                    currentTarget.z = newTarget.z;
+                }
+
+                sceneCamera.Controls.target.copy(currentTarget);
             }
 
-            if (Math.abs(focusedCameraTarget.y - newTarget.y) <= activeSystem.getPlanetRadius() / 10) {
-                currentTarget.y = newTarget.y;
-            }
-
-            if (Math.abs(focusedCameraTarget.z - newTarget.z) <= activeSystem.getPlanetRadius() / 10) {
-                currentTarget.z = newTarget.z;
-            }
-
-            sceneCamera.Controls.target.copy(currentTarget);
+            sceneCamera.Controls.update();
         }
-
-        sceneCamera.Controls.update();
 
         renderer.render(scene, sceneCamera.Camera);
 
@@ -192,7 +200,7 @@ function startRenderLoop(renderer: Three.WebGLRenderer) {
     }
 }
 
-function calculateCameraPosition(isTargetStar: boolean) {
+function changeCameraPosition(isTargetStar: boolean) {
     const targetWorldPos = (isTargetStar ? activeSystem.Star : activeSystem.Planet).getWorldPosition(new Three.Vector3());
     const cameraTargetOffset = isTargetStar ? activeSystem.getStarRadius() : activeSystem.getPlanetRadius();
 
@@ -209,9 +217,58 @@ function calculateCameraPosition(isTargetStar: boolean) {
         focusDelta.z = activeSystem.getPlanetRadius() * Math.cos(vectorMovementAngle * Math.PI / 180);
     }
 
-    sceneCamera.Camera.position.set(targetWorldPos.x + xOffset - focusDelta.x, targetWorldPos.y, targetWorldPos.z + zOffset + focusDelta.z);
-    sceneCamera.Controls.target.set(targetWorldPos.x - focusDelta.x, targetWorldPos.y, targetWorldPos.z + focusDelta.z);
-    focusedCameraTarget = sceneCamera.Controls.target.clone();
+    // Prepare camera animator
+    var currentCameraPosition = {
+        x: sceneCamera.Camera.position.x,
+        y: sceneCamera.Camera.position.y,
+        z: sceneCamera.Camera.position.z
+    };
+
+    var currentCameraLookAt = {
+        x: sceneCamera.Controls.target.x,
+        y: sceneCamera.Controls.target.y,
+        z: sceneCamera.Controls.target.z
+    };
+
+    var newCameraPosition = {
+        x: targetWorldPos.x + xOffset - focusDelta.x,
+        y: targetWorldPos.y,
+        z: targetWorldPos.z + zOffset + focusDelta.z
+    };
+
+    var newCameraLookAt = {
+        x: targetWorldPos.x - focusDelta.x,
+        y: targetWorldPos.y,
+        z: targetWorldPos.z + focusDelta.z
+    };
+
+    cameraAnimator = new Tween.Tween(
+        [
+            currentCameraPosition,
+            currentCameraLookAt
+        ]);
+
+    cameraAnimator.to(
+        [
+            newCameraPosition,
+            newCameraLookAt
+        ],
+        500);
+
+    cameraAnimator.onUpdate(() => {
+        sceneCamera.Camera.position.set(currentCameraPosition.x, currentCameraPosition.y, currentCameraPosition.z);
+        sceneCamera.Camera.lookAt(currentCameraLookAt.x, currentCameraLookAt.y, currentCameraLookAt.z);
+    });
+
+    cameraAnimator.onComplete(() => {
+        sceneCamera.Controls.enabled = isFocusOnScene;
+
+        var controlsTarget = new Three.Vector3(currentCameraLookAt.x, currentCameraLookAt.y, currentCameraLookAt.z);
+        sceneCamera.Controls.target.copy(controlsTarget);
+        focusedCameraTarget = controlsTarget.clone();
+    });
+
+    cameraAnimator.start();
 }
 
 function onMouseMove(ev: MouseEvent) {
@@ -238,4 +295,7 @@ class SceneGroupPositioner {
     positionGroup(group: Three.Object3D) {
         group.position.set(this.sceneGroupXPosition++ * this.sceneGroupXPositionIncrementor, 0, 0);
     }
+}
+
+class SceneCameraAnimationProperties {
 }
