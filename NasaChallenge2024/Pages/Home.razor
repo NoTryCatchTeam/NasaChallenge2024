@@ -110,11 +110,15 @@
 </div>
 
 <div class="@(_isExoplanetTableVisible && isUIChecked ? string.Empty : "invisible")">
-    <ExoplanetsLayout OnExoplanetSelected="HandleExoplanetSelectedEvent" OnObservatorySelected="HandleObservatorySelectedEvent"/>
+    <ExoplanetsLayout OnExoplanetSelected="HandleExoplanetSelectedEvent" OnObservatorySelected="HandleObservatorySelectedEvent" OnTelescopeSelected="HandleTelescopeSelectedEvent"/>
 </div>
 
 <div class="@(_isObservatoryWindowVisible && isUIChecked ? string.Empty : "invisible")">
     <ObservatoryWindow OnWindowCloseClicked="HandleObservatoryWindowCloseClickedEvent" @ref="_observatoryWindowRef"/>
+</div>
+
+<div class="@(_isTelescopeFloatingWindowVisible && isUIChecked ? string.Empty : "invisible")">
+    <TelescopeFloatingWindow OnWindowCloseClicked="HandleTelescopeWindowCloseClickedEvent" @ref="_telescopeFloatingWindowRef"/>
 </div>
 
 @code
@@ -169,9 +173,10 @@
     private string UIVisibility;
     private bool _isExoplanetTableVisible;
     private bool _isObservatoryWindowVisible;
-
-    private ObservatoryWindow _observatoryWindowRef;
+    private bool _isTelescopeFloatingWindowVisible;
     
+    private ObservatoryWindow _observatoryWindowRef;
+    private TelescopeFloatingWindow _telescopeFloatingWindowRef;
     
     protected override void OnParametersSet()
     {
@@ -240,10 +245,24 @@
         _observatoryWindowRef.SelectObservatory(observatory);
         StateHasChanged();
     }
+    
+    public void HandleTelescopeSelectedEvent(Telescope telescope)
+    {
+        _isExoplanetTableVisible = false;
+        _isTelescopeFloatingWindowVisible = true;
+        _telescopeFloatingWindowRef.SelectObservatory(telescope);
+        StateHasChanged();
+    }
 
     private void HandleObservatoryWindowCloseClickedEvent()
     {
         _isObservatoryWindowVisible = false;
+        StateHasChanged();
+    }
+
+    private void HandleTelescopeWindowCloseClickedEvent()
+    {
+        _isTelescopeFloatingWindowVisible = false;
         StateHasChanged();
     }
 }

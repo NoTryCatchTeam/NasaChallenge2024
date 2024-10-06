@@ -1,0 +1,56 @@
+@using NasaChallenge2024.Definitions.Models
+
+@if (_telescope != null)
+{
+    <div class="floating-window-container">
+        <button class="floating-window-close" @onclick="OnCloseClickAction">
+            <img src="images/ic_cross.svg"/>
+        </button>
+        <div class="floating-window-container-content">
+            <label class="floating-window-header-title">@_telescope.Name</label>
+            <div class="floating-window-content">
+                <div class="object-panel-item">
+                    <label class="object-panel-item-key">Mission Type</label>
+                    <label class="object-panel-item-value">@_telescope.MissionType</label>
+                </div>
+                <hr>
+                <div class="object-panel-item">
+                    <label class="object-panel-item-key">Launch Date</label>
+                    <label class="object-panel-item-value">@_telescope.LaunchDate</label>
+                </div>
+                <hr>
+                <div class="object-panel-item">
+                    <label class="object-panel-item-key">Objective</label>
+                    <label class="object-panel-item-value">@_telescope.Objective</label>
+                </div>
+                <hr>
+                <div class="object-panel-item">
+                    <label class="object-panel-item-key">Wave Light</label>
+                    <label class="object-panel-item-value">@_telescope.WaveLight</label>
+                </div>
+                <hr>
+                <div class="object-panel-item">
+                    <label class="object-panel-item-key">Type</label>
+                    <label class="object-panel-item-value">@_telescope.Type</label>
+                </div>
+                <hr>
+                <label>@_telescope.Description</label>
+            </div>
+        </div>
+    </div>
+}
+
+@code{
+    private Telescope _telescope;
+
+    [Parameter]
+    public EventCallback OnWindowCloseClicked { get; set; }
+
+    public void SelectObservatory(Telescope telescope)
+    {
+        _telescope = telescope;
+        StateHasChanged();
+    }
+
+    private Task OnCloseClickAction() => OnWindowCloseClicked.InvokeAsync(null);
+}
