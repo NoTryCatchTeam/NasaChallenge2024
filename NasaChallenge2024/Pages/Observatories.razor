@@ -1,29 +1,7 @@
 @page "/observatories"
-@inject IJSRuntime JsRuntime
-@inject HttpClient HttpClient
 
 <PageTitle>Observatories</PageTitle>
 
-@code {
+<button @onclick="ShowSpaceObservatoriesAsync" style="pointer-events: all;">Space</button>
 
-    private IJSObjectReference _mainJsModule;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (!firstRender)
-        {
-            return;
-        }
-
-        _mainJsModule = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scene.js");
-
-        if (await _mainJsModule.InvokeAsync<bool>("initScene", "#scene-canvas"))
-        {
-            return;
-        }
-
-        // In case of navigation
-        await _mainJsModule.InvokeVoidAsync("showObservatoriesStateAsync", false);
-    }
-
-}
+<button @onclick="ShowEarthObservatoriesAsync" style="pointer-events: all;">Earth</button>
