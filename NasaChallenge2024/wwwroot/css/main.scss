@@ -79,3 +79,32 @@ body {
 input {
     pointer-events: all;
 }
+
+#earth-observatories-labels {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: white;
+}
+
+#earth-observatories-labels > div {
+  position: absolute;
+  left: 0;
+  top: 0;
+  cursor: pointer;
+  user-select: none;
+  pointer-events: all;
+  text-shadow:
+      -1px -1px 0 #000,
+      0 -1px 0 #000,
+      1px -1px 0 #000,
+      1px 0 0 #000,
+      1px 1px 0 #000,
+      0 1px 0 #000,
+      -1px 1px 0 #000,
+      -1px 0 0 #000;
+}
+
+#earth-observatories-labels > div:hover {
+  color: red;
+}
