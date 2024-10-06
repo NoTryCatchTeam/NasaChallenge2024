@@ -2,7 +2,71 @@
 
 <PageTitle>Quizzes</PageTitle>
 
-@code {
+<div class="cards-page-container">
+    <label class="title">QUIZZES</label>
+    <label class="sub-title">HI! 👋 HERE YOU CAN PRACTICE YOUR KNOWLEDGE. CHOOSE A QUIZ, ANSWER QUESTIONS AND IMPROVE YOUR KNOWLEDGE</label>
+    
+    <div class="cards-container" style="margin-top: 40px;">
+        @foreach (var quiz in _quizzes)
+        {
+            <div class="item-card">
+                <div class="preview-image"></div>
+                <div class="card-content-container">
+                    <span class="title">@quiz.Name.ToUpper()</span>
+                    <div class="sub-title-container">
+                        <span>@quiz.QuestionsCount Questions</span>
+                        <div class="time-indicator"></div>
+                        <span>@quiz.Time.TotalMinutes minutes</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
 
+
+@code {
+    private class Quiz
+    {
+        public string Name { get; set; }
+        
+        public int QuestionsCount { get; set; }
+        
+        public TimeSpan Time { get; set; }
+    }
+
+    private Quiz[] _quizzes = new[]
+    {
+        new Quiz
+        {
+            Name = "Who are you from the exoplanets?",
+            QuestionsCount = 10,
+            Time = TimeSpan.FromMinutes(5),
+        },
+        new Quiz
+        {
+            Name = "La Silla observatory",
+            QuestionsCount = 15,
+            Time = TimeSpan.FromMinutes(8),
+        },
+        new Quiz
+        {
+            Name = "La Silla observatory",
+            QuestionsCount = 4,
+            Time = TimeSpan.FromMinutes(5),
+        },
+        new Quiz
+        {
+            Name = "La Silla observatory",
+            QuestionsCount = 15,
+            Time = TimeSpan.FromMinutes(15),
+        },
+        new Quiz
+        {
+            Name = "La Silla observatory",
+            QuestionsCount = 10,
+            Time = TimeSpan.FromMinutes(9),
+        },
+    };
 
 }
