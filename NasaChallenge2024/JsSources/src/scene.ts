@@ -5,12 +5,18 @@ import * as Tween from "@tweenjs/tween.js";
 import { BaseSystem, SolarSystem } from "./solarSystem";
 import { ExoplanetSystemData, ExoplanetSystem } from "./exoplanetSystem";
 import { SceneCamera } from "./sceneCamera";
+import * as Observatories from "./observatories";
 
 const initialSceneAngle = -160;
 
 let isInitialized = false;
+
+let canvas: HTMLElement;
+let observatoriesWrapper: HTMLElement;
+
 let scene: Three.Scene;
 let sceneCamera: SceneCamera;
+let sceneState: SceneState;
 let mouseCoordinates = { x: .5, y: .5 };
 
 // Star systems
@@ -38,7 +44,9 @@ export async function initScene(
 
     isInitialized = true;
 
-    const canvas: HTMLElement = document.querySelector(canvasId);
+    // Get needed DOM elemets
+    canvas = document.querySelector(canvasId);
+    observatoriesWrapper = document.querySelector('#earth-observatories-labels');
 
     // Create renderer
     const renderer = new Three.WebGLRenderer({
@@ -94,12 +102,15 @@ export async function initScene(
     sceneGroupsPositioner.positionGroup(exoplanetSystem);
     scene.add(exoplanetSystem);
 
+
     if (initialExoplanet != null) {
         await showHomeStateAsync(initialExoplanet);
     }
     else {
         await showObservatoriesStateAsync(true);
     }
+
+    Observatories.initObservatoriesData(observatoriesWrapper, solarSystem);
 
     window.addEventListener("mousemove", onMouseMove, false);
 
@@ -116,6 +127,8 @@ export async function showHomeStateAsync(data: ExoplanetSystemData, isAnimated: 
 
     sceneCamera.IsDirectOnPlanet = false;
     setIsFocusActivePlanetOnScene(false, isAnimated);
+
+    changeState(SceneState.Home);
 }
 
 // Observatories state
@@ -141,6 +154,8 @@ export async function showObservatoriesStateAsync(isPlanet: boolean, isAnimated:
 
         sceneCamera.changeCameraSettings(newCameraPosition, newCameraLookAt, isAnimated);
     }
+
+    changeState(isPlanet ? SceneState.ObservatoryEarth : SceneState.ObservatorySpace);
 }
 
 // Changes focus on planet: focus - move planet in the center, allow gestures; unfocus - move planet aside, disable gestures
@@ -166,6 +181,12 @@ function showSolarSystem() {
     activeSystem = solarSystem;
 }
 
+function changeState(newState: SceneState) {
+    sceneState = newState;
+
+    observatoriesWrapper.style.display = sceneState != SceneState.ObservatoryEarth ? 'none' : '';
+}
+
 function startRenderLoop(renderer: Three.WebGLRenderer) {
     requestAnimationFrame(render);
 
@@ -178,7 +199,10 @@ function startRenderLoop(renderer: Three.WebGLRenderer) {
             sceneCamera.Camera.updateProjectionMatrix();
         }
 
-        solarSystem.animate(time);
+        if (sceneState != SceneState.ObservatoryEarth) {
+            solarSystem.animate(time);
+        }
+
         exoplanetSystem.animate(time);
 
         // If camera is not animating then use other existed calculations and changes
@@ -208,6 +232,10 @@ function startRenderLoop(renderer: Three.WebGLRenderer) {
             }
 
             sceneCamera.Controls.update();
+        }
+
+        if (sceneState == SceneState.ObservatoryEarth) {
+            Observatories.updateObservatoriesLabels(canvas, sceneCamera.Camera, solarSystem);
         }
 
         renderer.render(scene, sceneCamera.Camera);
@@ -277,5 +305,9 @@ class SceneGroupPositioner {
     }
 }
 
-class SceneCameraAnimationProperties {
+enum SceneState {
+    Home,
+    ObservatoryEarth,
+    ObservatorySpace
 }
+
