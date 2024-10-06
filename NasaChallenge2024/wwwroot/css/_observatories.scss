@@ -1,4 +1,4 @@
-@import 'base/var';
+@import "base/var";
 
 .observatory-switch-button {
   display: flex;
@@ -14,7 +14,7 @@
     width: 40px;
   }
 }
-.space-observatory-image{
+.space-observatory-image {
   position: absolute;
   top: 120px;
   left: 257px;
@@ -27,11 +27,11 @@
   font-size: 18px;
   color: $color-text-primary-inverse;
   pointer-events: all;
-  
-  label{
+
+  label {
     margin: 6px 8px;
   }
-  
+
   img {
     width: 100%;
     height: auto;
@@ -41,15 +41,70 @@
 }
 
 .observatory-switch-button.bottom {
-   position: absolute;
-   bottom: 200px;
-   left: 50%;
-   transform: translateX(-50%);
- }
+  position: absolute;
+  bottom: 200px;
+  left: 50%;
+  transform: translateX(-50%);
+}
 
 .observatory-switch-button.top {
   position: absolute;
   top: 24px;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.telescope {
+  &-item {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    top: 120px;
+    cursor: pointer;
+    pointer-events: all;
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+
+    p {
+      font-size: 18px;
+      line-height: 20px;
+      font-weight: 500;
+    }
+
+    &:nth-child(1) {
+      left: 450px;
+    }
+
+    &:nth-child(2) {
+      left: 750px;
+    }
+
+    &:nth-child(3) {
+      left: 650px;
+    }
+
+    &.active {
+      width: 600px;
+      height: 600px;
+      left: 250px;
+
+      p {
+        position: absolute;
+        top: -60px;
+        left: 0;
+        font-family: "Jaro";
+        font-size: 120px;
+        font-weight: 400;
+        line-height: 150px;
+        font-optical-sizing: 72px;
+        text-transform: uppercase;
+        @include _laptop {
+          font-size: 80px;
+        }
+      }
+    }
+  }
 }

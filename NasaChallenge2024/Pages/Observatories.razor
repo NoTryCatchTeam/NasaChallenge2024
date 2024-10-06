@@ -2,46 +2,36 @@
 
 <PageTitle>Observatories</PageTitle>
 
-@if (_spaceColumnWidth is { } spaceColumnWidth)
+@if (_spaceObservatories != null)
 {
-    const double evenElementsTop = 50;
-    var elementSize = Math.Min(spaceColumnWidth * 0.75, (_screenHalfHeight - evenElementsTop) * 0.75);
-    var oddElementsTop = _screenHalfHeight - elementSize;
-    
-    var marginHorizontal = (spaceColumnWidth - elementSize) / 2;
-    <div class="@GetVisibilityStyle(_selectedObservatory == null && _isSpaceObservatories)">
-        @for (var i = 0; i < _spaceObservatories.Length; i++)
+    <div class="telescope">
+
+    @for (var i = 0; i < _spaceObservatories.Length; i++)
         {
             var spaceObservatory = _spaceObservatories[i];
-            var top = i % 2 == 0 ? evenElementsTop : oddElementsTop;
-            var left = _spaceElementsLeft + spaceColumnWidth * i + marginHorizontal;
-                
-            <button @onclick="() => SelectSpaceObservatory(spaceObservatory)" 
-                    class="space-observatory-button"
-                    style="top: @(top)px; left: @(left)px; width: @(elementSize)px; height: @(elementSize)px;">
-                <img src="@spaceObservatory.TexturePath"/>
-                <label>@spaceObservatory.Name</label>
-            </button>
+            <div class="telescope-item @GetSpaceObservatoryIsActiveClass(spaceObservatory)" @onclick="() => SelectSpaceObservatory(spaceObservatory)">
+                <img src="@spaceObservatory.TexturePath" />
+                <p>@spaceObservatory.Name</p>
+            </div>
         }
+
     </div>
 }
 
-@if (_selectedObservatory?.Type == "Space")
-{
-    <img class="space-observatory-image" src="@_selectedObservatory.TexturePath"/>
-}
+<button @onclick="ShowSpaceObservatoriesAsync"
+    class="observatory-switch-button top @GetVisibilityStyle(!_isSpaceObservatories && _selectedObservatory == null)"><img
+        src="images/ic_caret_up.svg" />Space Observatories</button>
 
-<label class="object-name @GetVisibilityStyle(_selectedObservatory != null)">@_selectedObservatory?.Name.ToUpper()</label>
-
-<button @onclick="ShowSpaceObservatoriesAsync" class="observatory-switch-button top @GetVisibilityStyle(!_isSpaceObservatories && _selectedObservatory == null)"><img src="images/ic_caret_up.svg" />Space Observatories</button>
-
-<button @onclick="ShowEarthObservatoriesAsync" class="observatory-switch-button bottom @GetVisibilityStyle(_isSpaceObservatories && _selectedObservatory == null)">Earth Observatories<img src="images/ic_caret_down.svg" /></button>
+<button @onclick="ShowEarthObservatoriesAsync"
+    class="observatory-switch-button bottom @GetVisibilityStyle(_isSpaceObservatories && _selectedObservatory == null)">Earth
+    Observatories<img src="images/ic_caret_down.svg" /></button>
 
 <div class="@GetVisibilityStyle(_isSpaceObservatoryFloatingWindowVisible)">
-    <SpaceObservatoryWindow OnWindowCloseClicked="HandleSpaceObservatoryWindowCloseClickedEvent" @ref="_spaceObservatoryWindowRef"/>
+    <SpaceObservatoryWindow OnWindowCloseClicked="HandleSpaceObservatoryWindowCloseClickedEvent"
+        @ref="_spaceObservatoryWindowRef" />
 </div>
 
 <div class="@GetVisibilityStyle(_isEarthObservatoryWindowVisible)">
-    <EarthObservatoryWindow OnWindowCloseClicked="HandleEarthObservatoryWindowCloseClickedEvent" @ref="_earthObservatoryWindowRef"/>
+    <EarthObservatoryWindow OnWindowCloseClicked="HandleEarthObservatoryWindowCloseClickedEvent"
+        @ref="_earthObservatoryWindowRef" />
 </div>
-

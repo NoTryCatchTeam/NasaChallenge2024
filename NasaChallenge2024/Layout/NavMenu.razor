@@ -3,24 +3,39 @@
 @inject UiIVisibilityService UiIVisibilityService
 @inject NavigationManager NavigationManager
 
-
 <ul class="menu @GetUiVisibility()">
-  <li class="menu-item" autofocus><NavLink href="" Match="NavLinkMatch.All"><img class="planets" src="images/planet.svg" alt="planet" />PLANETS</NavLink></li>
-  <li class="menu-item"><NavLink href="@Paths.OBSERVATORIES_PATH"><img src="images/flyingSaucer.svg" alt="flyingSaucer" />OBSERVATORIES</NavLink></li>
-  <li class="menu-item"><NavLink href="@Paths.QUIZZES_PATH"><img src="images/strategy.svg" alt="strategy" />QUIZ</NavLink></li>
-  <li class="menu-item"><NavLink href="@Paths.LEARN_PATH"><img src="images/graduationCap.svg" alt="graduationCap" />LEARN</NavLink></li>
-</ul> 
+    <li class="menu-item" autofocus>
+        <NavLink href="" Match="NavLinkMatch.All">
+            <img class="planets" src="images/planet.svg" alt="planet" /> PLANETS
+        </NavLink>
+    </li>
+    <li class="menu-item">
+        <NavLink href="@Paths.OBSERVATORIES_PATH">
+            <img src="images/flyingSaucer.svg" alt="flyingSaucer" /> OBSERVATORIES
+        </NavLink>
+    </li>
+    <li class="menu-item">
+        <NavLink href="@Paths.QUIZZES_PATH">
+            <img src="images/strategy.svg" alt="strategy" /> QUIZ
+        </NavLink>
+    </li>
+    <li class="menu-item">
+        <NavLink href="@Paths.LEARN_PATH">
+            <img src="images/graduationCap.svg" alt="graduationCap" /> LEARN
+        </NavLink>
+    </li>
+</ul>
 
-@code{
+@code {
     private bool _uiIVisibility = true;
-    
+
     private string GetUiVisibility() => _uiIVisibility ? string.Empty : "invisible";
-    
+
     public void Dispose()
     {
         UiIVisibilityService.OnUiVisibilityUpdated -= HandleUiVisibilityUpdated;
     }
-    
+
     protected override void OnInitialized()
     {
         UiIVisibilityService.OnUiVisibilityUpdated += HandleUiVisibilityUpdated;
