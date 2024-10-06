@@ -14,6 +14,7 @@
 @import 'controls/object_panel';
 @import 'controls/user_panel';
 @import 'controls/menu';
+@import 'controls/distance_panel';
 @import 'controls/planets-panels';
 @import 'base/_floating-window';
 
@@ -59,12 +60,16 @@ body {
 }
 
 .object-host-name {
-  position: absolute;
-  top: 194px;
-  left: 250px;
-  font-family: "Inter";
-  font-size: 18px;
-  font-weight: 600;
-  line-height: 24px;
-  opacity: 70%;
+    position: absolute;
+    top: 194px;
+    left: 250px;
+    font-family: "Inter";
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 24px;
+    opacity: 70%;
+}
+
+input {
+    pointer-events: all;
 }

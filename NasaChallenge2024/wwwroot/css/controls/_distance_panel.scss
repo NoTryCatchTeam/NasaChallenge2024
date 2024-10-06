@@ -1,0 +1,35 @@
+@import '../base/var';
+
+.distance-panel {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    bottom: 54px;
+    left: 250px;
+}
+
+.distance-panel-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: stretch;
+
+    label {
+        opacity: 70%;
+        padding: 2px 8px;
+    }
+
+    input[type="radio"] {
+        display: none;
+    }
+
+    input[type="radio"]:checked+label {
+        color: #FFFFFF;
+        opacity: 100%;
+        border-radius: 6px;
+        background: $color-primary;
+    }
+}
+
+.distance-panel-buttons-item {
+    pointer-events: all;
+}
