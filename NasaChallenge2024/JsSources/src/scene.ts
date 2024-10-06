@@ -110,6 +110,12 @@ export async function showObservatoriesStateAsync(isPlanet: boolean, isAnimated:
     changeState(isPlanet ? SceneState.ObservatoryEarth : SceneState.ObservatorySpace);
 }
 
+export async function showObservatoriesStateFirstTimeAsync(data: Observatories.Observatory[]) {
+    Observatories.addObservatoriesData(data);
+    Observatories.renderObservatories(observatoriesWrapper, solarSystem);
+    await showObservatoriesStateAsync(true, false);
+}
+
 // Changes focus on planet: focus - move planet in the center, allow gestures; unfocus - move planet aside, disable gestures
 export function setIsFocusActivePlanetOnScene(isFocus: boolean, isAnimated: boolean = true) {
     sceneCamera.IsFocusOnScene = isFocus;

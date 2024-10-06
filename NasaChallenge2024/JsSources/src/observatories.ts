@@ -40,7 +40,7 @@ export function renderObservatories(
         element.addEventListener(
             "click",
             function (e) {
-                globalThis.dotNet.invokeMethodAsync('OnLabelClick', observatory.id);
+                globalThis.dotNet.invokeMethodAsync('OnEarthLabelClicked', observatory.id);
             },
             false);
 
