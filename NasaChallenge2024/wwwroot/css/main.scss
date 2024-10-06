@@ -8,60 +8,62 @@
 
 @import 'controls/progress';
 @import 'controls/slider';
+@import 'infoTable';
 @import 'controls/vr';
 @import 'controls/bottom_panel';
 @import 'controls/object_panel';
 @import 'controls/user_panel';
 @import 'controls/menu';
+@import 'controls/planets-panels';
 
 body {
-    background-color: #010101;
+  background-color: #010101;
 }
 
 #app {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    pointer-events: none;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    color: #FFFFFF;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  color: #FFFFFF;
 }
 
 #scene-canvas {
-    width: 100%;
-    height: 100%;
-    display: block;
-    position: fixed;
-    left: 0;
-    top: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
 }
 
 .logo {
-    position: absolute;
-    top: 24px;
-    left: 24px;
+  position: absolute;
+  top: 24px;
+  left: 24px;
 }
 
 .object-name {
-    position: absolute;
-    top: 60px;
-    left: 250px;
-    font-family: "Jaro";
-    font-size: 120px;
-    font-weight: 400;
-    line-height: 150px;
-    font-optical-sizing: 72px;
+  position: absolute;
+  top: 60px;
+  left: 250px;
+  font-family: "Jaro";
+  font-size: 120px;
+  font-weight: 400;
+  line-height: 150px;
+  font-optical-sizing: 72px;
 }
 
 .object-host-name {
-    position: absolute;
-    top: 194px;
-    left: 250px;
-    font-family: "Inter";
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 24px;
-    opacity: 70%;
+  position: absolute;
+  top: 194px;
+  left: 250px;
+  font-family: "Inter";
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  opacity: 70%;
 }

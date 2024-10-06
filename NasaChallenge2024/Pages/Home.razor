@@ -85,6 +85,17 @@
     </div>
 </div>
 
+<div class="planets-panel @UIVisibility">
+    <button class="card" @onclick="HandleExoplanetsButtonClick">
+        <img src="images/ic_table.svg"/>
+        ALL PLANETS
+    </button>
+    <button class="card">
+        NEXT PLANET
+        <img src="images/ic_arrow_right.svg"/>
+    </button>
+</div>
+
 <div class="bottom-panels @UIVisibility">
     <div class="bottom-panels-item-1">
         <label class="bottom-panels-item-number">@SpaceObject.DiscoveryYear</label>
@@ -96,6 +107,10 @@
     <div class="bottom-panels-item-3"><label class="bottom-panels-item-number">@SpaceObject.OrbitalPeriod</label>
         <label class="bottom-panels-item-description">orbital period (days)</label>
     </div>
+</div>
+
+<div class="@(_isExoplanetTableVisible && isUIChecked ? string.Empty : "invisible")">
+    <ExoplanetsLayout OnExoplanetSelected="HandleExoplanetSelectedEvent" />
 </div>
 
 
@@ -149,6 +164,8 @@
     public bool IsUIChecked { get; set; } = true;
     private bool isUIChecked;
     private string UIVisibility;
+    private bool _isExoplanetTableVisible;
+    
     protected override void OnParametersSet()
     {
         isUIChecked = this.IsUIChecked;
@@ -197,5 +214,15 @@
         await _mainJsModule.InvokeVoidAsync("setIsFocusOnScene", !(bool)value);
     }
 
-
+    private void HandleExoplanetsButtonClick()
+    {
+        _isExoplanetTableVisible = true;
+        StateHasChanged();
+    }
+    
+    private void HandleExoplanetSelectedEvent(Exoplanet exoplanet)
+    {
+        _isExoplanetTableVisible = false;
+        StateHasChanged();
+    }
 }
