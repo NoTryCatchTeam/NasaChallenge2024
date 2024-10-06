@@ -10,18 +10,36 @@ public class Observatory
     [JsonPropertyName("name")]
     public string Name { get; set; }
 
+    [JsonPropertyName("type")]
+    public string Type { get; set; }
+
     [JsonPropertyName("established_year")]
-    public int EstablishedYear { get; set; }
+    public int? EstablishedYear { get; set; }
 
     [JsonPropertyName("latitude")]
-    public double Latitude { get; set; }
+    public float? Latitude { get; set; }
 
     [JsonPropertyName("longitude")]
-    public double Longitude { get; set; }
+    public float? Longitude { get; set; }
 
     [JsonPropertyName("description")]
     public string Description { get; set; }
 
-    [JsonPropertyName("telescope_ids")]
-    public IEnumerable<int> TelescopeIds { get; set; }
+    [JsonPropertyName("mission_type")]
+    public string MissionType { get; set; }
+
+    [JsonPropertyName("launch_date")]
+    public DateOnly? LaunchDate { get; set; }
+
+    [JsonPropertyName("destination")]
+    public string Destination { get; set; }
+
+    [JsonPropertyName("objective")]
+    public string Objective { get; set; }
+
+    [JsonPropertyName("texture_path")]
+    public string TexturePath { get; set; }
+
+    [JsonPropertyName("wave_light")]
+    public string WaveLight { get; set; }
 }

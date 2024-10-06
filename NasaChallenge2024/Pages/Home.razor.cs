@@ -187,10 +187,5 @@ namespace NasaChallenge2024.Pages
         {
             NavigationManager.NavigateTo($"{Paths.OBSERVATORIES_PATH}?id={observatory.Id}");
         }
-    
-        public void HandleTelescopeSelectedEvent(Telescope telescope)
-        {
-            NavigationManager.NavigateTo($"{Paths.TELESCOPES_PATH}?id={telescope.Id}");
-        }
     }
 }
