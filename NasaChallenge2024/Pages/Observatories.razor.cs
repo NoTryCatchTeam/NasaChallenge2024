@@ -14,7 +14,7 @@ public partial class Observatories : ComponentBase
 
     [Inject]
     public IJSRuntime JsRuntime { get; set; }
-    
+
     [Inject]
     NavigationManager NavigationManager { get; set; }
 
@@ -22,7 +22,7 @@ public partial class Observatories : ComponentBase
     public HttpClient HttpClient { get; set; }
 
     private IJSObjectReference _mainJsModule;
-    
+
     private string _id;
     private SpaceObservatoryWindow _spaceObservatoryWindowRef;
     private EarthObservatoryWindow _earthObservatoryWindowRef;
@@ -33,7 +33,7 @@ public partial class Observatories : ComponentBase
     private DotNetObjectReference<Observatories> _dotNet;
     private Observatory[] _spaceObservatories;
     private Observatory[] _observatories;
-    
+
     [JSInvokable("OnEarthLabelClicked")]
     public void OnEarthLabelClicked(int id)
     {
@@ -41,7 +41,7 @@ public partial class Observatories : ComponentBase
     }
 
     public void Dispose() => _dotNet?.Dispose();
-    
+
     protected override async Task OnInitializedAsync()
     {
         _dotNet = DotNetObjectReference.Create(this);
@@ -49,7 +49,7 @@ public partial class Observatories : ComponentBase
         var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
 
         _id = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query).TryGetValue("id", out var id) ? id : default(string);
-        
+
         _screenWidth = await JsRuntime.InvokeAsync<double>("getScreenWidth");
         _screenHalfHeight = await JsRuntime.InvokeAsync<double>("getScreenHeight") / 2;
     }
@@ -62,7 +62,7 @@ public partial class Observatories : ComponentBase
         }
 
         _observatories = await HttpClient.GetFromJsonAsync<Observatory[]>("jsons/observatories.json");
-        
+
         _spaceObservatories = _observatories.Where(o => o.Type == "Space").ToArray();
 
         if (_spaceObservatories.Length > 0 && (_screenWidth - _spaceElementsLeft) / _spaceObservatories.Length is var spaceElementWidth and > 0)
@@ -77,21 +77,19 @@ public partial class Observatories : ComponentBase
                 case "Earth":
                     _isSpaceObservatories = false;
                     await SelectEarthObservatory(observatory);
-                    
+
                     break;
                 default:
                     _isSpaceObservatories = true;
                     await SelectSpaceObservatory(observatory);
-                    
+
                     break;
             }
         }
-        
+
         _mainJsModule = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scene.js");
 
         var earthObservatories = _observatories.Where(x => x.Type == "Earth").ToArray();
-
-        await JsRuntime.InvokeVoidAsync("console.log", earthObservatories);
 
         if (await _mainJsModule.InvokeAsync<bool>("initObservatoriesScene", "#scene-canvas", earthObservatories))
         {
@@ -99,7 +97,7 @@ public partial class Observatories : ComponentBase
         else
         {
             // In case of navigation
-            await _mainJsModule.InvokeVoidAsync("showObservatoriesStateFirstTimeAsync", new [] { earthObservatories });
+            await _mainJsModule.InvokeVoidAsync("showObservatoriesStateFirstTimeAsync", new[] { earthObservatories });
         }
 
         await _mainJsModule.InvokeVoidAsync("passDotNet", _dotNet);
@@ -110,13 +108,13 @@ public partial class Observatories : ComponentBase
         _isSpaceObservatories = false;
         await _mainJsModule.InvokeVoidAsync("showObservatoriesStateAsync", !_isSpaceObservatories);
     }
-    
+
     private async Task ShowSpaceObservatoriesAsync()
     {
         _isSpaceObservatories = true;
         await _mainJsModule.InvokeVoidAsync("showObservatoriesStateAsync", !_isSpaceObservatories);
     }
-    
+
     private string GetVisibilityStyle(bool visible) => visible ? string.Empty : "invisible";
 
     private async Task SelectSpaceObservatory(Observatory observatory)
@@ -127,7 +125,7 @@ public partial class Observatories : ComponentBase
         _isSpaceObservatoryFloatingWindowVisible = true;
         StateHasChanged();
     }
-    
+
     private async Task SelectEarthObservatory(Observatory observatory)
     {
         _selectedObservatory = observatory;
@@ -136,18 +134,38 @@ public partial class Observatories : ComponentBase
         _isEarthObservatoryWindowVisible = true;
         StateHasChanged();
     }
-    
+
     private void HandleSpaceObservatoryWindowCloseClickedEvent()
     {
         _selectedObservatory = null;
         _isSpaceObservatoryFloatingWindowVisible = false;
         StateHasChanged();
     }
-    
+
     private void HandleEarthObservatoryWindowCloseClickedEvent()
     {
         _selectedObservatory = null;
         _isEarthObservatoryWindowVisible = false;
         StateHasChanged();
+    }
+
+    private string GetSpaceObservatoryIsActiveClass(Observatory observatory)
+    {
+        if (!_isSpaceObservatories)
+        {
+            return "invisible";
+        }
+
+        if (_selectedObservatory == null || _observatories == null)
+        {
+            return null;
+        }
+
+        if (_observatories.FirstOrDefault(x => observatory.Id == _selectedObservatory.Id) is { })
+        {
+            return "active";
+        }
+
+        return "invisible";
     }
 }
