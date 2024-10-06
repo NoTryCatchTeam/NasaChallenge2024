@@ -2,15 +2,21 @@ import * as Three from "three";
 
 import { SolarSystem } from "./solarSystem";
 
+let isInitialized = false;
 let observatories: Observatory[] = [];
 
-export function addObservatoriesData(data: Observatory[]) {
-    observatories = data;
-}
-
 export function renderObservatories(
+    data: Observatory[],
     observatoriesWrapper: HTMLElement,
     solarSystem: SolarSystem) {
+
+    if (isInitialized) {
+        return;
+    }
+
+    isInitialized = true;
+
+    observatories = data;
 
     const longFudge = Math.PI * 1.5;
     const latFudge = Math.PI;
@@ -37,7 +43,21 @@ export function renderObservatories(
         observatory.position = positionHelper.getWorldPosition(new Three.Vector3());
 
         const element = document.createElement('div');
-        element.textContent = observatory.name;
+        element.addEventListener(
+            "click",
+            function (e) {
+                globalThis.dotNet.invokeMethodAsync('OnEarthLabelClicked', observatory.id);
+            },
+            false);
+
+        const img = document.createElement('img');
+        img.src = "images/ic_observatory_pin.svg";
+        element.appendChild(img);
+
+        const p = document.createElement('p');
+        p.textContent = observatory.name;
+        element.appendChild(p);
+
         observatoriesWrapper.appendChild(element);
         observatory.element = element;
     }
@@ -83,6 +103,8 @@ export function updateObservatoriesLabels(
 }
 
 export class Observatory {
+
+    public id: string;
 
     public name: string;
 
