@@ -37,7 +37,15 @@ export function renderObservatories(
         observatory.position = positionHelper.getWorldPosition(new Three.Vector3());
 
         const element = document.createElement('div');
-        element.textContent = observatory.name;
+        
+        const img = document.createElement('img');
+        img.src = "images/ic_observatory_pin.svg";
+        element.appendChild(img);
+        
+        const p = document.createElement('p');
+        p.textContent = observatory.name;
+        element.appendChild(p);
+
         observatoriesWrapper.appendChild(element);
         observatory.element = element;
     }
