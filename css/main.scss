@@ -57,6 +57,9 @@ body {
   font-weight: 400;
   line-height: 150px;
   font-optical-sizing: 72px;
+  @include _laptop {
+    font-size: 80px;
+  }
 }
 
 .object-host-name {
