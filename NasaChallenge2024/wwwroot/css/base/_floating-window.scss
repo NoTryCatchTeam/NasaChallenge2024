@@ -1,0 +1,56 @@
+@import 'var';
+
+.floating-window-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: absolute;
+  top: 120px;
+  right: 24px;
+  background-color: $color-background-table;
+  border-radius: $border-radius-base;
+  pointer-events: all;
+  width: 478px;
+  max-height: calc(100% - 120px - 40px);
+  overflow-y: scroll;
+
+  .floating-window-container-content{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .floating-window-header-image{
+    height: 277px;
+    width: 100%;
+  }
+  
+  .floating-window-close{
+    background-color: $color-info-rows-divider;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    border-radius: 16px;
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+    img {
+      width: 20px;
+      height: 20px;
+    }
+  }
+  
+  .floating-window-header-title{
+    font-family: "Jaro";
+    font-size: 48px;
+    line-height: 48px;
+    font-weight: 400;
+  }
+  
+  .floating-window-content
+  {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+}

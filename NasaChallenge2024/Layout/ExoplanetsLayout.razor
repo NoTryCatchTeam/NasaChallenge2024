@@ -70,10 +70,10 @@
                     @if (_starts.FirstOrDefault(s => exoplanet.HostStarIds.Contains(s.Id)) is { } star)
                     {
                         <td>
-                            <a class="info-table-cell value" href="/stars/@star.Id">
+                            <button class="info-table-cell value">
                                 @star.Name
                                 <img src="images/ic_arrow_up_right.svg">
-                            </a>
+                            </button>
                         </td>
 
                         <td>
@@ -103,20 +103,20 @@
                     @if (exoplanet.TelescopeIds?.FirstOrDefault() is { } telescopeId && _telescopes.FirstOrDefault(t => t.Id == telescopeId) is { } telescope)
                     {
                         <td>
-                            <a class="info-table-cell value" href="/telescopes/@telescope.Id">
+                            <button class="info-table-cell value">
                                 @telescope.Name
                                 <img src="images/ic_arrow_up_right.svg">
-                            </a>
+                            </button>
                         </td>
                     }
 
                     @if (exoplanet.ObservatoryIds?.FirstOrDefault() is { } observatoryId && _observatories.FirstOrDefault(o => o.Id == observatoryId) is { } observatory)
                     {
                         <td>
-                            <a class="info-table-cell value" href="/observatories/@observatory.Id">
+                            <button class="info-table-cell value" @onclick="() => OnObservatoryClickAction(observatory)">
                                 @observatory.Name
                                 <img src="images/ic_arrow_up_right.svg">
-                            </a>
+                            </button>
                         </td>
                     }
 
@@ -133,6 +133,9 @@
     [Parameter]
     public EventCallback<Exoplanet> OnExoplanetSelected { get; set; }
     
+    [Parameter]
+    public EventCallback<Observatory> OnObservatorySelected { get; set; }
+    
     private Exoplanet[] _exoplanets;
     private Observatory[] _observatories;
     private Star[] _starts;
@@ -147,5 +150,6 @@
     }
 
     private Task OnExoplanetClickAction(Exoplanet exoplanet) => OnExoplanetSelected.InvokeAsync(exoplanet);
-
+    
+    private Task OnObservatoryClickAction(Observatory observatory) => OnObservatorySelected.InvokeAsync(observatory);
 }

@@ -110,9 +110,12 @@
 </div>
 
 <div class="@(_isExoplanetTableVisible && isUIChecked ? string.Empty : "invisible")">
-    <ExoplanetsLayout OnExoplanetSelected="HandleExoplanetSelectedEvent" />
+    <ExoplanetsLayout OnExoplanetSelected="HandleExoplanetSelectedEvent" OnObservatorySelected="HandleObservatorySelectedEvent"/>
 </div>
 
+<div class="@(_isObservatoryWindowVisible && isUIChecked ? string.Empty : "invisible")">
+    <ObservatoryWindow OnWindowCloseClicked="HandleObservatoryWindowCloseClickedEvent" @ref="_observatoryWindowRef"/>
+</div>
 
 @code
 {
@@ -165,6 +168,10 @@
     private bool isUIChecked;
     private string UIVisibility;
     private bool _isExoplanetTableVisible;
+    private bool _isObservatoryWindowVisible;
+
+    private ObservatoryWindow _observatoryWindowRef;
+    
     
     protected override void OnParametersSet()
     {
@@ -223,6 +230,20 @@
     private void HandleExoplanetSelectedEvent(Exoplanet exoplanet)
     {
         _isExoplanetTableVisible = false;
+        StateHasChanged();
+    }
+    
+    public void HandleObservatorySelectedEvent(Observatory observatory)
+    {
+        _isExoplanetTableVisible = false;
+        _isObservatoryWindowVisible = true;
+        _observatoryWindowRef.SelectObservatory(observatory);
+        StateHasChanged();
+    }
+
+    private void HandleObservatoryWindowCloseClickedEvent()
+    {
+        _isObservatoryWindowVisible = false;
         StateHasChanged();
     }
 }
