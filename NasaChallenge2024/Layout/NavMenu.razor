@@ -4,7 +4,7 @@
 @inject NavigationManager NavigationManager
 
 <div class="menu @GetUiVisibility()">
-    <button class="menu-item" autofocus ><NavLink href="@Paths.EXOPLANETS_PATH"><img class="planets" src="images/planet.svg" alt="planet" /> PLANETS</NavLink></button>
+    <button class="menu-item" autofocus ><NavLink href="" Match="NavLinkMatch.All"><img class="planets" src="images/planet.svg" alt="planet" /> PLANETS</NavLink></button>
     <button class="menu-item"><NavLink href="@Paths.OBSERVATORIES_PATH"><img src="images/flyingSaucer.svg" alt="flyingSaucer" />OBSERVATORIES</NavLink></button>
     <button class="menu-item" ><NavLink href="@Paths.QUIZZES_PATH"><img src="images/strategy.svg" alt="strategy" />QUIZ</NavLink></button>
     <button class="menu-item" ><NavLink href="@Paths.LEARN_PATH"><img src="images/graduationCap.svg" alt="graduationCap" />LEARN</NavLink></button>
