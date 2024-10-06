@@ -1,5 +1,6 @@
 {
   "imports": {
+    "@tweenjs/tween.js": "./@tweenjs/tweenjs.js",
     "three": "./three.js",
     "three/addons": "./three/addons.js"
   }
