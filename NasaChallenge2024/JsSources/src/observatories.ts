@@ -37,11 +37,17 @@ export function renderObservatories(
         observatory.position = positionHelper.getWorldPosition(new Three.Vector3());
 
         const element = document.createElement('div');
-        
+        element.addEventListener(
+            "click",
+            function (e) {
+                globalThis.dotNet.invokeMethodAsync('OnLabelClick', observatory.id);
+            },
+            false);
+
         const img = document.createElement('img');
         img.src = "images/ic_observatory_pin.svg";
         element.appendChild(img);
-        
+
         const p = document.createElement('p');
         p.textContent = observatory.name;
         element.appendChild(p);
@@ -91,6 +97,8 @@ export function updateObservatoriesLabels(
 }
 
 export class Observatory {
+
+    public id: string;
 
     public name: string;
 

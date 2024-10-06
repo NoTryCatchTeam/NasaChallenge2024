@@ -27,6 +27,7 @@ let exoplanetSystem: ExoplanetSystem;
 
 declare global {
     var isDebug: boolean;
+    var dotNet: any;
 }
 
 export async function initHomeScene(
@@ -114,6 +115,10 @@ export function setIsFocusActivePlanetOnScene(isFocus: boolean, isAnimated: bool
     sceneCamera.IsFocusOnScene = isFocus;
     const newCameraSettings = calculateCameraSettingsForActiveSystem(sceneCamera.IsDirectOnPlanet);
     sceneCamera.changeCameraSettings(newCameraSettings.position, newCameraSettings.lookAt, isAnimated);
+}
+
+export function passDotNet(dotNet: any){
+    globalThis.dotNet = dotNet;
 }
 
 async function showExoplanetSystemAsync(data: ExoplanetSystemData) {
