@@ -13,8 +13,10 @@
 
 /* Links */
 
+
 a, a:link, a:visited {
     text-decoration: none;
+    all: unset;
 }
 
 a:hover {

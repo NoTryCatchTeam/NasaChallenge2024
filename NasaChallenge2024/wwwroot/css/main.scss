@@ -6,17 +6,18 @@
 @import "globe/base";
 @import "globe/button";
 
-@import "controls/progress";
-@import "controls/slider";
-@import "infoTable";
-@import "controls/vr";
-@import "controls/bottom_panel";
-@import "controls/object_panel";
-@import "controls/user_panel";
-@import "controls/menu";
-@import "controls/distance_panel";
-@import "controls/planets-panels";
-@import "base/_floating-window";
+@import 'controls/progress';
+@import 'controls/slider';
+@import 'infoTable';
+@import 'controls/vr';
+@import 'controls/bottom_panel';
+@import 'controls/object_panel';
+@import 'controls/user_panel';
+@import 'controls/menu';
+@import 'controls/distance_panel';
+@import 'controls/planets-panels';
+@import 'base/_floating-window';
+@import '_observatories';
 
 body {
   background-image: url(../images/image_background_stars.jpg);

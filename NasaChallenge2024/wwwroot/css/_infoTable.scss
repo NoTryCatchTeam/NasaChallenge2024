@@ -75,6 +75,7 @@
 .info-separator {
     height: 1px;
     background-color: $color-info-rows-divider;
+    margin: 8px 0px;
 }
 
 .info-table-cell.title {
@@ -82,28 +83,32 @@
     color: $color-info-title;
     vertical-align: middle;
     margin: 4px 8px;
+    font-size: 13px;
+    font-weight: 500;
 }
 
 .info-table-cell {
     vertical-align: middle;
-    margin: 12px 8px;
+    margin: 4px 8px;
 }
 
 .info-table-cell-value-img {
     border-radius: $border-radius-base;
     width: 40px;
     height: 40px;
-    margin: 8px 4px;
+    margin: 0px 4px;
 }
 
 .info-table-cell.value {
     text-align: left;
     color: $color-text-primary-inverse;
+    font-size: 15px;
+    font-weight: 500;
 }
 
 button.info-table-cell.value {
      text-align: left;
-    color: $color_link;
+     color: $color_link;
  }
 
 .info-table-cell.value.right {

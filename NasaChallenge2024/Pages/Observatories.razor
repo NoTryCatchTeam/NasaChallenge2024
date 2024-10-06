@@ -2,6 +2,15 @@
 
 <PageTitle>Observatories</PageTitle>
 
-<button @onclick="ShowSpaceObservatoriesAsync" style="pointer-events: all;">Space</button>
+<button @onclick="ShowSpaceObservatoriesAsync" class="observatory-switch-button top @GetVisibilityStyle(!_isSpaceObservatories)"><img src="images/ic_caret_up.svg" />Space Observatories</button>
 
-<button @onclick="ShowEarthObservatoriesAsync" style="pointer-events: all;">Earth</button>
+<button @onclick="ShowEarthObservatoriesAsync" class="observatory-switch-button bottom @GetVisibilityStyle(_isSpaceObservatories)">Earth Observatories<img src="images/ic_caret_down.svg" /></button>
+
+<div class="@GetVisibilityStyle(_isSpaceObservatoryFloatingWindowVisible)">
+    <SpaceObservatoryWindow OnWindowCloseClicked="HandleSpaceObservatoryWindowCloseClickedEvent" @ref="_spaceObservatoryWindowRef"/>
+</div>
+
+<div class="@GetVisibilityStyle(_isEarthObservatoryWindowVisible)">
+    <EarthObservatoryWindow OnWindowCloseClicked="HandleEarthObservatoryWindowCloseClickedEvent" @ref="_earthObservatoryWindowRef"/>
+</div>
+

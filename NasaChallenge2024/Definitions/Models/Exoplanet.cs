@@ -52,9 +52,6 @@ public class Exoplanet
     [JsonPropertyName("detection_method")]
     public string DetectionMethod { get; set; }
 
-    [JsonPropertyName("telescope_ids")]
-    public IEnumerable<int> TelescopeIds { get; set; }
-
     [JsonPropertyName("texture_path")]
     public string TexturePath { get; set; }
 
