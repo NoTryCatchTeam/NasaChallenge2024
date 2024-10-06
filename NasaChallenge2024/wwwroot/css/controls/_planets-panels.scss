@@ -1,0 +1,25 @@
+@import '../base/var';
+@import '../base/mixins';
+
+.planets-panel{
+  position: absolute;
+  right: 24px;
+  bottom: 218px;
+  pointer-events: all;
+  display: flex;
+  gap: 16px;
+
+  .card{
+    display: flex;
+    align-items: center;
+    border-radius: $border-radius-card;
+    background-color: $color-background-search;
+    vertical-align: middle;
+    padding: 6px 12px;
+    font-family: "Inter";
+    font-size: 15px;
+    font-weight: 600;
+    color: $color-info-title;
+    gap: 8px;
+  }
+}

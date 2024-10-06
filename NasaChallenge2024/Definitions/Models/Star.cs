@@ -11,10 +11,10 @@ public class Star
     public string Name { get; set; }
 
     [JsonPropertyName("sun_radius")]
-    public double? SunRadius { get; set; }
+    public float? SunRadius { get; set; }
 
     [JsonPropertyName("sun_mass")]
-    public double? SunMass { get; set; }
+    public float? SunMass { get; set; }
 
     [JsonPropertyName("texture_path")]
     public string TexturePath { get; set; }
