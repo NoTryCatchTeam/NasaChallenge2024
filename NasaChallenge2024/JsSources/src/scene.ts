@@ -27,6 +27,7 @@ let exoplanetSystem: ExoplanetSystem;
 
 declare global {
     var isDebug: boolean;
+    var dotNet: any;
 }
 
 export async function initHomeScene(
@@ -62,8 +63,7 @@ export async function initObservatoriesScene(
 
     await prepareScene(canvasId, isDebug);
 
-    Observatories.addObservatoriesData(data);
-    Observatories.renderObservatories(observatoriesWrapper, solarSystem);
+    Observatories.renderObservatories(data, observatoriesWrapper, solarSystem);
     await showObservatoriesStateAsync(true, false);
 
     startRenderLoop(renderer);
@@ -109,11 +109,20 @@ export async function showObservatoriesStateAsync(isPlanet: boolean, isAnimated:
     changeState(isPlanet ? SceneState.ObservatoryEarth : SceneState.ObservatorySpace);
 }
 
+export async function showObservatoriesStateFirstTimeAsync(data: Observatories.Observatory[]) {
+    Observatories.renderObservatories(data, observatoriesWrapper, solarSystem);
+    await showObservatoriesStateAsync(true, false);
+}
+
 // Changes focus on planet: focus - move planet in the center, allow gestures; unfocus - move planet aside, disable gestures
 export function setIsFocusActivePlanetOnScene(isFocus: boolean, isAnimated: boolean = true) {
     sceneCamera.IsFocusOnScene = isFocus;
     const newCameraSettings = calculateCameraSettingsForActiveSystem(sceneCamera.IsDirectOnPlanet);
     sceneCamera.changeCameraSettings(newCameraSettings.position, newCameraSettings.lookAt, isAnimated);
+}
+
+export function passDotNet(dotNet: any) {
+    globalThis.dotNet = dotNet;
 }
 
 async function showExoplanetSystemAsync(data: ExoplanetSystemData) {
