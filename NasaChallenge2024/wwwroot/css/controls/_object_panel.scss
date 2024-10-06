@@ -1,7 +1,7 @@
 .object-panel {
     position: absolute;
     right: 24px;
-    bottom: 384px;
+    top: 120px;
     display: flex;
     flex-direction: column;
     background: #1E1E1ECC;
@@ -14,6 +14,9 @@
     line-height: 20px;
     font-weight: 500;
     pointer-events: all;
+    @include _laptop {
+        bottom: 206px;
+    }
     hr {
         height: 0px;
         border-bottom: 1px #FFFFFF;
