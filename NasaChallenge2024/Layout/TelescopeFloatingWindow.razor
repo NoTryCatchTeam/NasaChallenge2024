@@ -1,54 +1,54 @@
 @using NasaChallenge2024.Definitions.Models
 
-@if (_telescope != null)
+@if (_observatory != null)
 {
     <div class="floating-window-container">
         <button class="floating-window-close" @onclick="OnCloseClickAction">
             <img src="images/ic_cross.svg"/>
         </button>
         <div class="floating-window-container-content">
-            <label class="floating-window-header-title">@_telescope.Name</label>
+            <label class="floating-window-header-title">@_observatory.Name</label>
             <div class="floating-window-content">
                 <div class="object-panel-item">
                     <label class="object-panel-item-key">Mission Type</label>
-                    <label class="object-panel-item-value">@_telescope.MissionType</label>
+                    <label class="object-panel-item-value">@_observatory.MissionType</label>
                 </div>
                 <hr>
                 <div class="object-panel-item">
                     <label class="object-panel-item-key">Launch Date</label>
-                    <label class="object-panel-item-value">@_telescope.LaunchDate</label>
+                    <label class="object-panel-item-value">@_observatory.LaunchDate</label>
                 </div>
                 <hr>
                 <div class="object-panel-item">
                     <label class="object-panel-item-key">Objective</label>
-                    <label class="object-panel-item-value">@_telescope.Objective</label>
+                    <label class="object-panel-item-value">@_observatory.Objective</label>
                 </div>
                 <hr>
                 <div class="object-panel-item">
                     <label class="object-panel-item-key">Wave Light</label>
-                    <label class="object-panel-item-value">@_telescope.WaveLight</label>
+                    <label class="object-panel-item-value">@_observatory.WaveLight</label>
                 </div>
                 <hr>
                 <div class="object-panel-item">
                     <label class="object-panel-item-key">Type</label>
-                    <label class="object-panel-item-value">@_telescope.Type</label>
+                    <label class="object-panel-item-value">@_observatory.Type</label>
                 </div>
                 <hr>
-                <label>@_telescope.Description</label>
+                <label>@_observatory.Description</label>
             </div>
         </div>
     </div>
 }
 
 @code{
-    private Telescope _telescope;
+    private Observatory _observatory;
 
     [Parameter]
     public EventCallback OnWindowCloseClicked { get; set; }
 
-    public void SelectObservatory(Telescope telescope)
+    public void SelectObservatory(Observatory observatory)
     {
-        _telescope = telescope;
+        _observatory = observatory;
         StateHasChanged();
     }
 

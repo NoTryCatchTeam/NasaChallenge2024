@@ -26,7 +26,7 @@ public partial class Observatories : ComponentBase
 
         _mainJsModule = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scene.js");
 
-        if (await _mainJsModule.InvokeAsync<bool>("initObservatoriesScene", "#scene-canvas", observatories))
+        if (await _mainJsModule.InvokeAsync<bool>("initObservatoriesScene", "#scene-canvas", observatories.Where(x => x.Type == "Earth").ToArray()))
         {
             return;
         }

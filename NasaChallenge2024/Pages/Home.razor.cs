@@ -146,14 +146,6 @@ namespace NasaChallenge2024.Pages
             StateHasChanged();
         }
 
-        public void HandleTelescopeSelectedEvent(Telescope telescope)
-        {
-            _isExoplanetTableVisible = false;
-            _isTelescopeFloatingWindowVisible = true;
-            _telescopeFloatingWindowRef.SelectObservatory(telescope);
-            StateHasChanged();
-        }
-
         private void HandleObservatoryWindowCloseClickedEvent()
         {
             _isObservatoryWindowVisible = false;
