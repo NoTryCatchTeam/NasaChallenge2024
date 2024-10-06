@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "NasaChallenge2024",
   "resources": {
-    "hash": "sha256-LDhCxpS9osKn6PrVhpiO7pOtjFZA1oFrlbAHcOBuQdg=",
+    "hash": "sha256-dn0OXEEFe9CwKpAFbIb6Xe0hoMv2PtwpPLKRVQNusUs=",
     "jsModuleNative": {
       "dotnet.native.8.0.8.746giovk6l.js": "sha256-juC5sA7gHTLXFEhAKgdM2/RavswpwCtDfjYGsAz2FXg="
     },
@@ -34,7 +34,7 @@
       "Microsoft.Extensions.Primitives.wasm": "sha256-OkuMLZ45sJPTMxiEe6FwSmno5Aso4B+FL7S+B6T8q8U=",
       "Microsoft.JSInterop.wasm": "sha256-sqmN82WgCC58zlo1LeCRD1b6JrRExeAzQp2f/cLED5M=",
       "Microsoft.JSInterop.WebAssembly.wasm": "sha256-sLSiCKh0RQEV/2cl05tr7wOLWzExQfPZovvpqYLJduQ=",
-      "NasaChallenge2024.wasm": "sha256-Xt3qyCh6Al1tYTRWZrhEk0qDK5i0GzanAWa2oVUgBIE=",
+      "NasaChallenge2024.wasm": "sha256-GvUei+jNNuL8+W+ujfsuroVkF5sdUguGI7MpY8mSpO8=",
       "System.Collections.Concurrent.wasm": "sha256-Ppa4i4xO/JfaxTdbM62Hty15fhWDeaQSuBGt+CuJ7jE=",
       "System.Collections.wasm": "sha256-VtvzVh8wHlExpIZCkwCJCNSiGfcYDWvz6LneJQJ8imQ=",
       "System.ComponentModel.wasm": "sha256-GPAg/lqvtlGqfal3j6EPgQ+6mqlusQ30qCeS8LYv8ws=",
@@ -50,7 +50,7 @@
       "System.Private.Uri.wasm": "sha256-xaTm35A00r7/2vEPd+EUohsN8CzCzoldOrICZI47iHo=",
       "System.Resources.ResourceManager.wasm": "sha256-ronPeva7nqWvGu6iveRa3fMos1wASmqZ6he0vbV4s4w=",
       "System.Runtime.InteropServices.JavaScript.wasm": "sha256-rXNWJxdH8tME4a+ZYwP7wellel8Xp4lVPsbIQmC+ImE=",
-      "System.Runtime.wasm": "sha256-X7rIfHDCPeeR0Fj6FE25aofPaK8YAlWjTaV/aYe4+ds=",
+      "System.Runtime.wasm": "sha256-skypucRMMawHS509ztoO777JJ1tAiUZiUCT9fVm2RPs=",
       "System.Text.Encodings.Web.wasm": "sha256-MCv+5sGwYGikJ8D76raGF6L+02exyJcFgx2sVlUjmKk=",
       "System.Text.Json.wasm": "sha256-k2S3o+jQGlVJ4U5MSsFefYvweqDR/M2JmYTLZINFh4Y=",
       "System.Text.RegularExpressions.wasm": "sha256-8bujMNUMCuxn48zxE7AA6YYcbZJjv76LHEAtNjS6TuE=",
