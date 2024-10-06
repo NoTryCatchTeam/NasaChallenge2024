@@ -6,6 +6,9 @@
     position: absolute;
     bottom: 54px;
     left: 250px;
+    @include _laptop {
+        left: 100px;
+    }
 }
 
 .distance-panel-buttons {
